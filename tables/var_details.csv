@@ -1,0 +1,471 @@
+season,team1,team2,home.away,date,incident,type,min,big_six,big_six_h,big_six_a,big_six_t1,big_six_both,no_big_six_both,bs_vs_nbs
+19/20,Brighton and Hove Albion,West Ham United,H,Aug. 17 ,"Brighton goal for Leandro Trossard ruled out for offside by Dan Burn, who created the goal",AGAINST,27,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,Aston Villa,A,Oct. 19 ,Conor Hourihane goal ruled out for a foul by Wesley on Mat Ryan,FOR,42,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,Everton,H,Oct. 26 ,Penalty awarded (scored by Neil Maupay) for foul on Aaron Connolly by Michael Keane,FOR,78,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,Leicester City,H,Nov. 23 ,Jamie Vardy penalty retaken after James Maddison scored the rebound with encroachment,FOR,80,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,Arsenal,A,Dec. 5  ,David Luiz goal disallowed for offside,FOR,63,1,1,0,No Big Six,0,0,1
+19/20,Brighton and Hove Albion,Sheffield United,H,Dec. 21 ,John Egan goal ruled out for handball,FOR,8,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,Sheffield United,H,Dec. 21 ,Jack O'Connell goal disallowed for offside,FOR,54,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,Tottenham Hotspur,A,Dec. 26 ,Harry Kane goal ruled out for offside,FOR,24,1,1,0,No Big Six,0,0,1
+19/20,Brighton and Hove Albion,AFC Bournemouth,H,Dec. 28 ,Dan Burn goal ruled out for offside,AGAINST,58,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,Everton,A,Jan. 11 ,Goal for Dominic Calvert-Lewin ruled out for handball,FOR,75,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,West Ham United,A,Feb. 1  ,Goal for Glenn Murray allowed after incorrect handball,FOR,79,0,0,0,No Big Six,0,1,0
+19/20,Brighton and Hove Albion,Burnley,A,July 26 ,Jay Rodriguez goal ruled out for offside against Johann Berg Gudmundsson,FOR,57,0,0,0,No Big Six,0,1,0
+19/20,Manchester United,Arsenal,H,Sept. 30,"Pierre-Emerick Aubameyang goal, originally ruled out for offside, overturned on review",AGAINST,58,1,1,1,Big Six,1,0,0
+19/20,Manchester United,Liverpool,H,Oct. 20 ,Sadio Mane goal ruled out for handball,FOR,43,1,1,1,Big Six,1,0,0
+19/20,Manchester United,Norwich City,A,Oct. 27 ,Penalty awarded (missed by Marcus Rashford) for foul on Daniel James by Ben Godfrey,FOR,25,1,0,1,Big Six,0,0,1
+19/20,Manchester United,Norwich City,A,Oct. 27 ,Penalty awarded (missed by Anthony Martial) for handball by Todd Cantwell,FOR,41,1,0,1,Big Six,0,0,1
+19/20,Manchester United,Manchester City,A,Dec. 7  ,Penalty awarded (scored by Marcus Rashford) for foul on Rashford by Bernardo Silva,FOR,23,1,1,1,Big Six,1,0,0
+19/20,Manchester United,Liverpool,A,Jan. 19 ,Roberto Firmino goal disallowed for foul on David De Gea by Virgil van Dijk,FOR,25,1,1,1,Big Six,1,0,0
+19/20,Manchester United,Chelsea,A,Feb. 17 ,Kurt Zouma goal disallowed for foul on Brandon Williams by Cesar Azpilicueta,FOR,55,1,1,1,Big Six,1,0,0
+19/20,Manchester United,Chelsea,A,Feb. 17 ,Olivier Giroud goal disallowed for offside,FOR,77,1,1,1,Big Six,1,0,0
+19/20,Manchester United,Watford,H,Feb. 23 ,Goal for Troy Deeney disallowed for handball by Craig Dawson,FOR,52,1,1,0,Big Six,0,0,1
+19/20,Manchester United,Everton,A,March 1 ,Goal for Everton disallowed for offside against Gylfi Sigurdsson in front of David De Gea,FOR,92,1,0,1,Big Six,0,0,1
+19/20,Manchester United,Tottenham Hotspur,A,June 19 ,Penalty awarded for a foul on Bruno Fernandes overturned,AGAINST,91,1,1,1,Big Six,1,0,0
+19/20,Manchester United,Crystal Palace,A,July    ,Jordan Ayew goal disallowed for offside,FOR,55,1,0,1,Big Six,0,0,1
+19/20,Manchester United,West Ham United,H,July 22 ,Penalty awarded for a handball by Paul Pogba (scored by Michael Antonio),AGAINST,45,1,1,0,Big Six,0,0,1
+19/20,Crystal Palace,West Ham United,A,Oct. 5  ,Jordan Ayew goal awarded after originally being ruled out for offside,FOR,87,0,0,0,No Big Six,0,1,0
+19/20,Crystal Palace,Arsenal,A,Oct. 27 ,Penalty awarded for foul by Calum Chambers on Wilfried Zaha (initially booked for diving),FOR,32,1,1,0,No Big Six,0,0,1
+19/20,Crystal Palace,Arsenal,A,Oct. 27 ,Sokratis goal disallowed for foul by Calum Chambers,FOR,83,1,1,0,No Big Six,0,0,1
+19/20,Crystal Palace,Liverpool,H,Nov. 23 ,James Tomkins goal ruled out for push by Jordan Ayew,AGAINST,43,1,0,1,No Big Six,0,0,1
+19/20,Crystal Palace,Southampton,A,Dec. 28 ,Goal for Max Meyer ruled out for offside by Wilfried Zaha in the build-up,AGAINST,15,0,0,0,No Big Six,0,1,0
+19/20,Crystal Palace,Norwich City,A,Jan. 1  ,Connor Wickham goal awarded after originally being ruled out for offside,FOR,85,0,0,0,No Big Six,0,1,0
+19/20,Crystal Palace,Arsenal,H,Jan. 11 ,Pierre-Emerick Aubameyang sent off for foul on Max Meyer,FOR,65,1,0,1,No Big Six,0,0,1
+19/20,Crystal Palace,Manchester City,A,Jan. 18 ,Penalty for handball against Jairo Riedewald cancelled,FOR,72,1,1,0,No Big Six,0,0,1
+19/20,Crystal Palace,Sheffield United,H,Feb. 1  ,Red card for Joel Ward rescinded,FOR,74,0,0,0,No Big Six,0,1,0
+19/20,Crystal Palace,Aston Villa,A,July 12 ,Mamadou Sakho goal ruled out for handball,AGAINST,7,0,0,0,No Big Six,0,1,0
+19/20,Crystal Palace,Aston Villa,A,July 12 ,"Penalty cancelled, awarded for foul on Jack Grealish by Patrick van Aanholt",FOR,47,0,0,0,No Big Six,0,1,0
+19/20,Crystal Palace,Manchester United,H,July    ,Jordan Ayew goal disallowed for offside,AGAINST,55,1,0,1,No Big Six,0,0,1
+19/20,Burnley,Aston Villa,A,Sept. 28,"Goal for Villa's John McGinn ruled out on review, Conor Hourihane offside in build-up",FOR,25,0,0,0,No Big Six,0,1,0
+19/20,Burnley,Leicester City,A,Oct. 21 ,Jonny Evans own goal ruled out due to a foul by Chris Wood,AGAINST,80,0,0,0,No Big Six,0,1,0
+19/20,Burnley,Chelsea,H,Oct. 26 ,Penalty overturned for diving by Callum Hudson-Odoi,FOR,76,1,0,1,No Big Six,0,0,1
+19/20,Burnley,West Ham United,H,Nov. 9  ,Chris Wood goal disallowed for offside,AGAINST,36,0,0,0,No Big Six,0,1,0
+19/20,Burnley,Watford,A,Nov. 23 ,Penalty (scored by Barnes) awarded for foul on Ashley Barnes by Jose Holebas,FOR,80,0,0,0,No Big Six,0,1,0
+19/20,Burnley,Aston Villa,H,Jan. 1  ,"Goal for Villa's Jack Grealish ruled out on review, Wesley offside in build-up",FOR,11,0,0,0,No Big Six,0,1,0
+19/20,Burnley,AFC Bournemouth,H,Feb. 22 ,Goal for Josh King ruled out for handball in build-up by Philip Billing,FOR,22,0,0,0,No Big Six,0,1,0
+19/20,Burnley,AFC Bournemouth,H,Feb. 22 ,"Goal for Harry Wilson ruled out for handball by Bournemouth's Adam Smith, penalty awarded and scored by Jay Rodriguez",FOR,57,0,0,0,No Big Six,0,1,0
+19/20,Burnley,Manchester City,A,June 22 ,Penalty given (scored by Riyad Mahrez) for a foul by Ben Mee on Sergio Aguero,AGAINST,45,1,1,0,No Big Six,0,0,1
+19/20,Burnley,Norwich City,A,July 18 ,Red card for Emiliano Buendia for an elbow on Ashley Westwood,FOR,33,0,0,0,No Big Six,0,1,0
+19/20,Burnley,Brighton and Hove Albion,H,July 26 ,Jay Rodriguez goal ruled out for offside against Johann Berg Gudmundsson,AGAINST,57,0,0,0,No Big Six,0,1,0
+19/20,Newcastle,Sheffield United,A,Dec. 5  ,"Jonjo Shelvey goal, originally ruled out for offside, cleared by the VAR",FOR,70,0,0,0,No Big Six,0,1,0
+19/20,Newcastle,Southampton,A,March 7 ,Moussa Djenepo sent off for challenge on Isaac Hayden,FOR,28,0,0,0,No Big Six,0,1,0
+19/20,Newcastle,Southampton,A,March 7 ,Penalty awarded for handball by Sofiane Boufal,FOR,40,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Sheffield United,A,Sept. 14,Oliver McBurnie's goal disallowed for offside,FOR,52,0,0,0,No Big Six,0,1,0
+19/20,Southampton,AFC Bournemouth,H,Sept. 20,"Josh King scored for the Cherries, but he was offside",FOR,25,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Wolverhampton,A,Oct. 19 ,Raul Jimenez goal ruled out for offside against Patrick Cutrone,FOR,42,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Leicester City,H,Oct. 25 ,Ryan Bertrand sent off for challenge on Ayoze Perez,AGAINST,12,0,0,0,No Big Six,0,1,0
+19/20,Southampton,West Ham United,H,Dec. 14 ,Goal for Michail Antonio ruled out for handball,FOR,52,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Crystal Palace,H,Dec. 28 ,Goal for Max Meyer ruled out for offside by Wilfried Zaha in the build-up,FOR,15,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Leicester City,A,Jan. 11 ,Penalty for Southampton cancelled for offside against Shane Long in build-up,AGAINST,63,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Leicester City,A,Jan. 11 ,Jonny Evans goal ruled out for offside,FOR,90,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Wolverhampton,H,Jan. 18 ,Penalty awarded (scored by Raul Jimenez) for foul on Jonny by Jack Stephens,AGAINST,65,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Newcastle,H,March 7 ,Moussa Djenepo sent off for challenge on Isaac Hayden,AGAINST,28,0,0,0,No Big Six,0,1,0
+19/20,Southampton,Newcastle,H,March 7 ,Penalty awarded (missed by Matt Ritchie) for handball by Sofiane Boufal,AGAINST,40,0,0,0,No Big Six,0,1,0
+19/20,Southampton,AFC Bournemouth,A,July 19 ,Penalty awarded (missed by Danny Ings) for handball by Harry Wilson,FOR,57,0,0,0,No Big Six,0,1,0
+19/20,Southampton,AFC Bournemouth,A,July 19 ,"Sam Surridge goal disallowed, Callum Wilson offside",FOR,94,0,0,0,No Big Six,0,1,0
+19/20,Liverpool,Chelsea,A,Sept. 22,Chelsea goal ruled out after Mason Mount was offside in the build-up to Cesar Azpilicueta's goal,FOR,27,1,1,1,Big Six,1,0,0
+19/20,Liverpool,Manchester United,A,Oct. 20 ,Sadio Mane goal ruled out for handball,AGAINST,43,1,1,1,Big Six,1,0,0
+19/20,Liverpool,Crystal Palace,A,Nov. 23 ,James Tomkins goal ruled out for push by Jordan Ayew,FOR,43,1,0,1,Big Six,0,0,1
+19/20,Liverpool,Watford,H,Dec. 14 ,Sadio Mane goal ruled out for offside,AGAINST,51,1,1,0,Big Six,0,0,1
+19/20,Liverpool,Wolverhampton,H,Dec. 29 ,Goal for Sadio Mane given after originally ruled out for handball by Adam Lallana,FOR,42,1,1,0,Big Six,0,0,1
+19/20,Liverpool,Wolverhampton,H,Dec. 29 ,Goal for Pedro Neto ruled out for offside in the build-up by Jonny,FOR,45,1,1,0,Big Six,0,0,1
+19/20,Liverpool,Manchester United,H,Jan. 19 ,Roberto Firmino goal disallowed for foul on David De Gea by Virgil van Dijk,AGAINST,25,1,1,1,Big Six,1,0,0
+19/20,Liverpool,Manchester City,A,July 2  ,City goal for Riyad Mahrez ruled out for handball by Phil Foden in the build-up,FOR,90,1,1,1,Big Six,1,0,0
+19/20,Leicester City,Wolverhampton,H,Aug. 11 ,Wolves goal for Leander Dendoncker disallowed for handball in build-up by Willy Boly,FOR,51,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Tottenham Hotspur,H,Sept. 21,Goal disallowed for offside against Ayoze Perez,AGAINST,16,1,0,1,No Big Six,0,0,1
+19/20,Leicester City,Tottenham Hotspur,H,Sept. 21,Son Heung-Min offside in build-up to Serge Aurier goal,FOR,64,1,0,1,No Big Six,0,0,1
+19/20,Leicester City,Burnley,H,Oct. 21 ,Jonny Evans own goal ruled out due to a foul by Chris Wood,FOR,80,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Southampton,A,Oct. 25 ,Ryan Bertrand sent off for challenge on Ayoze Perez,FOR,12,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Brighton and Hove Albion,A,Nov. 23 ,Jamie Vardy penalty retaken after James Maddison scored the rebound with encroachment,AGAINST,80,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Everton,H,Dec. 1  ,Penalty for foul on Ben Chilwell by Mason Holgate cancelled,AGAINST,34,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Everton,H,Dec. 1  ,"Kelechi Iheanacho effort, originally ruled offside, given as a goal",FOR,94,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Southampton,H,Jan. 11 ,Penalty for Southampton cancelled for offside against Shane Long in build-up,FOR,63,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Southampton,H,Jan. 11 ,Jonny Evans goal ruled out for offside,AGAINST,90,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Wolverhampton,A,Feb. 14 ,Wolves goal for Willy Boly disallowed for offside in build-up by Pedro Neto,FOR,44,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Manchester City,H,Feb. 22 ,Penalty (missed by Sergio Aguero) awarded for handball against Dennis Praet,AGAINST,0,1,0,1,No Big Six,0,0,1
+19/20,Leicester City,Norwich City,A,Feb. 28 ,Goal for Kelechi Iheanacho disallowed for handball,AGAINST,49,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Everton,A,July 1  ,Penalty awarded (scored by Gylfi Sigurdsson) for handball against Wilfred Ndidi,AGAINST,13,0,0,0,No Big Six,0,1,0
+19/20,Leicester City,Arsenal,A,July 7  ,Edward Nketiah sent off for foul on James Justin,FOR,75,1,1,0,No Big Six,0,0,1
+19/20,Tottenham Hotspur,Manchester City,A,Aug. 17 ,City goal for Gabriel Jesus ruled out for handball in build-up by Aymeric Laporte,FOR,90,1,1,1,Big Six,1,0,0
+19/20,Tottenham Hotspur,Leicester City,A,Sept. 21,Goal disallowed for offside against Ayoze Perez,FOR,16,1,0,1,Big Six,0,0,1
+19/20,Tottenham Hotspur,Leicester City,A,Sept. 21,Son Heung-Min offside in build-up to Serge Aurier goal,AGAINST,64,1,0,1,Big Six,0,0,1
+19/20,Tottenham Hotspur,Sheffield United,H,Nov. 9  ,Goal for David McGoldrick disallowed for offside in build-up by John Lundstram,FOR,60,1,1,0,Big Six,0,0,1
+19/20,Tottenham Hotspur,West Ham United,A,Nov. 23 ,Declan Rice goal disallowed for offside,FOR,89,1,0,1,Big Six,0,0,1
+19/20,Tottenham Hotspur,Chelsea,H,Dec. 22 ,Penalty (scored by Willian) awarded for foul by Paulo Gazzaniga on Marcos Alonso,AGAINST,45,1,1,1,Big Six,1,0,0
+19/20,Tottenham Hotspur,Chelsea,H,Dec. 22 ,Son Heung-Min sent off for foul on Antonio Rudiger,AGAINST,62,1,1,1,Big Six,1,0,0
+19/20,Tottenham Hotspur,Brighton and Hove Albion,H,Dec. 26 ,Harry Kane goal ruled out for offside,AGAINST,24,1,1,0,Big Six,0,0,1
+19/20,Tottenham Hotspur,Norwich City,A,Dec. 28 ,Teemu Pukki goal ruled out for offside,FOR,33,1,0,1,Big Six,0,0,1
+19/20,Tottenham Hotspur,Manchester City,H,Feb. 2  ,Penalty (missed by Ilkay Gundogan) awarded for foul by Serge Aurier on Sergio Aguero,AGAINST,38,1,1,1,Big Six,1,0,0
+19/20,Tottenham Hotspur,Aston Villa,A,Feb. 16 ,Penalty (missed by Son Heung-Min but scored on the rebound) awarded for foul by Bjorn Engels on Steven Bergwijn,FOR,45,1,0,1,Big Six,0,0,1
+19/20,Tottenham Hotspur,Manchester United,H,June 19 ,Penalty awarded for a foul on Bruno Fernandes overturned,FOR,91,1,1,1,Big Six,1,0,0
+19/20,Tottenham Hotspur,West Ham United,H,June 23 ,Son Heung-Min goal disallowed for offside,AGAINST,45,1,1,0,Big Six,0,0,1
+19/20,Tottenham Hotspur,Sheffield United,A,July 2  ,Goal for Harry Kane ruled out for handball in the build-up by Lucas Moura,AGAINST,32,1,0,1,Big Six,0,0,1
+19/20,Tottenham Hotspur,AFC Bournemouth,A,July 9  ,Goal for Callum Wilson ruled out for handball by Josh King,FOR,90,1,0,1,Big Six,0,0,1
+19/20,Manchester City,West Ham United,A,Aug. 10 ,City goal for Gabriel Jesus ruled out for an offside against Raheem Sterling earlier in the move,AGAINST,53,1,0,1,Big Six,0,0,1
+19/20,Manchester City,West Ham United,A,Aug. 10 ,Missed City penalty retaken due to encroachment by Declan Rice. Retake scored by Sergio Aguero,FOR,86,1,0,1,Big Six,0,0,1
+19/20,Manchester City,Tottenham Hotspur,A,Aug. 17 ,City goal for Gabriel Jesus ruled out for handball in build-up by Aymeric Laporte,AGAINST,90,1,1,1,Big Six,1,0,0
+19/20,Manchester City,Manchester United,H,Dec. 7  ,Penalty awarded (scored by Marcus Rashford) for foul on Rashford by Bernardo Silva,AGAINST,23,1,1,1,Big Six,1,0,0
+19/20,Manchester City,Wolverhampton,A,Dec. 27 ,Penalty awarded (missed by Raheem Sterling) for foul on Riyad Mahrez by Leander Dendoncker,FOR,21,1,0,1,Big Six,0,0,1
+19/20,Manchester City,Wolverhampton,A,Dec. 27 ,Missed City penalty retaken due to encroachment by Connor Coady . Retake scored by on rebound by Raheem Sterling,FOR,25,1,0,1,Big Six,0,0,1
+19/20,Manchester City,Sheffield United,H,Dec. 29 ,Goal for Lys Mousset ruled out for offside,FOR,29,1,1,0,Big Six,0,0,1
+19/20,Manchester City,Everton,H,Jan. 1  ,Goal for Phil Foden ruled out for offside in build-up by Joao Cancelo,AGAINST,12,1,1,0,Big Six,0,0,1
+19/20,Manchester City,Crystal Palace,H,Jan. 18 ,Penalty for handball against Jairo Riedewald cancelled,AGAINST,72,1,1,0,Big Six,0,0,1
+19/20,Manchester City,Tottenham Hotspur,A,Feb. 2  ,Penalty (missed by Ilkay Gundogan) awarded for foul by Serge Aurier on Sergio Aguero,FOR,38,1,1,1,Big Six,1,0,0
+19/20,Manchester City,Leicester City,A,Feb. 22 ,Penalty (missed by Sergio Aguero) awarded for handball against Dennis Praet,FOR,0,1,0,1,Big Six,0,0,1
+19/20,Manchester City,Burnley,H,June 22 ,Penalty given (scored by Riyad Mahrez) for a foul by Ben Mee on Sergio Aguero,FOR,45,1,1,0,Big Six,0,0,1
+19/20,Manchester City,Chelsea,A,June 25 ,"Fernandinho sent off for deliberate handball on the goalline, penalty scored by Willian",AGAINST,77,1,1,1,Big Six,1,0,0
+19/20,Manchester City,Liverpool,H,July 2  ,City goal for Riyad Mahrez ruled out for handball by Phil Foden in the build-up,AGAINST,90,1,1,1,Big Six,1,0,0
+19/20,Manchester City,Manchester City,A,July 15 ,"Man City penalty, for a foul on Gabriel Jesus by Steve Cook, overturned",AGAINST,71,1,1,1,Big Six,1,0,0
+19/20,Manchester City,Norwich City,H,July 26 ,Goal for Onel Hernandez ruled out for offside,FOR,7,1,1,0,Big Six,0,0,1
+19/20,Arsenal,Manchester United,A,Sept. 30,"Pierre-Emerick Aubameyang goal, originally ruled out for offside, overturned on review",FOR,58,1,1,1,Big Six,1,0,0
+19/20,Arsenal,Crystal Palace,H,Oct. 27 ,Penalty awarded for foul by Calum Chambers on Wilfried Zaha (initially booked for diving),AGAINST,32,1,1,0,Big Six,0,0,1
+19/20,Arsenal,Crystal Palace,H,Oct. 27 ,Sokratis goal disallowed for foul by Calum Chambers,AGAINST,83,1,1,0,Big Six,0,0,1
+19/20,Arsenal,Norwich City,A,Dec. 1  ,Pierre-Emerick Aubameyang missed penalty retaken (and scored) following encroachment by a defender,FOR,29,1,0,1,Big Six,0,0,1
+19/20,Arsenal,Brighton and Hove Albion,H,Dec. 5  ,David Luiz goal disallowed for offside,AGAINST,63,1,1,0,Big Six,0,0,1
+19/20,Arsenal,Crystal Palace,A,Jan. 11 ,Pierre-Emerick Aubameyang sent off for foul on Max Meyer,AGAINST,65,1,0,1,Big Six,0,0,1
+19/20,Arsenal,West Ham United,H,March 7 ,Alexandre Lacazette goal allowed after incorrect offside against Mesut Ozil,FOR,78,1,1,0,Big Six,0,0,1
+19/20,Arsenal,Leicester City,H,July 7  ,Edward Nketiah sent off for foul on James Justin,AGAINST,75,1,1,0,Big Six,0,0,1
+19/20,Arsenal,Watford,H,July 26 ,Penalty (scored by Pierre-Emerick Aubameyang) awarded for foul by Craig Dawson on Alexandre Lacazette,FOR,2,1,1,0,Big Six,0,0,1
+19/20,Everton,Brighton and Hove Albion,A,Oct. 26 ,Penalty awarded (scored by Neal Maupay) for foul on Aaron Connolly by Michael Keane,AGAINST,78,0,0,0,No Big Six,0,1,0
+19/20,Everton,Leicester City,A,Dec. 1  ,Penalty for foul on Ben Chilwell by Mason Holgate cancelled,FOR,34,0,0,0,No Big Six,0,1,0
+19/20,Everton,Leicester City,A,Dec. 1  ,"Kelechi Iheanacho effort, originally ruled offside, given as a goal",AGAINST,94,0,0,0,No Big Six,0,1,0
+19/20,Everton,Manchester City,A,Jan. 1  ,Goal for Phil Foden ruled out for offside in build-up by Joao Cancelo,FOR,12,1,1,0,No Big Six,0,0,1
+19/20,Everton,Brighton and Hove Albion,H,Jan. 11 ,Goal for Dominic Calvert-Lewin ruled out for handball,AGAINST,75,0,0,0,No Big Six,0,1,0
+19/20,Everton,Manchester United,H,March 1 ,Goal for Everton disallowed for offside against Gylfi Sigurdsson in front of David De Gea,AGAINST,92,1,0,1,No Big Six,0,0,1
+19/20,Everton,Leicester City,H,July 1  ,Penalty awarded (scored by Gylfi Sigurdsson) for handball against Wilfred Ndidi,FOR,13,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,Southampton,A,Sept. 20,"Josh King scored for the Cherries, but he was offside",AGAINST,25,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,West Ham United,H,Sept. 28,"Josh King goal, originally ruled out for offside, cleared by the VAR",FOR,17,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,Chelsea,A,Dec. 14 ,"Dan Gosling goal, originally disallowed for offside, given by the VAR",FOR,84,1,1,0,No Big Six,0,0,1
+19/20,AFC Bournemouth,Brighton and Hove Albion,A,Dec. 28 ,Dan Burn goal ruled out for offside,FOR,58,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,West Ham United,A,Jan. 1  ,Aaron Cresswell red card downgraded to yellow,AGAINST,76,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,Norwich City,A,Jan. 18 ,Red card for Ben Godfrey for foul on Callum Wilson,FOR,76,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,Burnley,A,Feb. 22 ,Goal for Josh King ruled out for handball in build-up by Philip Billing,AGAINST,22,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,Burnley,A,Feb. 22 ,"Goal for Harry Wilson ruled out for handball by Bournemouth's Adam Smith, penalty awarded and scored by Jay Rodriguez",AGAINST,57,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,Tottenham Hotspur,H,July 9  ,Goal for Callum Wilson ruled out for handball by Josh King,AGAINST,90,1,0,1,No Big Six,0,0,1
+19/20,AFC Bournemouth,Manchester City,A,July 15 ,"Man City penalty, for a foul on Gabriel Jesus by Steve Cook, overturned",FOR,71,1,1,0,No Big Six,0,0,1
+19/20,AFC Bournemouth,Southampton,H,July 19 ,Penalty awarded (missed by Danny Ings) for handball by Harry Wilson,AGAINST,57,0,0,0,No Big Six,0,1,0
+19/20,AFC Bournemouth,Southampton,H,July 19 ,"Sam Surridge goal disallowed, Callum Wilson offside",AGAINST,94,0,0,0,No Big Six,0,1,0
+19/20,Chelsea,Norwich City,A,Aug. 24 ,Chelsea goal for Kurt Zouma disallowed for a foul on the goalkeeper by Olivier Giroud,AGAINST,77,1,0,1,Big Six,0,0,1
+19/20,Chelsea,Liverpool,H,Sept. 22,Goal ruled out after Mason Mount was offside in the build-up to Cesar Azpilicueta's goal,AGAINST,27,1,1,1,Big Six,1,0,0
+19/20,Chelsea,Burnley,A,Oct. 26 ,Penalty overturned for diving by Callum Hudson-Odoi,AGAINST,76,1,0,1,Big Six,0,0,1
+19/20,Chelsea,Watford,A,Nov. 2  ,Penalty (scored by Deulofeu) awarded for foul by Jorginho for trip on Gerard Deulofeu,AGAINST,77,1,0,1,Big Six,0,0,1
+19/20,Chelsea,West Ham United,H,Nov. 30 ,Goal for Michail Antonio ruled out for handball,FOR,67,1,1,0,Big Six,0,0,1
+19/20,Chelsea,AFC Bournemouth,H,Dec. 14 ,"Dan Gosling goal, originally disallowed for offside, given by the VAR",AGAINST,84,1,1,0,Big Six,0,0,1
+19/20,Chelsea,Tottenham Hotspur,A,Dec. 22 ,Penalty (scored by Willian) awarded for foul by Paulo Gazzaniga on Marcos Alonso,FOR,45,1,1,1,Big Six,1,0,0
+19/20,Chelsea,Tottenham Hotspur,A,Dec. 22 ,Son Heung-Min sent off for foul on Antonio Rudiger,FOR,62,1,1,1,Big Six,1,0,0
+19/20,Chelsea,Manchester United,H,Feb. 17 ,Kurt Zouma goal disallowed for foul on Brandon Williams by Cesar Azpilicueta,AGAINST,55,1,1,1,Big Six,1,0,0
+19/20,Chelsea,Manchester United,H,Feb. 17 ,Olivier Giroud goal disallowed for offside,AGAINST,77,1,1,1,Big Six,1,0,0
+19/20,Chelsea,Manchester City,H,June 25 ,"Fernandinho sent off for deliberate handball on the goalline, penalty scored by Willian",FOR,77,1,1,1,Big Six,1,0,0
+19/20,Chelsea,West Ham United,A,July 1  ,Tomas Soucek goal disallowed for offside against Michail Antonio,FOR,34,1,0,1,Big Six,0,0,1
+19/20,Watford,Chelsea,H,Nov. 2  ,Penalty (scored by Deulofeu) awarded for trip on Gerard Deulofeu by Jorginho,FOR,77,1,0,1,No Big Six,0,0,1
+19/20,Watford,Burnley,H,Nov. 23 ,Penalty (scored by Barnes) awarded for foul on Ashley Barnes by Jose Holebas,AGAINST,80,0,0,0,No Big Six,0,1,0
+19/20,Watford,Liverpool,A,Dec. 14 ,Sadio Mane goal ruled out for offside,FOR,51,1,1,0,No Big Six,0,0,1
+19/20,Watford,Wolverhampton,H,Jan. 1  ,Christian Kabasele sent off for professional foul after originally being booked,AGAINST,68,0,0,0,No Big Six,0,1,0
+19/20,Watford,Manchester United,A,Feb. 23 ,Goal for Troy Deeney disallowed for handball by Craig Dawson,AGAINST,52,1,1,0,No Big Six,0,0,1
+19/20,Watford,Arsenal,A,July 26 ,Penalty (scored by Pierre-Emerick Aubameyang) awarded for foul by Craig Dawson on Alexandre Lacazette,AGAINST,2,1,1,0,No Big Six,0,0,1
+19/20,Aston Villa,Burnley,H,Sept. 28,"Goal for John McGinn ruled out on review, Conor Hourihane offside in build-up",AGAINST,25,0,0,0,No Big Six,0,1,0
+19/20,Aston Villa,Brighton and Hove Albion,H,Oct. 19 ,Conor Hourihane goal ruled out for a foul by Wesley on Mat Ryan,AGAINST,42,0,0,0,No Big Six,0,1,0
+19/20,Aston Villa,Sheffield United,A,Dec. 14 ,Penalty awarded (missed by Jack Grealish) for handball by John Egan,FOR,76,0,0,0,No Big Six,0,1,0
+19/20,Aston Villa,Burnley,A,Jan. 1  ,"Goal for Villa's Jack Grealish ruled out on review, Wesley offside in build-up",AGAINST,11,0,0,0,No Big Six,0,1,0
+19/20,Aston Villa,Tottenham Hotspur,H,Feb. 16 ,Penalty (missed by Son Heung-Min but scored on the rebound) awarded for foul by Bjorn Engels on Steven Bergwijn,AGAINST,45,1,0,1,No Big Six,0,0,1
+19/20,Aston Villa,Crystal Palace,H,July 12 ,Mamadou Sakho goal ruled out for handball,FOR,7,0,0,0,No Big Six,0,1,0
+19/20,Aston Villa,Crystal Palace,H,July 12 ,"Penalty cancelled, awarded for foul on Jack Grealish by Patrick van Aanholt",AGAINST,47,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,Manchester City,H,Aug. 10 ,City goal for Gabriel Jesus ruled out for an offside against Raheem Sterling earlier in the move,FOR,53,1,0,1,No Big Six,0,0,1
+19/20,West Ham United,Manchester City,H,Aug. 10 ,Missed City penalty retaken due to encroachment by Declan Rice. Retake scored by Sergio Aguero,AGAINST,86,1,0,1,No Big Six,0,0,1
+19/20,West Ham United,Brighton and Hove Albion,A,Aug. 17 ,"Brighton goal for Leandro Trossard ruled out for offside by Dan Burn, who created the goal",FOR,27,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,AFC Bournemouth,A,Sept. 28,"Josh King goal, originally ruled out for offside, cleared by the VAR",AGAINST,17,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,Crystal Palace,H,Oct. 5  ,Jordan Ayew goal awarded after originally being ruled out for offside,AGAINST,87,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,Burnley,A,Nov. 9  ,Chris Wood goal disallowed for offside,FOR,36,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,Tottenham Hotspur,H,Nov. 23 ,Declan Rice goal disallowed for offside,AGAINST,89,1,0,1,No Big Six,0,0,1
+19/20,West Ham United,Chelsea,A,Nov. 30 ,Goal for Michail Antonio ruled out for handball,AGAINST,67,1,1,0,No Big Six,0,0,1
+19/20,West Ham United,Southampton,A,Dec. 14 ,Goal for Michail Antonio ruled out for handball,AGAINST,52,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,AFC Bournemouth,H,Jan. 1  ,Aaron Cresswell red card downgraded to yellow,FOR,76,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,Sheffield United,A,Jan. 10 ,Goal for Robert Snodgrass ruled out for handball in the build-up by Declan Rice,AGAINST,90,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,Brighton and Hove Albion,H,Feb. 1  ,Goal for Glenn Murray allowed after incorrect handball,AGAINST,79,0,0,0,No Big Six,0,1,0
+19/20,West Ham United,Arsenal,A,March 7 ,Alexandre Lacazette goal allowed after incorrect offside against Mesut Ozil,AGAINST,78,1,1,0,No Big Six,0,0,1
+19/20,West Ham United,Tottenham Hotspur,A,June 23 ,Son Heung-Min goal disallowed for offside,FOR,45,1,1,0,No Big Six,0,0,1
+19/20,West Ham United,Chelsea,H,July 1  ,Tomas Soucek goal disallowed for offside against Michail Antonio,AGAINST,34,1,0,1,No Big Six,0,0,1
+19/20,West Ham United,Manchester United,A,July 22 ,Penalty awarded for a handball by Paul Pogba (scored by Michael Antonio),FOR,45,1,1,0,No Big Six,0,0,1
+19/20,Sheffield United,Southampton,H,Sept. 14,Oliver McBurnie's goal disallowed for offside,AGAINST,52,0,0,0,No Big Six,0,1,0
+19/20,Sheffield United,Tottenham Hotspur,A,Nov. 9  ,Goal for David McGoldrick disallowed for offside in build-up by John Lundstram,AGAINST,60,1,1,0,No Big Six,0,0,1
+19/20,Sheffield United,Newcastle,H,Dec. 5  ,"Jonjo Shelvey goal, originally ruled out for offside, cleared by the VAR",AGAINST,70,0,0,0,No Big Six,0,1,0
+19/20,Sheffield United,Norwich City,A,Dec. 8  ,Red card for Chris Basham rescinded,FOR,74,0,0,0,No Big Six,0,1,0
+19/20,Sheffield United,Aston Villa,H,Dec. 14 ,Penalty awarded (missed by Jack Grealish) for handball by John Egan,AGAINST,76,0,0,0,No Big Six,0,1,0
+19/20,Sheffield United,Brighton and Hove Albion,A,Dec. 21 ,John Egan goal ruled out for handball,AGAINST,8,0,0,0,No Big Six,0,1,0
+19/20,Sheffield United,Brighton and Hove Albion,A,Dec. 21 ,Jack O'Connell goal disallowed for offside,AGAINST,54,0,0,0,No Big Six,0,1,0
+19/20,Sheffield United,Manchester City,A,Dec. 29 ,Goal for Lys Mousset ruled out for offside,AGAINST,29,1,1,0,No Big Six,0,0,1
+19/20,Sheffield United,West Ham United,H,Jan. 10 ,Goal for Robert Snodgrass ruled out for handball in the build-up by Declan Rice,FOR,90,0,0,0,No Big Six,0,1,0
+19/20,Sheffield United,Crystal Palace,A,Feb. 1  ,Red card for Joel Ward rescinded,AGAINST,74,0,0,0,No Big Six,0,1,0
+19/20,Wolverhampton,Leicester City,A,Aug. 11 ,Wolves goal for Leander Dendoncker disallowed for handball in build-up by Willy Boly,AGAINST,51,0,0,0,No Big Six,0,1,0
+19/20,Wolverhampton,Southampton,H,Oct. 19 ,Raul Jimenez goal ruled out for offside against Patrick Cutrone,AGAINST,42,0,0,0,No Big Six,0,1,0
+19/20,Wolverhampton,Manchester City,H,Dec. 27 ,Penalty awarded (missed by Raheem Sterling) for foul on Riyad Mahrez by Leander Dendoncker,AGAINST,21,1,0,1,No Big Six,0,0,1
+19/20,Wolverhampton,Manchester City,H,Dec. 27 ,Missed City penalty retaken due to encroachment by Connor Coady . Retake scored by on rebound by Raheem Sterling,AGAINST,25,1,0,1,No Big Six,0,0,1
+19/20,Wolverhampton,Liverpool,A,Dec. 29 ,Goal for Sadio Mane given after originally ruled out for handball by Adam Lallana,AGAINST,42,1,1,0,No Big Six,0,0,1
+19/20,Wolverhampton,Liverpool,A,Dec. 29 ,Goal for Pedro Neto ruled out for offside in the build-up by Jonny,AGAINST,45,1,1,0,No Big Six,0,0,1
+19/20,Wolverhampton,Watford,A,Jan. 1  ,Christian Kabasele sent off for professional foul after originally being booked,FOR,68,0,0,0,No Big Six,0,1,0
+19/20,Wolverhampton,Southampton,A,Jan. 18 ,Penalty awarded (scored by Raul Jimenez) for foul on Jonny by Jack Stephens,FOR,65,0,0,0,No Big Six,0,1,0
+19/20,Wolverhampton,Leicester City,A,Feb. 14 ,Wolves goal for Willy Boly disallowed for offside in build-up by Pedro Neto,AGAINST,44,0,0,0,No Big Six,0,1,0
+19/20,Norwich City,Chelsea,H,Aug. 24 ,Chelsea goal for Kurt Zouma disallowed for a foul on the goalkeeper by Olivier Giroud,FOR,77,1,0,1,No Big Six,0,0,1
+19/20,Norwich City,Manchester United,H,Oct. 27 ,Penalty awarded (missed by Marcus Rashford) for foul on Daniel James by Ben Godfrey,AGAINST,25,1,0,1,No Big Six,0,0,1
+19/20,Norwich City,Manchester United,H,Oct. 27 ,Penalty awarded (missed by Anthony Martial) for handball by Todd Cantwell,AGAINST,41,1,0,1,No Big Six,0,0,1
+19/20,Norwich City,Arsenal,H,Dec. 1  ,Pierre-Emerick Aubameyang missed penalty retaken (and scored) following encroachment by a defender,AGAINST,29,1,0,1,No Big Six,0,0,1
+19/20,Norwich City,Sheffield United,H,Dec. 8  ,Red card for Chris Basham rescinded,AGAINST,74,0,0,0,No Big Six,0,1,0
+19/20,Norwich City,Tottenham Hotspur,H,Dec. 28 ,Teemu Pukki goal ruled out for offside,AGAINST,33,1,0,1,No Big Six,0,0,1
+19/20,Norwich City,Crystal Palace,H,Jan. 1  ,Connor Wickham goal awarded after originally being ruled out for offside,AGAINST,85,0,0,0,No Big Six,0,1,0
+19/20,Norwich City,AFC Bournemouth,H,Jan. 18 ,Red card for Ben Godfrey for foul on Callum Wilson,AGAINST,76,0,0,0,No Big Six,0,1,0
+19/20,Norwich City,Leicester City,H,Feb. 28 ,Goal for Kelechi Iheanacho disallowed for handball,FOR,49,0,0,0,No Big Six,0,1,0
+19/20,Norwich City,Burnley,H,July 18 ,Red card for Emiliano Buendia for an elbow on Ashley Westwood,AGAINST,33,0,0,0,No Big Six,0,1,0
+19/20,Norwich City,Manchester City,A,July 26 ,Goal for Onel Hernandez ruled out for offside,AGAINST,7,1,1,0,No Big Six,0,0,1
+20/21,Burnley,Manchester City,A,Nov. 28 ,Bailey Peacock-Farrell own goal disallowed for offside in the build-up against Gabriel Jesus,FOR,77,1,1,0,No Big Six,0,0,1
+20/21,Burnley,Arsenal,A,Dec. 13 ,Granit Xhaka sent off for violent conduct on Ashley Westwood,FOR,58,1,1,0,No Big Six,0,0,1
+20/21,Burnley,Manchester United,H,Jan. 12 ,"Man United free-kick and Robbie Brady red-card review cancelled for foul in the build-up by Luke Shaw, who was booked",NEUTRAL,0,1,0,1,No Big Six,0,0,1
+20/21,Burnley,West Bromwich Albion,H,Feb. 20 ,Semi Ajayi sent off for handball and denying an obvious goal-scoring opportunity,FOR,28,0,0,0,No Big Six,0,1,0
+20/21,Burnley,Arsenal,H,March 6 ,Penalty and red card for handball against Erik Pieters cancelled,FOR,85,1,0,1,No Big Six,0,0,1
+20/21,Burnley,Southampton,A,April 4 ,Penalty awarded (scored by Chris Wood) for foul on Erik Pieters by Kyle Walker-Peters,FOR,8,0,0,0,No Big Six,0,1,0
+20/21,Burnley,Wolverhampton,A,April 25,Matej Vydra goal disallowed for offside,AGAINST,50,0,0,0,No Big Six,0,1,0
+20/21,Everton,West Bromwich Albion,H,Sept. 19,Dominic Calvert-Lewin goal awarded after originally ruled out for offside,FOR,31,0,0,0,No Big Six,0,1,0
+20/21,Everton,Crystal Palace,A,Sept. 26,Penalty awarded (scored by Richarlison) for handball by Joel Ward,FOR,41,0,0,0,No Big Six,0,1,0
+20/21,Everton,Liverpool,H,Oct. 17 ,Jordan Henderson goal ruled out for offside against Sadio Mane,FOR,90,1,0,1,No Big Six,0,0,1
+20/21,Everton,Chelsea,H,Dec. 12 ,Penalty cancelled for offside against Dominic Calvert-Lewin,AGAINST,63,1,0,1,No Big Six,0,0,1
+20/21,Everton,Leicester City,A,Dec. 16 ,Penalty cancelled for challenge on Ayoze Perez by Andre Gomes,FOR,81,0,0,0,No Big Six,0,1,0
+20/21,Everton,Liverpool,A,Feb. 20 ,Penalty overturn review rejected after Trent Alexander-Arnold had brought down Dominic Calvert-Lewin,FOR,81,1,1,0,No Big Six,0,0,1
+20/21,Everton,Southampton,H,March 1 ,Michael Keane goal disallowed for offside in the build-up against Mason Holgate,AGAINST,25,0,0,0,No Big Six,0,1,0
+20/21,Everton,Arsenal,A,April 23,Arsenal penalty rescinded for offside in the build-up against Nicolas Pepe,FOR,51,1,1,0,No Big Six,0,0,1
+20/21,Chelsea,Liverpool,H,Sept. 20,Andreas Christensen sent off for denying a goal-scoring opportunity when bringing down Sadio Mane,AGAINST,45,1,1,1,Big Six,1,0,0
+20/21,Chelsea,Everton,A,Dec. 12 ,Penalty cancelled for offside against Dominic Calvert-Lewin,FOR,63,1,0,1,Big Six,0,0,1
+20/21,Chelsea,Wolverhampton,A,Dec. 15 ,Penalty cancelled for challenge on Pedro Neto by Reece James,FOR,81,1,0,1,Big Six,0,0,1
+20/21,Chelsea,Arsenal,A,Dec. 26 ,Tammy Abraham goal awarded after incorrect offside,FOR,85,1,1,1,Big Six,1,0,0
+20/21,Chelsea,Leicester City,A,Jan. 19 ,Penalty cancelled as Jonny Evans' foul on Christian Pulisic was outside the area,AGAINST,39,1,0,1,Big Six,0,0,1
+20/21,Chelsea,Sheffield United,A,Feb. 7  ,Penalty for Ben Chilwell's challenge on Chris Basham cancelled for offside,FOR,11,1,0,1,Big Six,0,0,1
+20/21,Chelsea,Sheffield United,A,Feb. 7  ,Penalty awarded (scored by Jorginho) for Aaron Ramsdale's challenge on Timo Werner,FOR,58,1,0,1,Big Six,0,0,1
+20/21,Chelsea,Manchester United,H,Feb. 28 ,Penalty review rejected for handball against Callum Hudson-Odoi,FOR,15,1,1,1,Big Six,1,0,0
+20/21,Chelsea,Liverpool,A,March 4 ,Timo Werner goal disallowed for offside,AGAINST,24,1,1,1,Big Six,1,0,0
+20/21,Chelsea,West Ham United,A,April 24,Fabian Balbuena yellow card upgraded to red for foul on Ben Chilwell,FOR,79,1,0,1,Big Six,0,0,1
+20/21,Chelsea,Arsenal,H,May 12  ,Christian Pulisic goal disallowed for offside,AGAINST,60,1,1,1,Big Six,1,0,0
+20/21,Chelsea,Leicester City,H,May 18  ,Timo Werner goal disallowed for handball,AGAINST,35,1,1,0,Big Six,0,0,1
+20/21,Fulham,Aston Villa,H,Sept. 28,Bobby Decordova-Reid goal disallowed for foul in the build-up by Aleksandar Mitrovic,AGAINST,56,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Sheffield United,A,Oct. 18 ,Penalty awarded (scored by Billy Sharp) for foul on Jack Robinson by Aleksandar Mitrovic,AGAINST,85,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Crystal Palace,H,Oct. 24 ,Aboubakar Kamara sent off for foul on Eberechi Eze,AGAINST,86,0,0,0,No Big Six,0,1,0
+20/21,Fulham,West Ham United,A,Nov. 7  ,Penalty awarded (missed by Ademola Lookman) for foul on Tom Cairney by Saïd Benrahma,FOR,95,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Leicester City,A,Nov. 30 ,Penalty awarded (scored by Ivan Cavaleiro) for foul on Bobby De Cordova-Reid by Christian Fuchs,FOR,35,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Liverpool,H,Dec. 13 ,Penalty review rejected by referee Andre Marriner following Fabinho challenge on Ivan Cavaleiro,AGAINST,16,1,0,1,No Big Six,0,0,1
+20/21,Fulham,Brighton and Hove Albion,H,Dec. 16 ,Adam Lallana goal disallowed for handball in the build-up by Danny Welbeck,FOR,49,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Newcastle,A,Dec. 19 ,Joachim Andersen sent off for denying a goal-scoring opportunity following challenge on Callum Wilson,AGAINST,62,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Southampton,H,Dec. 26 ,Goal (scored by Theo Walcott) disallowed for offside against Che Adams,FOR,85,0,0,0,No Big Six,0,1,0
+20/21,Fulham,West Ham United,H,Feb. 6  ,Tomas Soucek sent off for elbow on Aleksandar Mitrovic,FOR,90,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Tottenham Hotspur,H,March 4 ,Josh Maja goal disallowed for handball in the build-up by Mario Lemina,AGAINST,64,1,0,1,No Big Six,0,0,1
+20/21,Fulham,Leeds United,H,March 19,Luke Ayling goal disallowed for offside against Tyler Roberts in the build-up,FOR,8,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Aston Villa,A,April 4 ,Penalty cancelled. Mario Lemina adjudged not to have fouled Ollie Watkins,FOR,45,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Wolverhampton,H,April 9 ,Willian Jose goal disallowed for offside in the build-up against Daniel Podence,FOR,45,0,0,0,No Big Six,0,1,0
+20/21,Fulham,Arsenal,A,April 18,Dani Ceballos goal disallowed for offside in the build-up against Bukayo Saka,FOR,40,1,1,0,No Big Six,0,0,1
+20/21,Sheffield United,Fulham,H,Oct. 18 ,Penalty awarded (scored by Billy Sharp) for foul on Jack Robinson by Aleksandar Mitrovic,FOR,85,0,0,0,No Big Six,0,1,0
+20/21,Sheffield United,Liverpool,A,Oct. 24 ,Penalty awarded (scored by Sander Berge) for foul on Oliver McBurnie by Fabinho. Factual decision on where foul took place,FOR,10,1,1,0,No Big Six,0,0,1
+20/21,Sheffield United,Liverpool,A,Oct. 24 ,Mohamed Salah goal disallowed for offside,FOR,62,1,1,0,No Big Six,0,0,1
+20/21,Sheffield United,Brighton and Hove Albion,A,Dec. 20 ,John Lundstram sent off for challenge on Joel Veltman,AGAINST,40,0,0,0,No Big Six,0,1,0
+20/21,Sheffield United,Newcastle,H,Jan. 12 ,Penalty awarded (scored by Billy Sharp) for handball by Federico Fernandez,FOR,73,0,0,0,No Big Six,0,1,0
+20/21,Sheffield United,Chelsea,H,Feb. 7  ,Penalty for Ben Chilwell's challenge on Chris Basham cancelled for offside,AGAINST,11,1,0,1,No Big Six,0,0,1
+20/21,Sheffield United,Chelsea,H,Feb. 7  ,Penalty awarded (scored by Jorginho) for Aaron Ramsdale's challenge on Timo Werner,AGAINST,58,1,0,1,No Big Six,0,0,1
+20/21,Sheffield United,West Ham United,A,Feb. 15 ,Penalty cancelled after Craig Dawson ruled offside before being fouled by Edna Stevens,FOR,5,0,0,0,No Big Six,0,1,0
+20/21,Sheffield United,Aston Villa,H,March 3 ,Phil Jagielka sent off for professional foul on Anwar El Ghazi,AGAINST,57,0,0,0,No Big Six,0,1,0
+20/21,Sheffield United,Brighton and Hove Albion,H,April 24,Jakub Moder goal disallowed for offside,FOR,56,0,0,0,No Big Six,0,1,0
+20/21,Sheffield United,Tottenham Hotspur,A,May 2   ,Son Heung-Min goal disallowed for offside,FOR,50,1,1,0,No Big Six,0,0,1
+20/21,Aston Villa,Fulham,A,Sept. 28,Bobby Decordova-Reid goal disallowed for foul in the build-up by Aleksandar Mitrovic,FOR,56,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,Southampton,H,Nov. 1  ,Ezri Konsa own goal disallowed for offside against Che Adams,FOR,3,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,Arsenal,A,Nov. 8  ,John McGinn goal disallowed for offside against Ross Barkley,AGAINST,1,1,1,0,No Big Six,0,0,1
+20/21,Aston Villa,Brighton and Hove Albion,H,Nov. 21 ,Penalty rescinded after Solly March adjudged not to have fouled Trezeguet,AGAINST,92,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,West Ham United,A,Nov. 30 ,Ollie Watkins goal disallowed for offside,AGAINST,92,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,West Bromwich Albion,A,Dec. 20 ,Jake Livermore sent off for high tackle on Jack Grealish,FOR,36,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,West Bromwich Albion,A,Dec. 20 ,Ollie Watkins goal ruled out for offside,AGAINST,72,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,Crystal Palace,H,Dec. 26 ,Penalty review rejected by referee Anthony Taylor following Matty Cash challenge on Patrick van Aanholt,FOR,24,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,Sheffield United,A,March 3 ,Phil Jagielka sent off for professional foul on Anwar El Ghazi,FOR,57,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,Fulham,H,April 4 ,Penalty cancelled. Mario Lemina adjudged not to have fouled Ollie Watkins,AGAINST,45,0,0,0,No Big Six,0,1,0
+20/21,Aston Villa,Liverpool,A,April 10,Roberto Firmino goal ruled out for offside against Diogo Jota in the build-up,FOR,45,1,1,0,No Big Six,0,0,1
+20/21,Aston Villa,Manchester City,H,April 21,John Stones yellow changed to red for high challenge on Jacob Ramsey,FOR,42,1,0,1,No Big Six,0,0,1
+20/21,Leicester City,West Ham United,H,Oct. 4  ,Jamie Vardy offside in build-up to Harvey Barnes goal,AGAINST,90,0,0,0,No Big Six,0,1,0
+20/21,Leicester City,Leeds United,A,Nov. 2  ,Penalty awarded (scored by Youri Tielemans) for foul on James Maddison by Mateusz Klich,FOR,88,0,0,0,No Big Six,0,1,0
+20/21,Leicester City,Wolverhampton,H,Nov. 8  ,Penalty awarded (scored by Jamie Vardy) for handball by Max Kilman,FOR,14,0,0,0,No Big Six,0,1,0
+20/21,Leicester City,Fulham,H,Nov. 30 ,Penalty awarded (scored by Ivan Cavaleiro) for foul on Bobby De Cordova-Reid by Christian Fuchs,AGAINST,35,0,0,0,No Big Six,0,1,0
+20/21,Leicester City,Everton,H,Dec. 16 ,Penalty cancelled for challenge on Ayoze Perez by Andre Gomes,AGAINST,81,0,0,0,No Big Six,0,1,0
+20/21,Leicester City,Tottenham Hotspur,A,Dec. 20 ,Penalty awarded (scored by Jamie Vardy) after foul on Wesley Fofana by Serge Aurier,FOR,45,1,1,0,No Big Six,0,0,1
+20/21,Leicester City,Tottenham Hotspur,A,Dec. 20 ,James Maddison goal ruled out for offside,AGAINST,47,1,1,0,No Big Six,0,0,1
+20/21,Leicester City,Chelsea,H,Jan. 19 ,Penalty cancelled as Jonny Evans' foul on Christian Pulisic was outside the area,FOR,39,1,0,1,No Big Six,0,0,1
+20/21,Leicester City,Liverpool,H,Feb. 13 ,Penalty cancelled after Thiago's foul on Harvey Barnes adjudged to be outside the area,AGAINST,76,1,0,1,No Big Six,0,0,1
+20/21,Leicester City,Liverpool,H,Feb. 13 ,James Maddison goal allowed after incorrect offside against Daniel Amartey,FOR,79,1,0,1,No Big Six,0,0,1
+20/21,Leicester City,Arsenal,H,Feb. 28 ,Penalty cancelled as foul on Nicolas Pepe by Wilfred Ndidi deemed outside the area,FOR,14,1,0,1,No Big Six,0,0,1
+20/21,Leicester City,Arsenal,H,Feb. 28 ,Penalty awarded (scored by Alexandre Lacazette) for handball against Wilfred Ndidi,AGAINST,45,1,0,1,No Big Six,0,0,1
+20/21,Leicester City,West Ham United,A,April 11,Issa Diop goal ruled out for offside,FOR,54,0,0,0,No Big Six,0,1,0
+20/21,Leicester City,Chelsea,A,May 18  ,Timo Werner goal disallowed for handball,FOR,35,1,1,0,No Big Six,0,0,1
+20/21,Leicester City,Tottenham Hotspur,H,May 23  ,Penalty awarded (scored by Jamie Vardy) for foul on Vardy by Toby Alderweireld,FOR,16,1,0,1,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Newcastle,A,Sept. 20,Neal Maupay goal allowed after being ruled out for offside,FOR,8,0,0,0,No Big Six,0,1,0
+20/21,Brighton and Hove Albion,Newcastle,A,Sept. 20,Yves Bissouma sent off for dangerous challenge on Jamal Lewis,AGAINST,86,0,0,0,No Big Six,0,1,0
+20/21,Brighton and Hove Albion,Manchester United,H,Sept. 26,Penalty cancelled for challenge on Aaron Connolly by Paul Pogba,AGAINST,48,1,0,1,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Manchester United,H,Sept. 26,Marcus Rashford goal disallowed for offside,FOR,52,1,0,1,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Manchester United,H,Sept. 26,Penalty awarded (scored by Bruno Fernandes) for handball against Neal Maupay,AGAINST,90,1,0,1,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Tottenham Hotspur,A,Nov. 1  ,Penalty awarded (scored by Harry Kane) after foul on Kane by Adam Lallana adjudged to be inside the area,AGAINST,11,1,1,0,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Tottenham Hotspur,A,Nov. 1  ,Goal for Tariq Lamptey stands after Graham Scott rejects VAR review for foul in the build-up by Solly March on Pierre-Emile Hojbjerg,FOR,56,1,1,0,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Aston Villa,A,Nov. 21 ,Penalty rescinded after Solly March adjudged not to have fouled Trezeguet,FOR,92,0,0,0,No Big Six,0,1,0
+20/21,Brighton and Hove Albion,Liverpool,H,Nov. 28 ,Mohamed Salah goal disallowed for offside,FOR,35,1,0,1,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Liverpool,H,Nov. 28 ,Offside against Sadio Mane after scoring,FOR,85,1,0,1,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Liverpool,H,Nov. 28 ,Penalty awarded (scored by Pascal Gross) for a foul on Danny Welbeck by Andrew Robertson,FOR,92,1,0,1,No Big Six,0,0,1
+20/21,Brighton and Hove Albion,Southampton,H,Dec. 7  ,Penalty conceded (scored by Danny Ings) after Solly March adjudged to have fouled Kyle Walker-Peters inside the area,AGAINST,80,0,0,0,No Big Six,0,1,0
+20/21,Brighton and Hove Albion,Fulham,A,Dec. 16 ,Adam Lallana goal disallowed for handball in the build-up by Danny Welbeck,AGAINST,49,0,0,0,No Big Six,0,1,0
+20/21,Brighton and Hove Albion,Sheffield United,H,Dec. 20 ,John Lundstram sent off for challenge on Joel Veltman,FOR,40,0,0,0,No Big Six,0,1,0
+20/21,Brighton and Hove Albion,West Bromwich Albion,A,Feb. 27 ,Penalty conceded (missed by Pascal Gross) for handball against Okay Yokuslu,FOR,17,0,0,0,No Big Six,0,1,0
+20/21,Brighton and Hove Albion,West Bromwich Albion,A,Feb. 27 ,Lewis Dunk goal disallowed as referee Lee Mason had blown his whistle before the ball crossed the line,AGAINST,37,0,0,0,No Big Six,0,1,0
+20/21,Brighton and Hove Albion,Sheffield United,A,April 24,Jakub Moder goal disallowed for offside,AGAINST,56,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,Southampton,H,Sept. 12,Red card for Kyle Walker-Peters rescinded,AGAINST,51,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,Manchester United,A,Sept. 19,Penalty awarded (missed by Jordan Ayew) for handball by Victor Lindelof,FOR,70,1,1,0,No Big Six,0,0,1
+20/21,Crystal Palace,Manchester United,A,Sept. 19,Penalty retaken (scored by Wilfried Zaha) for encroachment by David de Gea,FOR,73,1,1,0,No Big Six,0,0,1
+20/21,Crystal Palace,Everton,H,Sept. 26,Penalty awarded (scored by Richarlison) for handball by Joel Ward,AGAINST,41,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,Leeds United,H,Nov. 7  ,Patrick Bamford goal disallowed for offside,FOR,19,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,Fulham,A,Oct. 24 ,Aboubakar Kamara sent off for foul on Eberechi Eze,FOR,86,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,Wolverhampton,A,Oct. 30 ,Penalty for Crystal Palace cancelled for offside against Patrick van Aanholt,AGAINST,38,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,Wolverhampton,A,Oct. 30 ,Luka Milivojevic sent off for a challenge on Joao Moutinho,AGAINST,85,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,West Bromwich Albion,A,Dec. 6  ,Matheus Pereira sent off for challenge on Patrick van Aanholt,FOR,35,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,Aston Villa,A,Dec. 26 ,Penalty review rejected by referee Anthony Taylor following Matty Cash challenge on Patrick van Aanholt,AGAINST,24,0,0,0,No Big Six,0,1,0
+20/21,Crystal Palace,West Bromwich Albion,H,March 13,Penalty conceded (scored by Luka Milivojevic) for handball against Darnell Furlong,FOR,34,0,0,0,No Big Six,0,1,0
+20/21,Leeds United,Wolverhampton,H,Oct. 19 ,Goal for Romain Saiss disallowed for offside in the build-up by Daniel Podence,FOR,54,0,0,0,No Big Six,0,1,0
+20/21,Leeds United,Leicester City,H,Nov. 2  ,Penalty awarded (scored by Youri Tielemans) for foul on James Maddison by Mateusz Klich,AGAINST,88,0,0,0,No Big Six,0,1,0
+20/21,Leeds United,Crystal Palace,A,Nov. 7  ,Patrick Bamford goal disallowed for offside,AGAINST,19,0,0,0,No Big Six,0,1,0
+20/21,Leeds United,Arsenal,H,Nov. 22 ,Nicolas Pepe sent off for headbutt on Ezgjan Alioski,FOR,51,1,0,1,No Big Six,0,0,1
+20/21,Leeds United,West Ham United,H,Dec. 11 ,Penalty retaken (scored by Mateusz Klich) for encroachment by Lukasz Fabianski,FOR,6,0,0,0,No Big Six,0,1,0
+20/21,Leeds United,Arsenal,A,Feb. 14 ,Penalty cancelled after Liam Cooper adjudged not to have fouled Bukayo Saka,FOR,35,1,1,0,No Big Six,0,0,1
+20/21,Leeds United,Southampton,H,Feb. 23 ,Penalty cancelled after Diego Llorente adjudged not to have fouled Nathan Tella,FOR,33,0,0,0,No Big Six,0,1,0
+20/21,Leeds United,Fulham,A,March 19,Luke Ayling goal disallowed for offside against Tyler Roberts in the build-up,AGAINST,8,0,0,0,No Big Six,0,1,0
+20/21,Leeds United,Manchester City,A,April 10,Liam Cooper card upgraded from yellow to red for high challenge on Gabriel Jesus,AGAINST,45,1,1,0,No Big Six,0,0,1
+20/21,Manchester City,Liverpool,H,Nov. 8  ,Penalty awarded (missed by Kevin De Bruyne) for handball against Joe Gomez,FOR,41,1,1,1,Big Six,1,0,0
+20/21,Manchester City,Tottenham Hotspur,A,Nov. 21 ,Aymeric Laporte goal disallowed for handball by Gabriel Jesus,AGAINST,27,1,1,1,Big Six,1,0,0
+20/21,Manchester City,Burnley,H,Nov. 28 ,Bailey Peacock-Farrell own goal disallowed for offside in the build-up against Gabriel Jesus,AGAINST,77,1,1,0,Big Six,0,0,1
+20/21,Manchester City,Manchester United,A,Dec. 12 ,Penalty cancelled for offside against Marcus Rashford,FOR,38,1,1,1,Big Six,1,0,0
+20/21,Manchester City,West Bromwich Albion,A,Jan. 26 ,Ilkay Gundogan goal awarded after incorrect offside against Bernardo Silva,FOR,20,1,0,1,Big Six,0,0,1
+20/21,Manchester City,Wolverhampton,H,March 2 ,Gabriel Jesus goal allowed after incorrect offside,FOR,90,1,1,0,Big Six,0,0,1
+20/21,Manchester City,Leeds United,H,April 10,Liam Cooper card upgraded from yellow to red for high challenge on Gabriel Jesus,FOR,45,1,1,0,Big Six,0,0,1
+20/21,Manchester City,Aston Villa,A,April 21,John Stones yellow changed to red for high challenge on Jacob Ramsey,AGAINST,42,1,0,1,Big Six,0,0,1
+20/21,Manchester City,Newcastle,A,May 14  ,Penalty awarded (scored by Joelinton) after incorrect offside against Allan Saint-Maximin,AGAINST,45,1,0,1,Big Six,0,0,1
+20/21,Manchester United,Crystal Palace,H,Sept. 19,Penalty awarded (missed by Jordan Ayew) for handball by Victor Lindelof,AGAINST,70,1,1,0,Big Six,0,0,1
+20/21,Manchester United,Crystal Palace,H,Sept. 19,Penalty retaken (scored by Wilfried Zaha) for encroachment by David de Gea,AGAINST,73,1,1,0,Big Six,0,0,1
+20/21,Manchester United,Brighton and Hove Albion,A,Sept. 26,Penalty cancelled for challenge on Aaron Connolly by Paul Pogba,FOR,48,1,0,1,Big Six,0,0,1
+20/21,Manchester United,Brighton and Hove Albion,A,Sept. 26,Marcus Rashford goal disallowed for offside,AGAINST,52,1,0,1,Big Six,0,0,1
+20/21,Manchester United,Brighton and Hove Albion,A,Sept. 26,Penalty awarded (scored by Bruno Fernandes) for handball against Neal Maupay,FOR,90,1,0,1,Big Six,0,0,1
+20/21,Manchester United,Newcastle,A,Oct. 17 ,Bruno Fernandes goal ruled out for offside against Juan Mata,AGAINST,19,1,0,1,Big Six,0,0,1
+20/21,Manchester United,Newcastle,A,Oct. 17 ,Penalty awarded (missed by Bruno Fernandes) for foul on Marcus Rashford by Jamal Lewis,FOR,54,1,0,1,Big Six,0,0,1
+20/21,Manchester United,West Bromwich Albion,H,Nov. 21 ,WBA penalty cancelled after Bruno Fernandes adjudged not to have fouled Conor Gallagher,FOR,47,1,1,0,Big Six,0,0,1
+20/21,Manchester United,West Bromwich Albion,H,Nov. 21 ,Penalty retake (scored by Bruno Fernandes) after encroachment by Sam Johnstone,FOR,56,1,1,0,Big Six,0,0,1
+20/21,Manchester United,Manchester City,H,Dec. 12 ,Penalty cancelled for offside against Marcus Rashford,AGAINST,38,1,1,1,Big Six,1,0,0
+20/21,Manchester United,Burnley,A,Jan. 12 ,"Man United free-kick and Robbie Brady red-card review cancelled for foul in the build-up by Luke Shaw, who was booked",NEUTRAL,0,1,0,1,Big Six,0,0,1
+20/21,Manchester United,Southampton,H,Feb. 2  ,Penalty cancelled after Kayne Ramsay's foul on Edinson Cavani ruled outside the area,AGAINST,42,1,1,0,Big Six,0,0,1
+20/21,Manchester United,Southampton,H,Feb. 2  ,Goal for Che Adams disallowed for offside,FOR,53,1,1,0,Big Six,0,0,1
+20/21,Manchester United,Southampton,H,Feb. 2  ,Jan Bednarek sent off for denying an obvious goal-scoring opportunity,FOR,53,1,1,0,Big Six,0,0,1
+20/21,Manchester United,West Bromwich Albion,A,Feb. 14 ,Penalty cancelled after Semi Ajayi adjudged not to have fouled Harry Maguire,AGAINST,64,1,0,1,Big Six,0,0,1
+20/21,Manchester United,Chelsea,A,Feb. 28 ,Penalty review rejected for handball against Callum Hudson-Odoi,AGAINST,15,1,1,1,Big Six,1,0,0
+20/21,Manchester United,Tottenham Hotspur,A,April 11,Edinson Cavani goal ruled out for foul on Son Heung-Min by Scott McTominay,AGAINST,33,1,1,1,Big Six,1,0,0
+20/21,Manchester United,Liverpool,H,May 13  ,Penalty cancelled for challenge on Nathaniel Phillips by Eric Bailly,FOR,27,1,1,1,Big Six,1,0,0
+20/21,Manchester United,Wolverhampton,A,May 23  ,Penalty awarded (missed by Juan Mata but scored on the rebound) for foul on Donny van de Beek by Romain Saiss,FOR,45,1,0,1,Big Six,0,0,1
+20/21,Newcastle,Brighton and Hove Albion,H,Sept. 20,Neal Maupay goal allowed after being ruled out for offside,AGAINST,8,0,0,0,No Big Six,0,1,0
+20/21,Newcastle,Brighton and Hove Albion,H,Sept. 20,Yves Bissouma sent off for dangerous challenge on Jamal Lewis,FOR,86,0,0,0,No Big Six,0,1,0
+20/21,Newcastle,Tottenham Hotspur,A,Sept. 27,Penalty awarded (scored by Callum Wilson) for handball by Eric Dier,FOR,90,1,1,0,No Big Six,0,0,1
+20/21,Newcastle,Manchester United,H,Oct. 17 ,Bruno Fernandes goal ruled out for offside against Juan Mata,FOR,19,1,0,1,No Big Six,0,0,1
+20/21,Newcastle,Manchester United,H,Oct. 17 ,Penalty awarded (missed by Bruno Fernandes) for foul on Marcus Rashford by Jamal Lewis,AGAINST,54,1,0,1,No Big Six,0,0,1
+20/21,Newcastle,Fulham,H,Dec. 19 ,Joachim Andersen sent off for denying a goal-scoring opportunity following challenge on Callum Wilson,FOR,62,0,0,0,No Big Six,0,1,0
+20/21,Newcastle,Sheffield United,A,Jan. 12 ,Penalty awarded (scored by Billy Sharp) for handball by Federico Fernandez,AGAINST,73,0,0,0,No Big Six,0,1,0
+20/21,Newcastle,West Ham United,H,April 17,Penalty awarded (scored by Jesse Lingard) for handball by Ciaran Clark,AGAINST,76,0,0,0,No Big Six,0,1,0
+20/21,Newcastle,Liverpool,A,April 24,Callum Wilson goal disallowed for handball,AGAINST,92,1,1,0,No Big Six,0,0,1
+20/21,Newcastle,Manchester City,H,May 14  ,Penalty awarded (scored by Joelinton) after incorrect offside against Allan Saint-Maximin,FOR,45,1,0,1,No Big Six,0,0,1
+20/21,Southampton,Crystal Palace,A,Sept. 12,Red card for Kyle Walker-Peters rescinded,FOR,51,0,0,0,No Big Six,0,1,0
+20/21,Southampton,Tottenham Hotspur,H,Sept. 20,Goal (scored by Harry Kane) disallowed for offside against Son Heung-Min,FOR,3,1,0,1,No Big Six,0,0,1
+20/21,Southampton,Tottenham Hotspur,H,Sept. 20,Penalty awarded (scored by Danny Ings) for handball by Matt Doherty,FOR,90,1,0,1,No Big Six,0,0,1
+20/21,Southampton,Aston Villa,A,Nov. 1  ,Ezri Konsa own goal disallowed for offside against Che Adams,AGAINST,3,0,0,0,No Big Six,0,1,0
+20/21,Southampton,Brighton and Hove Albion,A,Dec. 7  ,Penalty conceded (scored by Danny Ings) after Solly March adjudged to have fouled Kyle Walker-Peters inside the area,FOR,80,0,0,0,No Big Six,0,1,0
+20/21,Southampton,Fulham,A,Dec. 26 ,Goal (scored by Theo Walcott) disallowed for offside against Che Adams,AGAINST,85,0,0,0,No Big Six,0,1,0
+20/21,Southampton,Manchester United,A,Feb. 2  ,Penalty cancelled after Kayne Ramsay's foul on Edinson Cavani ruled outside the area,FOR,42,1,1,0,No Big Six,0,0,1
+20/21,Southampton,Manchester United,A,Feb. 2  ,Goal for Che Adams disallowed for offside,AGAINST,53,1,1,0,No Big Six,0,0,1
+20/21,Southampton,Manchester United,A,Feb. 2  ,Jan Bednarek sent off for denying an obvious goal-scoring opportunity,AGAINST,53,1,1,0,No Big Six,0,0,1
+20/21,Southampton,Leeds United,A,Feb. 23 ,Penalty cancelled after Diego Llorente adjudged not to have fouled Nathan Tella,AGAINST,33,0,0,0,No Big Six,0,1,0
+20/21,Southampton,Everton,A,March 1 ,Michael Keane goal disallowed for offside in the build-up against Mason Holgate,FOR,25,0,0,0,No Big Six,0,1,0
+20/21,Southampton,Burnley,H,April 4 ,Penalty awarded (scored by Chris Wood) for foul on Erik Pieters by Kyle Walker-Peters,AGAINST,8,0,0,0,No Big Six,0,1,0
+20/21,Southampton,Tottenham Hotspur,A,April 21,Son Heung-Min goal disallowed for offside against Lucas Moura in the goalkeeper's line of vision,FOR,74,1,1,0,No Big Six,0,0,1
+20/21,Southampton,Tottenham Hotspur,A,April 21,Penalty awarded (scored by Son Heung-Min) after foul by Moussa Djenepo on Sergio Reguilon adjudged to be inside the area,AGAINST,86,1,1,0,No Big Six,0,0,1
+20/21,West Ham United,Newcastle,H,Sept. 12,Yellow card for Tomas Soucek switched to Andriy Yarmolenko due to mistaken identity by the referee.,None,0,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Leicester City,A,Oct. 4  ,Jamie Vardy offside in build-up to Harvey Barnes goal,FOR,90,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Liverpool,A,Oct. 31 ,Diojo Jota goal disallowed for a foul by Sadio Mane,FOR,82,1,1,0,No Big Six,0,0,1
+20/21,West Ham United,Fulham,H,Nov. 7  ,Penalty awarded (missed by Ademola Lookman) for foul on Tom Cairney by Saïd Benrahma,AGAINST,95,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Aston Villa,H,Nov. 30 ,Ollie Watkins goal disallowed for offside,FOR,92,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Leeds United,A,Dec. 11 ,Penalty retaken (scored by Mateusz Klich) for encroachment by Lukasz Fabianski,AGAINST,6,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Fulham,A,Feb. 6  ,Tomas Soucek sent off for elbow on Aleksandar Mitrovic,AGAINST,90,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Sheffield United,H,Feb. 15 ,Penalty cancelled after Craig Dawson ruled offside before being fouled by Edna Stevens,AGAINST,5,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Tottenham Hotspur,H,Feb. 21 ,Goal for Jesse Lingard allowed after incorrect offside,FOR,47,1,0,1,No Big Six,0,0,1
+20/21,West Ham United,Leicester City,H,April 11,Issa Diop goal ruled out for offside,AGAINST,54,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Newcastle,A,April 17,Penalty awarded (scored by Jesse Lingard) for handball by Ciaran Clark,FOR,76,0,0,0,No Big Six,0,1,0
+20/21,West Ham United,Chelsea,H,April 24,Fabian Balbuena yellow card upgraded to red for foul on Ben Chilwell,AGAINST,79,1,0,1,No Big Six,0,0,1
+20/21,Tottenham Hotspur,Southampton,A,Sept. 20,Goal (scored by Harry Kane) disallowed for offside against Son Heung-Min,AGAINST,3,1,0,1,Big Six,0,0,1
+20/21,Tottenham Hotspur,Southampton,A,Sept. 20,Penalty awarded (scored by Danny Ings) for handball by Matt Doherty,AGAINST,90,1,0,1,Big Six,0,0,1
+20/21,Tottenham Hotspur,Newcastle,H,Sept. 27,Penalty awarded (scored by Callum Wilson) for handball by Eric Dier,AGAINST,90,1,1,0,Big Six,0,0,1
+20/21,Tottenham Hotspur,Brighton and Hove Albion,H,Nov. 1  ,Penalty awarded (scored by Harry Kane) after foul on Kane by Adam Lallana adjudged to be inside the area,FOR,11,1,1,0,Big Six,0,0,1
+20/21,Tottenham Hotspur,Brighton and Hove Albion,H,Nov. 1  ,Goal for Tariq Lamptey stands after Graham Scott rejects VAR review for foul in the build-up by Solly March on Pierre-Emile Hojbjerg,AGAINST,56,1,1,0,Big Six,0,0,1
+20/21,Tottenham Hotspur,Manchester City,H,Nov. 21 ,Aymeric Laporte goal disallowed for handball by Gabriel Jesus,FOR,27,1,1,1,Big Six,1,0,0
+20/21,Tottenham Hotspur,Leicester City,H,Dec. 20 ,Penalty awarded (scored by Jamie Vardy) after foul on Wesley Fofana by Serge Aurier,AGAINST,45,1,1,0,Big Six,0,0,1
+20/21,Tottenham Hotspur,Leicester City,H,Dec. 20 ,James Maddison goal ruled out for offside,FOR,47,1,1,0,Big Six,0,0,1
+20/21,Tottenham Hotspur,Liverpool,H,Jan. 28 ,Son Heung-Min goal disallowed for offside in the build-up,AGAINST,3,1,1,1,Big Six,1,0,0
+20/21,Tottenham Hotspur,Liverpool,H,Jan. 28 ,Mohamed Salah goal ruled out for handball in the build-up by Roberto Firmino,FOR,56,1,1,1,Big Six,1,0,0
+20/21,Tottenham Hotspur,West Ham United,A,Feb. 21 ,Goal for Jesse Lingard allowed after incorrect offside,AGAINST,47,1,0,1,Big Six,0,0,1
+20/21,Tottenham Hotspur,Fulham,A,March 4 ,Josh Maja goal disallowed for handball in the build-up by Mario Lemina,FOR,64,1,0,1,Big Six,0,0,1
+20/21,Tottenham Hotspur,Manchester United,H,April 11,Edinson Cavani goal ruled out for foul on Son Heung-Min by Scott McTominay,FOR,33,1,1,1,Big Six,1,0,0
+20/21,Tottenham Hotspur,Southampton,H,April 21,Son Heung-Min goal disallowed for offside against Lucas Moura in the goalkeeper's line of vision,AGAINST,74,1,1,0,Big Six,0,0,1
+20/21,Tottenham Hotspur,Southampton,H,April 21,Penalty awarded (scored by Son Heung-Min) after foul by Moussa Djenepo on Sergio Reguilon adjudged to be inside the area,FOR,86,1,1,0,Big Six,0,0,1
+20/21,Tottenham Hotspur,Sheffield United,H,May 2   ,Son Heung-Min goal disallowed for offside,AGAINST,50,1,1,0,Big Six,0,0,1
+20/21,Tottenham Hotspur,Leicester City,A,May 23  ,Penalty awarded (scored by Jamie Vardy) for foul on Vardy by Toby Alderweireld,AGAINST,16,1,0,1,Big Six,0,0,1
+20/21,Wolverhampton,Leeds United,A,Oct. 19 ,Goal for Romain Saiss disallowed for offside in the build-up by Daniel Podence,AGAINST,54,0,0,0,No Big Six,0,1,0
+20/21,Wolverhampton,Crystal Palace,H,Oct. 30 ,Penalty for Crystal Palace cancelled for offside against Patrick van Aanholt,FOR,38,0,0,0,No Big Six,0,1,0
+20/21,Wolverhampton,Crystal Palace,H,Oct. 30 ,Luka Milivojevic sent off for a challenge on Joao Moutinho,FOR,85,0,0,0,No Big Six,0,1,0
+20/21,Wolverhampton,Leicester City,A,Nov. 8  ,Penalty awarded (scored by Jamie Vardy) for handball by Max Kilman,AGAINST,14,0,0,0,No Big Six,0,1,0
+20/21,Wolverhampton,Liverpool,A,Dec. 6  ,"Penalty cancelled, Sadio Mane adjudged not to have fouled Conor Coady",AGAINST,44,1,1,0,No Big Six,0,0,1
+20/21,Wolverhampton,Chelsea,H,Dec. 15 ,Penalty cancelled for challenge on Pedro Neto by Reece James,AGAINST,81,1,0,1,No Big Six,0,0,1
+20/21,Wolverhampton,Arsenal,H,Feb. 2  ,Bukayo Saka goal disallowed for offside in the build-up against Alexandre Lacazette,FOR,9,1,0,1,No Big Six,0,0,1
+20/21,Wolverhampton,Manchester City,A,March 2 ,Gabriel Jesus goal allowed after incorrect offside,AGAINST,90,1,1,0,No Big Six,0,0,1
+20/21,Wolverhampton,Fulham,A,April 9 ,Willian Jose goal disallowed for offside in the build-up against Daniel Podence,AGAINST,45,0,0,0,No Big Six,0,1,0
+20/21,Wolverhampton,Burnley,H,April 25,Matej Vydra goal disallowed for offside,FOR,50,0,0,0,No Big Six,0,1,0
+20/21,Wolverhampton,Manchester United,H,May 23  ,Penalty awarded (missed by Juan Mata but scored on the rebound) for foul on Donny van de Beek by Romain Saiss,AGAINST,45,1,0,1,No Big Six,0,0,1
+20/21,Arsenal,Aston Villa,H,Nov. 8  ,John McGinn goal disallowed for offside against Ross Barkley,FOR,1,1,1,0,Big Six,0,0,1
+20/21,Arsenal,Leeds United,A,Nov. 22 ,Nicolas Pepe sent off for headbutt on Ezgjan Alioski,AGAINST,51,1,0,1,Big Six,0,0,1
+20/21,Arsenal,Burnley,H,Dec. 13 ,Granit Xhaka sent off for violent conduct on Ashley Westwood,AGAINST,58,1,1,0,Big Six,0,0,1
+20/21,Arsenal,Chelsea,H,Dec. 26 ,Tammy Abraham goal awarded after incorrect offside,AGAINST,85,1,1,1,Big Six,1,0,0
+20/21,Arsenal,Wolverhampton,A,Feb. 2  ,Bukayo Saka goal disallowed for offside in the build-up against Alexandre Lacazette,AGAINST,9,1,0,1,Big Six,0,0,1
+20/21,Arsenal,Leeds United,H,Feb. 14 ,Penalty cancelled after Liam Cooper adjudged not to have fouled Bukayo Saka,AGAINST,35,1,1,0,Big Six,0,0,1
+20/21,Arsenal,Leicester City,A,Feb. 28 ,Penalty cancelled as foul on Nicolas Pepe by Wilfred Ndidi deemed outside the area,AGAINST,14,1,0,1,Big Six,0,0,1
+20/21,Arsenal,Leicester City,A,Feb. 28 ,Penalty awarded (scored by Alexandre Lacazette) for handball against Wilfred Ndidi,FOR,45,1,0,1,Big Six,0,0,1
+20/21,Arsenal,Burnley,A,March 6 ,Penalty and red card for handball against Erik Pieters cancelled,AGAINST,85,1,0,1,Big Six,0,0,1
+20/21,Arsenal,Fulham,H,April 18,Dani Ceballos goal disallowed for offside in the build-up against Bukayo Saka,AGAINST,40,1,1,0,Big Six,0,0,1
+20/21,Arsenal,Everton,H,April 23,Arsenal penalty rescinded for offside in the build-up against Nicolas Pepe,AGAINST,51,1,1,0,Big Six,0,0,1
+20/21,Arsenal,Chelsea,A,May 12  ,Christian Pulisic goal disallowed for offside,FOR,60,1,1,1,Big Six,1,0,0
+20/21,Liverpool,Chelsea,A,Sept. 20,Andreas Christensen sent off for denying a goal-scoring opportunity when bringing down Sadio Mane,FOR,45,1,1,1,Big Six,1,0,0
+20/21,Liverpool,Everton,A,Oct. 17 ,Jordan Henderson goal ruled out for offside against Sadio Mane,AGAINST,90,1,0,1,Big Six,0,0,1
+20/21,Liverpool,Sheffield United,H,Oct. 24 ,Penalty awarded (scored by Sander Berge) for foul on Oliver McBurnie by Fabinho. Factual decision on where foul took place,AGAINST,10,1,1,0,Big Six,0,0,1
+20/21,Liverpool,Sheffield United,H,Oct. 24 ,Mohamed Salah goal disallowed for offside,AGAINST,62,1,1,0,Big Six,0,0,1
+20/21,Liverpool,West Ham United,H,Oct. 31 ,Diojo Jota goal disallowed for a foul by Sadio Mane,AGAINST,82,1,1,0,Big Six,0,0,1
+20/21,Liverpool,Manchester City,A,Nov. 8  ,Penalty awarded (missed by Kevin De Bruyne) for handball against Joe Gomez,AGAINST,41,1,1,1,Big Six,1,0,0
+20/21,Liverpool,Brighton and Hove Albion,A,Nov. 28 ,Mohamed Salah goal disallowed for offside,AGAINST,35,1,0,1,Big Six,0,0,1
+20/21,Liverpool,Brighton and Hove Albion,A,Nov. 28 ,Offside against Sadio Mane after scoring,AGAINST,85,1,0,1,Big Six,0,0,1
+20/21,Liverpool,Brighton and Hove Albion,A,Nov. 28 ,Penalty awarded (scored by Pascal Gross) for a foul on Danny Welbeck by Andrew Robertson,AGAINST,92,1,0,1,Big Six,0,0,1
+20/21,Liverpool,Wolverhampton,H,Dec. 6  ,"Penalty cancelled, Sadio Mane adjudged not to have fouled Conor Coady",FOR,44,1,1,0,Big Six,0,0,1
+20/21,Liverpool,Fulham,A,Dec. 13 ,Penalty review rejected by referee Andre Marriner following Fabinho challenge on Ivan Cavaleiro,FOR,16,1,0,1,Big Six,0,0,1
+20/21,Liverpool,Tottenham Hotspur,A,Jan. 28 ,Son Heung-Min goal disallowed for offside in the build-up,FOR,3,1,1,1,Big Six,1,0,0
+20/21,Liverpool,Tottenham Hotspur,A,Jan. 28 ,Mohamed Salah goal ruled out for handball in the build-up by Roberto Firmino,AGAINST,56,1,1,1,Big Six,1,0,0
+20/21,Liverpool,Leicester City,A,Feb. 13 ,Penalty cancelled after Thiago's foul on Harvey Barnes adjudged to be outside the area,FOR,76,1,0,1,Big Six,0,0,1
+20/21,Liverpool,Leicester City,A,Feb. 13 ,James Maddison goal allowed after incorrect offside against Daniel Amartey,AGAINST,79,1,0,1,Big Six,0,0,1
+20/21,Liverpool,Everton,H,Feb. 20 ,Penalty overturn review rejected after Trent Alexander-Arnold had brought down Dominic Calvert-Lewin,AGAINST,81,1,1,0,Big Six,0,0,1
+20/21,Liverpool,Chelsea,H,March 4 ,Timo Werner goal disallowed for offside,FOR,24,1,1,1,Big Six,1,0,0
+20/21,Liverpool,Aston Villa,H,April 10,Roberto Firmino goal ruled out for offside against Diogo Jota in the build-up,AGAINST,45,1,1,0,Big Six,0,0,1
+20/21,Liverpool,Newcastle,H,April 24,Callum Wilson goal disallowed for handball,FOR,92,1,1,0,Big Six,0,0,1
+20/21,Liverpool,Manchester United,A,May 13  ,Penalty cancelled for challenge on Nathaniel Phillips by Eric Bailly,AGAINST,27,1,1,1,Big Six,1,0,0
+20/21,West Bromwich Albion,Everton,A,Sept. 19,Dominic Calvert-Lewin goal awarded after originally ruled out for offside,AGAINST,31,0,0,0,No Big Six,0,1,0
+20/21,West Bromwich Albion,Manchester United,A,Nov. 21 ,WBA penalty cancelled after Bruno Fernandes adjudged not to have fouled Conor Gallagher,AGAINST,47,1,1,0,No Big Six,0,0,1
+20/21,West Bromwich Albion,Manchester United,A,Nov. 21 ,Penalty retake (scored by Bruno Fernandes) after encroachment by Sam Johnstone,AGAINST,56,1,1,0,No Big Six,0,0,1
+20/21,West Bromwich Albion,Crystal Palace,H,Dec. 6  ,Matheus Pereira sent off for challenge on Patrick van Aanholt,AGAINST,35,0,0,0,No Big Six,0,1,0
+20/21,West Bromwich Albion,Aston Villa,H,Dec. 20 ,Jake Livermore sent off for high tackle on Jack Grealish,AGAINST,36,0,0,0,No Big Six,0,1,0
+20/21,West Bromwich Albion,Aston Villa,H,Dec. 20 ,Ollie Watkins goal ruled out for offside,FOR,72,0,0,0,No Big Six,0,1,0
+20/21,West Bromwich Albion,Manchester City,H,Jan. 26 ,Ilkay Gundogan goal awarded after incorrect offside against Bernardo Silva,AGAINST,20,1,0,1,No Big Six,0,0,1
+20/21,West Bromwich Albion,Manchester United,H,Feb. 14 ,Penalty cancelled after Semi Ajayi adjudged not to have fouled Harry Maguire,FOR,64,1,0,1,No Big Six,0,0,1
+20/21,West Bromwich Albion,Burnley,A,Feb. 20 ,Semi Ajayi sent off for handball and denying an obvious goal-scoring opportunity,AGAINST,28,0,0,0,No Big Six,0,1,0
+20/21,West Bromwich Albion,Brighton and Hove Albion,H,Feb. 27 ,Penalty conceded (missed by Pascal Gross) for handball against Okay Yokuslu,AGAINST,17,0,0,0,No Big Six,0,1,0
+20/21,West Bromwich Albion,Brighton and Hove Albion,H,Feb. 27 ,Lewis Dunk goal disallowed as referee Lee Mason had blown his whistle before the ball crossed the line,FOR,37,0,0,0,No Big Six,0,1,0
+20/21,West Bromwich Albion,Crystal Palace,A,March 13,Penalty conceded (scored by Luka Milivojevic) for handball against Darnell Furlong,AGAINST,34,0,0,0,No Big Six,0,1,0

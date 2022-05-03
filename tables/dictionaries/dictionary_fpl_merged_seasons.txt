@@ -1,0 +1,76 @@
+Diccionario Tabla: fpl_merged_seasons
+
+Tabla que contiene algunas estadísticas usuales medidas en partidos de fútbol (# goles concedidos, # porterías en cero, etc), además de métricas utilizadas usualmente en ligas de Fantasy Football, todo esto a nivel jugador
+
+	1. season: indicador de temporada de la EPL (2016/2017 - 2020/2021)
+
+	2. name: Nombre del jugador
+
+	3. position: Posición del jugador
+
+	4. team1: Nombre del equipo en el que juega el futbolista a analizar (hay algunos vacíos)
+
+	5. assists: Número de asistencias hechas por el jugador
+
+	6. bonus: Número de puntos de bono que recibe el jugador en FPL de acuerdo a su BPS. EL jugador con mayor BPS recibe 3 puntos de bono, el jugador con segundo mejor BPS recibe 2, el jugador con el tercer mejor BPS recibe 1 punto y los demás reciben cero puntos de bono
+
+	7. bps: Bonus Points System, puntos que se le suman/restan al jugador de acuerdo a acciones que realiza durante el partido a manera de medir su desempeño en el mismo
+
+	8. clean_sheets: Número de porterías imbatidas logradas por el jugador
+
+	9. creativity: Mide el desempeño del jugador en términos de oportunidades creadas de gol (mayormente derivadas en asistencias). Toma en cuenta frecuencia de pases, cruces, locación en la cancha y calidad de pase final
+
+	10. goals_conceded: Número de goles concebidos por parte del jugador
+
+	11. goals_scored: Número de goles anotados por el jugador
+
+	12. ict_index: Combinación de influencia, amenaza y creatividad del jugador durante el partido
+
+	13. influence: Evalúa el grado de impacto que ha tenido el jugador durante el partido, tomando en cuenta acciones que intervienen directa o indirectamente en el resultado final del partido, ya sea en acciones para un atacante, medio, defensa o portero.
+
+	14. kickoff_time: Fecha y hora en que se llevó a cabo el partido
+
+	15. minutes: Número de minutos que jugó el futbolista
+
+	16. opp_team_name: Nombre del equipo contrario
+
+	17. own_goals: Número de goles anotados en propia puerta
+
+	18. penalties_missed: Número de penales fallados
+
+	19. penalties_saved: Número de penales atajados
+
+	20. red_cards: Número de tarjetas rojas obtenidas por el jugador
+
+	21. round: Número de jornada
+
+	22. saves: Número de atajadas
+
+	23. team_a_score: Marcador del equipo visitante
+
+	24. team_h_score: Marcador del equipo local
+
+	25. threat: Examina la amenaza del jugador en cuanto a goles, tomando en cuenta a acciones individuales. Este índice toma en cuenta la locación del campo, por lo que le da mayor peso a acciones que tienen mayor probabilidad de anotación
+
+	26. total_points: Total de puntos obtenidos por el jugador en FPL
+
+	27. transfers_balance: Balance de las transferencias del jugador (transfers_in - transfers_out)
+
+	28. transfers_in: Número de veces que el jugador ha sido elegido por algún equipo de la FPL
+
+	29. transfers_out: Número de veces que el jugador ha sido vendido o sacado de algún equipo de la FPL
+
+	30. value: Monto en que está valuado el jugador
+
+	31. was_home: Flag que indica si el jugador estaba en condición de local
+
+	32. yellow_cards: Número de tarjetas amarillas mostradas al jugador
+
+	33. GW: Número de jornada
+
+
+Referencias:
+
+1. https://www.premierleague.com/news/106533
+
+2. https://www.premierleague.com/news/65567
