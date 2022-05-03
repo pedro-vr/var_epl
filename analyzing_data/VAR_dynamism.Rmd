@@ -1,0 +1,86 @@
+---
+title: "Efecto del VAR en el dinamismo del fútbol"
+author: "Pedro Alan Velázquez Romero"
+date: "4/21/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries,include=FALSE}
+#librerias a utilizar
+
+#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt",
+ #               "urltools","fmsb","devtools","vcd","aplpack","GGally","wesanderson","e1071"))
+#devtools::install_github("ricardo-bion/ggradar", dependencies=TRUE)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(httr)
+library(XML)
+library(rvest)
+library(xml2)
+library(tidyverse)
+library(robotstxt)
+library(urltools)
+library(XML)
+library(methods)
+library(ggradar)
+library(scales)
+library(tibble)
+library(fmsb)
+library(vcd)
+library(GGally)
+library(aplpack)
+library(e1071)
+library(wesanderson)
+library(gridExtra)
+```
+
+```{r datatables, include=FALSE}
+#Datos a utilizar 
+
+get_df <- function(is_work_computer=F,df_number){
+  
+  ruta_personal = '/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables'
+  ruta_trabajo = '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/VAR_soccer/tables' 
+  
+  df_name <- switch (as.character(df_number),
+    '1' = '/premier_league.csv',
+    '2' = '/pl_overturns_var.csv',
+    '3' = '/var_details.csv',
+    '4' = '/var_details1.csv',
+    '5' = '/stats_epl.csv'
+  )
+  
+  if(is_work_computer)
+    df_path <-paste(ruta_trabajo,df_name,sep = "")
+  else 
+    df_path <- paste(ruta_personal,df_name,sep = "")
+  
+  df_final <- read.csv(df_path)
+}
+```
+
+# El efecto del VAR en el dinamismo del fútbol
+#### Caso especial estudiado dentro de la EPL
+
+El dinamismo dentro del fútbol encubre, por mencionar solo algunos, los siguientes aspectos:
+
+1. Dinámica de pases dentro del equipo (pass map)
+2. Dinámica de movimientos del equipo, dividido en lo siguiente:
+    * Fatiga de los jugadores como parte del dinamismo del juego
+    * Número de pases, goles, asistencias en campo contrario: ¿Qué tanto se crea en el campo contrario?
+    * Formaciones y tipo de agrupaciones que toman los equipos a la hora de defender: La defensa como parte del dinamismo del equipo
+    * Número de faltas cometidas por equipo durante el partido: Número de intervenciones del VAR
+    * La dinámica del equipo para con la "estrella" de cada equipo. ¿Juegan con base en él o lejos de él?
+    * Número de encaramientos durante el partido: ¿Qué tanto se da el juego 1 vs 1 durante el partido?, ¿cuántos de ellos terminan en gol?
+3. Analizar el trabajo en conjunto de todos los involucrados en el equipo: Qué tanto ocasiona el VAR que se juegue a base de más individualidades
+
+
+```{r prob}
+pl_matches <- get_df(df_number = 4)
+plot(pl_matches$HS)
+```
