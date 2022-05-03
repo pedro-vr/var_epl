@@ -1,0 +1,63 @@
+Diccionario tabla: premier_league
+
+Tabla que registra los partidos jugados en la PL desde la temporada 16/17 hasta la temporada 20/21. Dentro de esta tabla se consideran las siguientes variables:
+
+  a. season: Año en que inició la temporada de la PL
+  
+  b. date: Fecha en que se llevó a cabo el partido
+  
+  c. league_id: ID único de la liga (PL) asignado por FiveThirtyEight
+  
+  d. league: Nombre de la liga
+  
+  e. team1: Nombre del equipo local 
+  
+  f. team2: Nombre del equipo visitante
+  
+  g. spi1: Soccer Power Index del equipo local
+  
+  h. spi2: Soccer Power Index del equipo visitante
+  
+  i. prob1: Probabilidad de victoria del equipo local
+  
+  j. prob2: Probabilidad de victoria del equipo visitante
+  
+  k. probtie: Probabilidad de que el partido termine en empate
+  
+  l. proj_score1: Marcador (en goles) proyectado para el equipo local basado en sus goles esperados (xG)
+  
+  m. proj_score1: Marcador (en goles) proyectado para el equipo visitante basado en sus goles esperados (xG)
+  
+  n. importance1: Mide qué tanto impacta el resultado del partido en la imagen estadística del equipo local en toda la temporada
+  
+  o. importance2: Mide qué tanto impacta el resultado del partido en la imagen estadística del equipo visitante en toda la temporada
+  
+  p. score1: Marcador (en goles) del equipo local en el partido
+  
+  q. score2: Marcador (en goles) del equipo visitante en el partido
+  
+  r. xg1: Número de goles esperados del equipo local basado en las oportunidades creadas y terminadas por el mismo equipo
+  
+  s. xg2: Número de goles esperados del equipo visitante basado en las oportunidades creadas y terminadas por el mismo equipo
+  
+  t. nsxg1: Número de goles esperados del equipo local basado en las posiciones y carreos de balón que no terminan en tiro a portería
+  
+  u. nsxg2: Número de goles esperados del equipo visitante basado en las posiciones y carreos de balón que no terminan en tiro a portería
+  
+  v. adj_score1: Cuenta las condiciones en que el equipo local anotó los goles resultantes en el partido
+  
+  w. adj_score2: Cuenta las condiciones en que el equipo visitante anotó los goles resultantes en el partido
+  
+  x. after_covid: Flag que indica si el partido se llevó a cabo antes o después de la llegada del COVID (1 si así fue, 0 en otro caso)
+  
+  y. is_VAR: Flag que indica si el partido se llevó a cabo antes o después de la llegada del VAR (1 si así fue, 0 en otro caso)
+  
+  z. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  aa. big_six_h: Flag que indica si el equipo local pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  ab. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  ac. season2: Temporada en que se jugó el partido de la PL con diferente formato
+  
+  ad. int_var: Número de intervenciones que hizo el VAR durante el partido

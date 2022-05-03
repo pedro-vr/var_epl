@@ -1,0 +1,17 @@
+Diccionario tabla: var_details1
+
+Tabla que contiene la descripción de las intervenciones del VAR de cada partido de la EPL durante las temporadas 19/20 y 20/21
+
+	a. season: Temporada de la EPL (19/20,20/21)
+
+	b. team1: Nombre del equipo local
+
+	c. team2: Nombre del equipo visitante
+
+	d. date: fecha en que se llevó a cabo el partido
+
+	e. incident: Descripción de la intervención que se llevó a cabo por el VAR
+
+	f. type: Flag que indica si la intervención del VAR fue a favor (FOR) o en contra (AGAINST) del equipo 1
+
+	g. min: número del minuto en que se llevó a cabo la intervención del VAR
