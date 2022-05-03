@@ -1,0 +1,1126 @@
+---
+title: "VAR in PL"
+author: "Pedro Alan Velázquez Romero"
+date: "5/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+#librerias a utilizar 
+#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt",
+            #       "urltools"))
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(httr)
+library(XML)
+library(rvest)
+library(xml2)
+library(tidyverse)
+library(robotstxt)
+library(urltools)
+library(XML)
+library(methods)
+```
+
+Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
+
+El primer acercamiento por supuesto es sobre el VAR como nueva medida en el fútbol, de aquí que sale el repentino interés de querer saber lo siguiente:
+
+1. En qué fecha se implementó el VAR? A partir de ahí podemos hacer comparaciones entre métricas de equipos antes y después del VAR
+2. Si se puede conseguir datos del VAR en la PL entonces también podemos comparar el efecto del VAR junto al efecto que trajo consigo la pandemia del COVID-19.
+
+Implementación del VAR en la PL: **2018 empieza como piloto, se implementó en 2019 de manera oficial**
+
+Propuestas de métricas para medir la ineficiencia/eficiencia del VAR (Arturo Brizio, presidente de la Comisión de Árbitros en México):
+
+1. La unificación de procedimientos
+2. La línea de intervención (equilibrio entre poco y nunca, solamente when necessary)
+3. Tiempo de revisión (el promedio hasta marzo 2021 es de 1.5 mins, el máximo es 9 mins)
+4. Medidas PEGII: Penal, Expulsión, Gol, Identidad errónea e Incidente no visto por el árbitro
+
+Esta criteria trasladada en la PL varia un poco debido a que en esa liga se toman en cuenta más variables, la referencia de esto es el siguiente link proveniente de la página oficial de la PL: https://www.premierleague.com/news/1293321
+
+Fuente: https://www.marca.com/claro-mx/futbol/liga-mx/2021/03/25/605cfb42ca4741d5138b4612.html
+
+VAR definición: https://www.marca.com/claro-mx/futbol/liga-mx/2018/10/18/5bc8a11a268e3ebb268b45ce.html
+
+
+Si obtenemos el documento directamente de la página de GitHub de FiveThirtyEight se tienen los partidos actualizados al día.
+
+```{r}
+#al parecer aquí ya se encuentran desde 2016 hasta hoy, se actualiza cada semana
+url <- "https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv"
+football_matches <- read.csv(url,fileEncoding = 'UTF-8',skipNul = T)
+premier_league <- filter(football_matches,league == "Barclays Premier League")
+```
+
+En el caso de la PL, como se trata de torneos largos, aquí no se mete la variable de una "liguilla" a comparación con la liga de México. Aquí se toman en cuenta todos los partidos y lo que cambian son los ascendidos y descendidos en cada temporada.
+
+Aquí se considerarán dos nuevas variables, a saber, las siguientes:
+
+- after_covid: flag que denota si el partido se jugó en pandemia o pre-pandemia. La PL se suspendió un 13 de marzo de 2020 según ESPN
+- is_VAR: flag que denota si en el partido ya está implemnentado el VAR o no. EL VAR se implementó en la PL a partir de la temporada 19/20, es decir, a partir del 9 de agosto de 2019.
+
+```{r,include=FALSE}
+#Creamos otra variable para determinar en qué momento inició COVID
+premier_league <- premier_league %>% mutate(after_covid = if_else(as.POSIXct(date) > as.POSIXct('2020-03-13'),1,0))
+#Creamos la variable que nos indica si en el partido estuvo presente el VAR
+premier_league <- premier_league %>% mutate(is_VAR = if_else(as.POSIXct(date) > as.POSIXct('2019-08-08'),1,0))
+```
+
+```{r,include=FALSE}
+head(premier_league,3)
+arrange(premier_league,desc(date))
+arrange(premier_league,date)
+```
+
+```{r}
+head(premier_league,3)
+```
+
+Se cuenta con un archivo en donde se denotan las intervenciones del VAR en la PL de la temporada 19/20 (la primera temporada en que se implementó) y se va a hacer un data set de esos records a continuación.
+
+```{r,include=FALSE}
+#Empezamos el proceso para obtener los datos de las intervenciones del VAR en temporadas 19/20 y 20/21 de la PL
+
+#Leemos primero todo el archivo html de la temporada 19/20
+VAR_19_20 <- htmlParse("/Users/pedrovela/Documentos/Git_repos/VAR_soccer/getting_data/VAR_in_PL_19-20.html")
+#Leemos primero todo el archivo html de la temporada 20/21
+VAR_20_21 <- htmlParse("/Users/pedrovela/Documentos/Git_repos/VAR_soccer/getting_data/VAR_in_PL_20-21.html")
+
+#Nos traemos las tablas de overturns del VAR hacia todos los equipos para la 19/20, los cuales sabemos que están en los nodos de la forma <aside class = "inline editorial float-r">
+var_overturns_19_20 <- getNodeSet(VAR_19_20, "//aside[@class='inline editorial float-r']") %>% sapply(., xmlValue)
+#Nos traemos las tablas de overturns del VAR hacia todos los equipos para la 20/21, los cuales sabemos que están en los nodos de la forma <aside class = "inline editorial float-r">
+var_overturns_20_21 <- getNodeSet(VAR_20_21, "//aside[@class='inline editorial float-r']") %>% sapply(., xmlValue)
+
+#Nos traemos los nombres de los equipos de la PL de la 19/20 con sus puntos a favor o en contra a raíz de decisiones del VAR (netscore), los cuales sabemos que están en nodos de la forma <h2>
+teams_19_20 <- getNodeSet(VAR_19_20, "//h2") %>% sapply(., xmlValue)
+#Nos traemos los nombres de los equipos de la PL de la 20/21 con sus puntos a favor o en contra a raíz de decisiones del VAR (netscore), los cuales sabemos que están en nodos de la forma <h2>
+teams_20_21 <- getNodeSet(VAR_20_21, "//h2") %>% sapply(., xmlValue)
+
+#Nos traemos el detalle de las decisiones del VAR por cada equipo de la 19/20, los cuales sabemos que están en nodos del tipo <p>
+details_var_19_20 <- getNodeSet(VAR_19_20, "//p") %>% sapply(., xmlValue)
+#Nos traemos el detalle de las decisiones del VAR por cada equipo de la 20/21, los cuales sabemos que están en nodos del tipo <p>
+details_var_20_21 <- getNodeSet(VAR_20_21, "//p") %>% sapply(., xmlValue)
+
+#Empezamos a tratar con los datos obtenidos arriba para solo quedarnos con la info importante
+
+#Se va a guardar todos los datos "servibles" o "útiles" dentro de un solo array
+ovrt_19_20 <- NULL
+#Vamos a hacer un loop para guardar los datos acerca de los overturns de los equipos de la 19/20
+for (a in 1:length(var_overturns_19_20)) {
+  #Guardamos cada jornada como una matriz
+  ovrt_19_20 <- c(ovrt_19_20,str_split(var_overturns_19_20[a],"\n",simplify = T))
+}
+
+#ya que tenemos los datos de todos los equipos de la 19/20, ahora nos vamos a quedar solamente 
+#con los datos útiles, para esto, hacemos un loop, vamos a trimear cada entrada 
+#y si la longitud de la entrada después de trimearla es mayor a cero entonces es un dato
+#útil y lo guardamos en un nuevo array
+
+#Array en donde vamos a guardar todo
+ovrt_data_19_20 <- NULL
+#Iniciamos el loop en donde vamos a guardar todos los datos
+for (b in 1:length(ovrt_19_20)) {
+  #Trimeamos los datos para ver is es que hay datos útiles
+  data_trim <- str_trim(ovrt_19_20[b])
+  #Si la longitud de lo trimeado es mayor a cero entonces tiene datos útiles
+  if(str_length(data_trim) > 0){
+    #Guardamos el dato útil en un array 
+    ovrt_data_19_20 <- c(ovrt_data_19_20,data_trim)
+  }
+}
+
+#Hacemos el mismo proceso para los datos de la 20/21
+
+#Se va a guardar todos los datos "servibles" o "útiles" dentro de un solo array
+ovrt_20_21 <- NULL
+#Vamos a hacer un loop para guardar los datos acerca de los overturns de los equipos de la 20/21
+for (c in 1:length(var_overturns_20_21)) {
+  #Guardamos cada jornada como una matriz
+  ovrt_20_21 <- c(ovrt_20_21,str_split(var_overturns_20_21[c],"\n",simplify = T))
+}
+
+#ya que tenemos los datos de todos los equipos de la 20/21, ahora nos vamos a quedar solamente 
+#con los datos útiles, para esto, hacemos un loop, vamos a trimear cada entrada 
+#y si la longitud de la entrada después de trimearla es mayor a cero entonces es un dato
+#útil y lo guardamos en un nuevo array
+
+#Array en donde vamos a guardar todo
+ovrt_data_20_21 <- NULL
+#Iniciamos el loop en donde vamos a guardar todos los datos
+for (d in 1:length(ovrt_20_21)) {
+  #Trimeamos los datos para ver is es que hay datos útiles
+  data_trim <- str_trim(ovrt_20_21[d])
+  #Si la longitud de lo trimeado es mayor a cero entonces tiene datos útiles
+  if(str_length(data_trim) > 0){
+    #Guardamos el dato útil en un array 
+    ovrt_data_20_21 <- c(ovrt_data_20_21,data_trim)
+  }
+}
+
+#Empezamos a guardar los datos de los overturns en vectores separados para después unirlos en un dataset
+ovrt_data_19_20 <- ovrt_data_19_20[1:123]
+
+#Empezamos el loop para los datos de los equipos de ambas temporadas
+
+#Creamos un array para meter los equipos de la temporada 19/20 para cada tipo de overturn
+teams_ovrt_19_20 <- NULL
+#Creamos un array para meter los puntos a favor o en contra de cada equipo de la 19/20 por cada tipo de 
+#overturn
+ovrt_points_19_20 <- NULL
+#Creamos un array para meter los equipos de la temporada 20/21 para cada tipo de overturn
+teams_ovrt_20_21 <- NULL
+#Creamos un array para meter los puntos a favor o en contra de cada equipo de la 20/21 por cada tipo de 
+#overturn
+ovrt_points_20_21 <- NULL
+#Creamos un contador para saber si estamos en los primeros 20 overturns, ya que esos primeros 20
+#tienen un signo positivo o negativo al principio que debemos quitar
+contador_ovrt <- 0
+#Empezamos el loop con la longitud de la 19/20 y como ambos tienen la misma longitud esto no 
+#importa mucho
+for (e in 1:length(ovrt_data_19_20)) {
+  #Nos fijamos si la entrada es el título del tipo de overturn, este siempre inicia con la palabra "VAR"
+  if (substr(ovrt_data_19_20[e],1,3) == "VAR") {
+    #Si estamos en el título del tipo de overturn, entonces sabemos que son 20 equipos por lo tanto
+    #hacemos el loop recorriendo los 20 equipos de 2 en 2 que es donde están los equipos
+    for(f in seq(e+1,e+39,by=2)){
+      #Aumentamos el contador para fijarnos si son los primeros 20
+      contador_ovrt <- contador_ovrt + 1
+      #Nos fijamos si son los primeros 20 equipos
+      if(contador_ovrt <= 20){
+        #Nos traemos los puntos con el signo adecuado ya en entero
+        ovrt_points_19_20 <- c(ovrt_points_19_20,as.integer(ovrt_data_19_20[f+1]))
+        #en este loop solo lidiamos con los signos de los equipos de la temporada 19/20 por lo tanto
+        #las primeras 20 entradas del vector para la temporada 20/21 los dejamos en 0
+        ovrt_points_20_21 <- c(ovrt_points_20_21,0)
+      } else {
+        #Si ya pasamos los primeros 20 entonces ya nos traemos el puro número, estos ya no tienen signo
+        #y aquí si guardamos para ambas tenporadas
+        ovrt_points_19_20 <- c(ovrt_points_19_20,as.integer(ovrt_data_19_20[f+1]))
+        ovrt_points_20_21 <- c(ovrt_points_20_21,as.integer(ovrt_data_20_21[f+1]))
+      }
+      #Después de guardar los puntos guardamos el nombre de los equipos para ambas temporadas
+      teams_ovrt_19_20 <- c(teams_ovrt_19_20,ovrt_data_19_20[f])
+      teams_ovrt_20_21 <- c(teams_ovrt_20_21,ovrt_data_20_21[f])
+    }
+  }
+}
+
+#Como los primeros 20 puntos no coinciden necesariamente entre ambas temporadas en cuanto signo entonces
+#tratamos aquí los primeros 20 puntos de la temporada 20/21
+
+#Creamos un indice el cual nos servirá para saber en que entrada del vector ya creado para la 20/21
+#guardar el respectivo punto positivo, negativo o cero
+index_20_21 <- 0
+#empezamos el loop dentro del vector de datos de la 20/21 para obtener los primeros 20 puntos
+for(g in 1:length(ovrt_data_20_21)){
+  #Queremos solamente los puntos del tipo net score
+  if (ovrt_data_20_21[g] == "VAR overturns (net score)"){
+    #Son 20 equipos por lo tanto recorremos el vector solo los primeros 20 de dos en dos a partir 
+    #del inicio del overturn más dos lugares
+    for(h in seq(g+2,g+40,by=2)){
+      #Aumentamos el índice para ir recorriendo los primeros 20 lugares del vector de puntos 
+      #para la 20/21
+      index_20_21 <- index_20_21 + 1
+      #Nos traemos los puntos con el signo adecuado ya en entero
+      ovrt_points_20_21[index_20_21] <- as.integer(ovrt_data_20_21[h])
+    }
+  }
+}
+
+#Vamos a guardar estos tres tipos de overturn en un tres tablas diferntes para cada temporada y así después unirlos en uno solo
+
+#ns = net score
+#df = decisions for
+#da = decisions against
+
+#Tabla para el overturn "net score"
+ns_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20)), "team" = c(teams_ovrt_19_20[1:20],teams_ovrt_20_21[1:20]), "ns" = c(ovrt_points_19_20[1:20],ovrt_points_20_21[1:20]))
+#Tabla para el overturn "decisions for"
+desfor_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20)), "team" = c(teams_ovrt_19_20[21:40],teams_ovrt_20_21[21:40]), "df" = c(ovrt_points_19_20[21:40],ovrt_points_20_21[21:40]))
+#Tabla para el overturn "decisions against"
+desagnst_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20)), "team" = c(teams_ovrt_19_20[41:60],teams_ovrt_20_21[41:60]), "da" = c(ovrt_points_19_20[41:60],ovrt_points_20_21[41:60]))
+#unimos las tres tablas en una sola basado en la temporada y nombre de equipo
+ovrt_df <- inner_join(ns_df,desfor_df,by=c("season","team")) %>% inner_join(.,desagnst_df,by=c("season","team"))
+```
+
+Iniciamos el proceso para obtener la descripción de las decisiones del VAR en los partidos de la Premier League en las temporadas 19/20 y 20/21
+
+```{r,include=FALSE}
+#Empezamos a tratar con los datos obtenidos sobre los detalles del VAR en cada partido de la PL y entonces
+#solo quedarnos con la info importante
+
+#Se va a guardar todos los datos "servibles" o "útiles" dentro de un solo array
+details_19_20 <- NULL
+#Vamos a hacer un loop para guardar los datos acerca de las intervenciones del VAR de la 19/20
+for (i in 1:length(details_var_19_20)) {
+  #Guardamos cada dato como una matriz
+  details_19_20 <- c(details_19_20,str_split(details_var_19_20[i],"\n",simplify = T))
+}
+
+#ya que tenemos los datos de todos los partidos de la 19/20, ahora nos vamos a quedar solamente 
+#con los datos útiles, para esto, hacemos un loop, vamos a trimear cada entrada 
+#y si la longitud de la entrada después de trimearla es mayor a cero entonces es un dato
+#útil y lo guardamos en un nuevo array
+
+#Array en donde vamos a guardar todo
+details_data_19_20 <- NULL
+#Iniciamos el loop en donde vamos a guardar todos los datos
+for (j in 1:length(details_19_20)) {
+  #Trimeamos los datos para ver is es que hay datos útiles
+  data_trim <- str_trim(details_19_20[j])
+  #Si la longitud de lo trimeado es mayor a cero entonces tiene datos útiles
+  if(str_length(data_trim) > 0){
+    #Guardamos el dato útil en un array 
+    details_data_19_20 <- c(details_data_19_20,data_trim)
+  }
+}
+
+#Hacemos el mismo proceso para los datos de la 20/21
+
+#Se va a guardar todos los datos "servibles" o "útiles" dentro de un solo array
+details_20_21 <- NULL
+#Vamos a hacer un loop para guardar los datos acerca de los partidos de los equipos de la 20/21
+for (k in 1:length(details_var_20_21)) {
+  #Guardamos cada dato como una matriz
+  details_20_21 <- c(details_20_21,str_split(details_var_20_21[k],"\n",simplify = T))
+}
+
+#ya que tenemos los datos de todos los partidos de la 20/21, ahora nos vamos a quedar solamente 
+#con los datos útiles, para esto, hacemos un loop, vamos a trimear cada entrada 
+#y si la longitud de la entrada después de trimearla es mayor a cero entonces es un dato
+#útil y lo guardamos en un nuevo array
+
+#Array en donde vamos a guardar todo
+details_data_20_21 <- NULL
+#Iniciamos el loop en donde vamos a guardar todos los datos
+for (l in 1:length(details_20_21)) {
+  #Trimeamos los datos para ver is es que hay datos útiles
+  data_trim <- str_trim(details_20_21[l])
+  #Si la longitud de lo trimeado es mayor a cero entonces tiene datos útiles
+  if(str_length(data_trim) > 0){
+    #Guardamos el dato útil en un array 
+    details_data_20_21 <- c(details_data_20_21,data_trim)
+  }
+}
+
+#Ahora que ya tenemos los datos "útiles" entonces empezamos a guardar los datos en vectores 
+
+#Empezamos el proceso para traernos la descripciones de decisiones del VAR, primero vamos a obtener
+#más métricas relacionadas a los overturns de los equipos 
+
+#Creamos los vectores en donde vamos a guardar todos los valores numéricos de los overturns 
+#para todos los equipos en las dos temporadas
+des_19_20 <- NULL
+des_20_21 <- NULL
+
+#Iniciamos los loops en donde vamos a recorrer todos los datos de la página web y solo nos quedamos
+#con los valores numéricos, todo esto para las dos temporadas. Se hacen en dos loops diferentes 
+#porque el tamaño del vector es diferente entre ambas temporadas
+
+for (m in 1:length(details_data_19_20)) {
+  #los valores numéricos para cada equipo empiezan con los "Overturns"
+  if(details_data_19_20[m] == "Overturns:"){
+    #si ya encontramos el "Overturn" entonces sabemos que después vienen 9 métricas y 
+    #son las que únicamente queremos guardar
+    for (n in seq(m+1,m+17,by=2)) {
+      #Guardamos cada número en el vector
+      des_19_20 <- c(des_19_20,details_data_19_20[n])
+    }
+  }
+}
+
+for (p in 1:length(details_data_20_21)) {
+  #los valores numéricos para cada equipo empiezan con los "Overturns"
+  if(details_data_20_21[p] == "Overturns:"){
+    #si ya encontramos el "Overturn" entonces sabemos que después vienen 9 métricas y 
+    #son las que únicamente queremos guardar
+    for (q in seq(p+1,p+17,by=2)) {
+      #Guardamos cada número en el vector
+      des_20_21 <- c(des_20_21,details_data_20_21[q])
+    }
+  }
+}
+
+#Ahora, tenemos el vector con los valores numéricos de todas las métricas en conjunto
+#sin separación, entonces creamos los vectores individuales de cada métrica para separar
+#los valores de cada uno. Esto aplica para ambas temporadas
+
+#Overturns totales del equipo
+overturns_19_20 <- NULL
+overturns_20_21 <- NULL
+#leading goals for
+lgf_19_20 <- NULL
+lgf_20_21 <- NULL
+#disallowed goals for
+dgf_19_20 <- NULL
+dgf_20_21 <- NULL
+#leading goals against
+lga_19_20 <- NULL
+lga_20_21 <- NULL
+#disallowed goals against
+dga_19_20 <- NULL
+dga_20_21 <- NULL
+#net goal score
+ngs_19_20 <- NULL
+ngs_20_21 <- NULL
+#subjective decisions for
+sdf_19_20 <- NULL
+sdf_20_21 <- NULL
+#subjective decisions against
+sda_19_20 <- NULL
+sda_20_21 <- NULL
+#net subjective score
+nsc_19_20 <- NULL
+nsc_20_21 <- NULL
+
+#ya que tenemos los vectores creados entonces recorremos el vector con todos los valores numéricos
+#y vamos guardando cada dato en su respectivo vector. Esto aplica para ambas temporadas
+
+for (o in seq(1,9*19+1,by=9)) {
+  overturns_19_20 <- c(overturns_19_20,as.integer(des_19_20[o]))
+  lgf_19_20 <- c(lgf_19_20,as.integer(des_19_20[o+1]))
+  dgf_19_20 <- c(dgf_19_20,as.integer(des_19_20[o+2]))
+  lga_19_20 <- c(lga_19_20,as.integer(des_19_20[o+3]))
+  dga_19_20 <- c(dga_19_20,as.integer(des_19_20[o+4]))
+  ngs_19_20 <- c(ngs_19_20,as.integer(des_19_20[o+5]))
+  sdf_19_20 <- c(sdf_19_20,as.integer(des_19_20[o+6]))
+  sda_19_20 <- c(sda_19_20,as.integer(des_19_20[o+7]))
+  nsc_19_20 <- c(nsc_19_20,as.integer(des_19_20[o+8]))
+  overturns_20_21 <- c(overturns_20_21,as.integer(des_20_21[o]))
+  lgf_20_21 <- c(lgf_20_21,as.integer(des_20_21[o+1]))
+  dgf_20_21 <- c(dgf_20_21,as.integer(des_20_21[o+2]))
+  lga_20_21 <- c(lga_20_21,as.integer(des_20_21[o+3]))
+  dga_20_21 <- c(dga_20_21,as.integer(des_20_21[o+4]))
+  ngs_20_21 <- c(ngs_20_21,as.integer(des_20_21[o+5]))
+  sdf_20_21 <- c(sdf_20_21,as.integer(des_20_21[o+6]))
+  sda_20_21 <- c(sda_20_21,as.integer(des_20_21[o+7]))
+  nsc_20_21 <- c(nsc_20_21,as.integer(des_20_21[o+8]))
+}
+
+#Ya que tenemos los vectores individuales de cada métrica entonces creamos la tabla de los 
+#equipos con estas nuevas métricas 
+des_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20)),
+                     "team" = c(teams_ovrt_19_20[1:20],teams_ovrt_20_21[1:20]),
+                     "ovrt" = c(overturns_19_20,overturns_20_21),
+                     "lgf" = c(lgf_19_20,lgf_20_21),"dgf" = c(dgf_19_20,dgf_20_21),
+                     "lga" = c(lga_19_20,lga_20_21),"dga" = c(dga_19_20,dga_20_21),
+                     "ngs" = c(ngs_19_20,ngs_20_21),"sdf" = c(sdf_19_20,sdf_20_21),
+                     "sda" = c(sda_19_20,sda_20_21),"nsc" = c(nsc_19_20,nsc_20_21))
+
+#ya que tenemos la tabla creada la unimos con la primera que obtuvimos atrás para ampliar las métricas
+ovrt_var <- inner_join(ovrt_df,des_df,by=c("season","team"))
+
+ovrt_var$season <- as.character(ovrt_var$season)
+ovrt_var$team <- as.character(ovrt_var$team)
+```
+
+```{r}
+#Tabla que contiene las métricas en cuanto overturns por equipo 
+ovrt_var
+```
+
+Ya que tenemos la tabla con los overturns de cada equipo entonces obtenemos la descripción de cada intervención del VAR para cada equipo
+
+```{r,include=FALSE}
+#Empezamos con el proceso para obtener los detalles del VAR en ciertos partidos para cada equipo
+#de la PL durante las dos temporadas
+
+#Primero vamos a obtener el detalle de los juegos e incidentes por cada equipo de las dos temporadas
+
+#Vectores en donde guardaremos el detalle del equipo al que se enfrentó, localia y fecha del incidente
+game_detail_19_20 <- NULL
+game_detail_20_21 <- NULL
+#Vectores en donde guardaremos la descripción del incidente y el tipo de este (a favor o en contra)
+incident_detail_19_20 <- NULL
+incident_detail_20_21 <- NULL
+#Vectores auxiliares que nos van a ayudar a delimitar los incidentes de cada equipo
+aux_1 <- NULL
+aux_2 <- NULL
+#Vectores en donde guardaremos la cuenta del total de incidentes por equipo
+cuenta_equipo_19_20 <- NULL
+cuenta_equipo_20_21 <- NULL
+
+#ya una vez que tenemos los vectores entonces iniciamos los loops para guardar la información
+#en cada vector
+
+#Loop que nos sirve para guardar el índice de comienzo de cada equipo, la descripción de la localía y fecha
+#y la descripción de los incidentes por equipo de la temporada 19/20
+for(s in 1:length(details_data_19_20)){
+  if(details_data_19_20[s] == "Overturns:")
+    #Guardamos el índice en donde inicia las descripciones de cada equipo
+    aux_1 <- c(aux_1,s)
+  else if(details_data_19_20[s] == "Game:")
+    #Guardamos el detalle del equipo contrario, fecha y localía
+    game_detail_19_20 <- c(game_detail_19_20,details_data_19_20[s+1])
+  else if(details_data_19_20[s] == "Incident:")
+    #Guardamos la descripción del incidente y el tipo de éste
+    incident_detail_19_20 <- c(incident_detail_19_20,details_data_19_20[s+1])
+}
+
+#Loop que nos sirve para guardar el índice de comienzo de cada equipo, la descripción de la localía y fecha
+#y la descripción de los incidentes por equipo de la temporada 20/21
+for(z in 1:length(details_data_20_21)){
+  if(details_data_20_21[z] == "Overturns:")
+    #Guardamos el índice en donde inicia las descripciones de cada equipo
+    aux_2 <- c(aux_2,z)
+  else if(details_data_20_21[z] == "Game:")
+    #Guardamos el detalle del equipo contrario, fecha y localía
+    game_detail_20_21 <- c(game_detail_20_21,details_data_20_21[z+1])
+  else if(details_data_20_21[z] == "Incident:")
+    #Guardamos la descripción del incidente y el tipo de éste
+    incident_detail_20_21 <- c(incident_detail_20_21,details_data_20_21[z+1])
+}
+
+#Al final agregamos la longitud del vector de los detalles para delimitar los incidentes 
+#del último equipo, esto aplica oara ambas temporadas
+aux_1 <- c(aux_1,length(details_data_19_20))
+aux_2 <- c(aux_2,length(details_data_20_21))
+
+#ya que tenemos los vectores auxiliares iniciamos los loops para contar el número total 
+#de incidentes por equipo
+
+#Loop en donde guardamos el número total de incidentes por equipo para la temporada 19/20
+for(t in 1:(length(aux_1)-1)){
+  #Contador auxiliar que contará el número de incidentes por equipo
+  cont <- 0
+  for(u in seq(aux_1[t],aux_1[t+1])){
+    #verificamos si el dato que nos encontramos es un incidente
+    if(details_data_19_20[u] == "Incident:")
+      #Si si es un incidente entonces aumentamos la cuenta en el auxiliar
+      cont <- cont + 1
+  }
+  #Al final guardamos la cuenta total de incidentes por equipo en el vector nulo 
+  cuenta_equipo_19_20 <- c(cuenta_equipo_19_20,cont)
+}
+
+#Loop en donde guardamos el número total de incidentes por equipo para la temporada 20/21
+for(r in 1:(length(aux_2)-1)){
+  #Contador auxiliar que contará el número de incidentes por equipo
+  cont <- 0
+  for(aa in seq(aux_2[r],aux_2[r+1])){
+    #verificamos si el dato que nos encontramos es un incidente
+    if(details_data_20_21[aa] == "Incident:")
+      #Si si es un incidente entonces aumentamos la cuenta en el auxiliar
+      cont <- cont + 1
+  }
+  #Al final guardamos la cuenta total de incidentes por equipo en el vector nulo
+  cuenta_equipo_20_21 <- c(cuenta_equipo_20_21,cont)
+}
+
+#Ya que tenemos el número total de incidentes por equipo entonces vamos a repetir el nombre 
+#de cada equipo por el número total de incidentes que tenga cada uno
+
+#Vectores que guardaran los nombres de los equipos repetidos
+teams_var_detail_19_20 <- NULL
+teams_var_detail_20_21 <- NULL 
+
+#Iniciamos el loop en donde ya repetimos el nombre de los equipos
+for(v in 1:length(cuenta_equipo_19_20)){
+  teams_var_detail_19_20 <- c(teams_var_detail_19_20,rep(teams_ovrt_19_20[v],cuenta_equipo_19_20[v]))
+  teams_var_detail_20_21 <- c(teams_var_detail_20_21,rep(teams_ovrt_20_21[v],cuenta_equipo_20_21[v]))
+}
+
+#Ya que tenemos el nombre de los equipos repetidos entonces empezamos por desglozar la descripción
+#de los incidentes que tuvo cada equipo, se dividen en la descripción como tal, el minuto en que
+#ocurrió el incidente y el tipo de incidente (a favor o en contra)
+
+#Vectores en donde guardaremos la descripción como tal del incidente
+desc_incident_19_20 <- NULL
+desc_incident_20_21 <- NULL
+#Vectores en donde guardaremos el minuto en que ocurrió el incidente
+min_incident_19_20 <- NULL
+min_incident_20_21 <- NULL
+#Vectores en donde guardaremos el tipo de incidente
+type_incident_19_20 <- NULL
+type_incident_20_21 <- NULL
+
+#iniciamos con los loops en donde guardaremos todos estos datos de los incidentes
+
+#Loop en donde guardaremos el detalle de los incidentes por minuto, tipo, etc., para los equipos 
+#de la temporada 19/20
+for(w in 1:length(incident_detail_19_20)){
+  #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
+  #se encuentra alguna comna, esto porque lo que separa la descripción del incidente y el 
+  #minuto en donde ocurrio es una coma
+  coma_1 <- str_locate_all(incident_detail_19_20[w],",")
+  #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
+  #se encuentra algún guión, esto porque lo que separa el minuto del incidente y el 
+  #tipo del mismo es un guión
+  guion_1 <- str_locate_all(incident_detail_19_20[w],"-")
+  #ya que tenemos el o los índices de las comas nos traemos siempre el último índice 
+  #para así siempre asegurar que nos traemos la descripción del incidente por completo
+  coma_2 <- coma_1[[1]][dim(coma_1[[1]])[1]]
+  #ya que tenemos el o los índices de los guiones nos traemos siempre el último índice 
+  #para así siempre asegurar que nos traemos el minuto y el tipo del incidente
+  guion_2 <- guion_1[[1]][dim(guion_1[[1]])[1]]
+  #para el caso de la temporada 19/20 en los incidentes con el índice 84 y 113 son diferentes 
+  #porque no traen el minuto de incidente entonces los tratamos por aparte
+  if(w == 84 | w == 113){
+    #Traemos la pura descripción del incidente
+    desc_incident_19_20 <- c(desc_incident_19_20,substr(incident_detail_19_20[w],1,guion_2-2))
+    #Traemos el puro tipo de incidente
+    type_incident_19_20 <- c(type_incident_19_20,substr(incident_detail_19_20[w],guion_2+2,
+                                                        str_length(incident_detail_19_20[w])))
+    #En este caso no hay minuto de incidente entonces le asignamos un cero
+    min_incident_19_20 <- c(min_incident_19_20,"0")
+  } else {
+    #Traemos la pura descripción del incidente
+    desc_incident_19_20 <- c(desc_incident_19_20,substr(incident_detail_19_20[w],1,coma_2-1))
+    #Traemos el puro tipo de incidente
+    type_incident_19_20 <- c(type_incident_19_20,substr(incident_detail_19_20[w],guion_2+2,
+                                                        str_length(incident_detail_19_20[w])))
+    #Traemos el puro minuto del incidente
+    min_incident_19_20 <- c(min_incident_19_20,substr(incident_detail_19_20[w],coma_2+2,guion_2-2))
+  }
+}
+
+#Loop en donde guardaremos el detalle de los incidentes por minuto, tipo, etc., para los equipos 
+#de la temporada 20/21
+for(ab in 1:length(incident_detail_20_21)){
+  #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
+  #se encuentra alguna comna, esto porque lo que separa la descripción del incidente y el 
+  #minuto en donde ocurrio es una coma
+  coma_1 <- str_locate_all(incident_detail_20_21[ab],",")
+  #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
+  #se encuentra algún guión, esto porque lo que separa el minuto del incidente y el 
+  #tipo del mismo es un guión
+  guion_1 <- str_locate_all(incident_detail_20_21[ab],"-")
+  #ya que tenemos el o los índices de las comas nos traemos siempre el último índice 
+  #para así siempre asegurar que nos traemos la descripción del incidente por completo
+  coma_2 <- coma_1[[1]][dim(coma_1[[1]])[1]]
+  #ya que tenemos el o los índices de los guiones nos traemos siempre el último índice 
+  #para así siempre asegurar que nos traemos el minuto y el tipo del incidente
+  guion_2 <- guion_1[[1]][dim(guion_1[[1]])[1]]
+  #para el caso de la temporada 20/21 en el incidente con el índice 170 es diferente
+  #porque no trae el minuto de incidente ni el tipo del mismo, entonces lo tratamos por aparte
+  if(ab == 170){
+    #Traemos la pura descripción del incidente
+    desc_incident_20_21 <- c(desc_incident_20_21,incident_detail_20_21[ab])
+    #En este caso no hay tipo de incidente entonces le asignamos un "None"
+    type_incident_20_21 <- c(type_incident_20_21,"None")
+    #En este caso no hay minuto de incidente entonces le asignamos un cero
+    min_incident_20_21 <- c(min_incident_20_21,"0")
+  #para el caso de la temporada 20/21 en los incidentes con el índice 3 y 137 son diferentes 
+  #porque no traen el minuto de incidente entonces los tratamos por aparte
+  } else if(ab == 3 | ab == 137){
+    #Traemos la pura descripción del incidente
+    desc_incident_20_21 <- c(desc_incident_20_21,substr(incident_detail_20_21[ab],1,guion_2-2))
+    #Traemos el puro tipo de incidente
+    type_incident_20_21 <- c(type_incident_20_21,substr(incident_detail_20_21[ab],guion_2+2,
+                                                          str_length(incident_detail_20_21[ab])))
+    #En este caso no hay minuto de incidente entonces le asignamos un cero
+    min_incident_20_21 <- c(min_incident_20_21,"0")
+  } else {
+    #Traemos la pura descripción del incidente
+    desc_incident_20_21 <- c(desc_incident_20_21,substr(incident_detail_20_21[ab],1,coma_2-1))
+    #Traemos el puro tipo de incidente
+    type_incident_20_21 <- c(type_incident_20_21,substr(incident_detail_20_21[ab],guion_2+2,
+                                                          str_length(incident_detail_20_21[ab])))
+    #Traemos el puro minuto del incidente
+    min_incident_20_21 <- c(min_incident_20_21,substr(incident_detail_20_21[ab],coma_2+2,guion_2-2))
+  }
+}
+
+#Ya que desglosamos todo el incidente en sus partes ahora tenemos que transformar el minuto
+#del incidente para quedarnos con el simple número
+
+#Vectores en donde guardaremos el puro número del minuto de incidente
+min_inc_19_20 <- NULL
+min_inc_20_21 <- NULL
+
+#Loop en do de procesaremos los minutos obtenidos anteriormente y nos quedamos con el simple
+#número
+for (x in 1:length(min_incident_19_20)) {
+  #Dentro del minuto, ubicamos el índice donde esta el espacio para delimitar el puro número
+  espacio <- str_locate(min_incident_19_20[x]," ")[1]
+  #Para el caso de la temporada 19/20 en los índices 84 y 113 no tenemos números entonces 
+  #los tratamos diferente
+  if(x == 84 | x == 113)
+    #En este caso no hay minuto como tal entonces agregamos un cero
+    min_inc_19_20 <- c(min_inc_19_20,0)
+  else
+    #Nos quedamos con el puro número en entero
+    min_inc_19_20 <- c(min_inc_19_20,as.integer(substr(min_incident_19_20[x],1,espacio-3)))
+}
+
+#Loop en do de procesaremos los minutos obtenidos anteriormente y nos quedamos con el simple
+#número
+for(ac in 1:length(min_incident_20_21)){
+  #Dentro del minuto, ubicamos el índice donde esta el espacio para delimitar el puro número
+  espacio <- str_locate(min_incident_20_21[ac]," ")[1]
+  #Para el caso de la temporada 20/21 en los índices 170, 3 y 137 no tenemos números entonces 
+  #los tratamos diferente
+  if(ac == 170 | ac == 3 | ac == 137)
+    #En este caso no hay minuto como tal entonces agregamos un cero
+    min_inc_20_21 <- c(min_inc_20_21,0)
+  else
+    #Nos quedamos con el puro número en entero
+    min_inc_20_21 <- c(min_inc_20_21,as.integer(substr(min_incident_20_21[ac],1,espacio-3)))
+}
+
+#ya que tenemos los minutos en número entonces iniciamos el proceso para desglozar los datos 
+#de cada partido en donde ocurrió un incidente por equipo
+
+#Vector en donde guardaremos los nombres de los equipos contrincantes
+juegos <- NULL
+#Vector en donde guardaremos si es que el equipo es local o visitante
+localia <- NULL
+#Vector en donde guardaremos la fecha del partido en donde suscitó el incidente
+fecha <- NULL
+#Variable que nos ayudará a controlar el número de incidentes que se suscitaron en un 
+#mismo partido
+suma <- 0
+
+#Loop en donde separaremos el nombre del equipo contrincante, el tipo de localia y la fecha del incidente
+for(aj in 1:(length(aux_1)-1)){
+  #Vector que nos va a ayudar a concatenar los índices en donde se encuentra un partido para cada equipo
+  vector1 <- NULL
+  #Loop en donde obtenemos el índice donde se encuentra cada partido para cada equipo
+  for(af in seq(aux_1[aj],aux_1[aj+1])){
+    #Verificamos que sea un partido
+    if(details_data_19_20[af] == "Game:"){
+      #Si sí es un partido entonces guardamos el número de índice
+      vector1 <- c(vector1,af)
+    }
+  }
+  #Al final, cuando ya tengamos todos los índices, concatenamos el último para abarcar todos los juegos
+  vector1 <- c(vector1,aux_1[aj+1])
+  #Vector nulo que nos ayudará a saber cuántos incidentes hubo dentro de cada juego para cada equipo
+  cont_total <- NULL
+  #Loop para guardar el número de incidentes para cada partido de cada equipo
+  for(ag in 1:(length(vector1)-1)){
+    #Variable que va a acumular el número de incidentes por partido
+    cont_inc <- 0
+    #Loop que nos va a ayudar a identificar los incidentes por partido y sumarlos
+    for(ah in seq(vector1[ag],vector1[ag+1])){
+      #Verificamos que sea un incidente
+      if(details_data_19_20[ah] == "Incident:"){
+        #Si sí es un incidente entonces incrementamos la cuenta
+        cont_inc <- cont_inc + 1
+      }
+    }
+    #Al final concatenamos el total de incidentes por cada partido
+    cont_total <- c(cont_total,cont_inc)
+  }
+  #Ya que tenemos el conteo de incidentes por cada partido de cada equipo, hacemos el loop para 
+  #entonces si separar todos los datos del partido (equipo contrincante, localia y fecha)
+  for(ai in 1:length(cont_total)){
+    #Encontramos el índice en donde se encuentra el primer paréntesis
+    parentesis_1 <- str_locate(game_detail_19_20[suma+ai],"\\(")[1]
+    #Encontramos el índice en donde se encuentra el segundo paréntesis
+    parentesis_2 <- str_locate(game_detail_19_20[suma+ai],"\\)")[1]
+    #Encontramos el índice en donde se encuentra el punto y coma
+    punto_coma <- str_locate(game_detail_19_20[suma+ai],";")[1]
+    #Nos traemos el nombre del equipo contrincante y lo repetimos por el número de 
+    #incidentes que tuvo en un mismo partido
+    juegos <- c(juegos,rep(substr(game_detail_19_20[suma+ai],1,parentesis_1-2),cont_total[ai]))
+    #Nos traemos la localia y lo repetimos por el número de incidentes que tuvo en un mismo partido
+    localia <- c(localia,rep(substr(game_detail_19_20[suma+ai],parentesis_1+1,punto_coma-1),cont_total[ai]))
+    #Nos traemos la fecha del partido y lo repetimos por el número de incidentes que tuvo en un 
+    #mismo partido
+    fecha <- c(fecha,rep(substr(game_detail_19_20[suma+ai],punto_coma+2,parentesis_2-1),cont_total[ai]))
+  }
+  #Aumentamos la variable para controlar los datos a repetir
+  suma <- suma + length(cont_total)
+}
+
+#Variable que nos ayudará a controlar el número de incidentes que se suscitaron en un 
+#mismo partido
+suma1 <- 0
+
+#Loop en donde separaremos el nombre del equipo contrincante, el tipo de localia y la fecha del incidente
+for(ak in 1:(length(aux_2)-1)){
+  #Vector que nos va a ayudar a concatenar los índices en donde se encuentra un partido para cada equipo
+  vector1 <- NULL
+  #Loop en donde obtenemos el índice donde se encuentra cada partido para cada equipo
+  for(al in seq(aux_2[ak],aux_2[ak+1])){
+    #Verificamos que sea un partido
+    if(details_data_20_21[al] == "Game:"){
+      #Si sí es un partido entonces guardamos el número de índice
+      vector1 <- c(vector1,al)
+    }
+  }
+  #Al final, cuando ya tengamos todos los índices, concatenamos el último para abarcar todos los juegos
+  vector1 <- c(vector1,aux_2[ak+1])
+  #Vector nulo que nos ayudará a saber cuántos incidentes hubo dentro de cada juego para cada equipo
+  cont_total <- NULL
+  #Loop para guardar el número de incidentes para cada partido de cada equipo
+  for(am in 1:(length(vector1)-1)){
+    #Variable que va a acumular el número de incidentes por partido
+    cont_inc <- 0
+    #Loop que nos va a ayudar a identificar los incidentes por partido y sumarlos
+    for(an in seq(vector1[am],vector1[am+1])){
+      #Verificamos que sea un incidente
+      if(details_data_20_21[an] == "Incident:"){
+        #Si sí es un incidente entonces incrementamos la cuenta
+        cont_inc <- cont_inc + 1
+      }
+    }
+    #Al final concatenamos el total de incidentes por cada partido
+    cont_total <- c(cont_total,cont_inc)
+  }
+  #Ya que tenemos el conteo de incidentes por cada partido de cada equipo, hacemos el loop para 
+  #entonces si separar todos los datos del partido (equipo contrincante, localia y fecha)
+  for(ao in 1:length(cont_total)){
+    #Encontramos el índice en donde se encuentra el primer paréntesis
+    parentesis_1 <- str_locate(game_detail_20_21[suma1+ao],"\\(")[1]
+    #Encontramos el índice en donde se encuentra el segundo paréntesis
+    parentesis_2 <- str_locate(game_detail_20_21[suma1+ao],"\\)")[1]
+    #Encontramos el índice en donde se encuentra el punto y coma
+    punto_coma <- str_locate(game_detail_20_21[suma1+ao],";")[1]
+    #Nos traemos el nombre del equipo contrincante y lo repetimos por el número de 
+    #incidentes que tuvo en un mismo partido
+    juegos <- c(juegos,rep(substr(game_detail_20_21[suma1+ao],1,parentesis_1-2),cont_total[ao]))
+    #Nos traemos la localia y lo repetimos por el número de incidentes que tuvo en un mismo partido
+    localia <- c(localia,rep(substr(game_detail_20_21[suma1+ao],parentesis_1+1,punto_coma-1),cont_total[ao]))
+    #Nos traemos la fecha del partido y lo repetimos por el número de incidentes que tuvo en un 
+    #mismo partido
+    fecha <- c(fecha,rep(substr(game_detail_20_21[suma1+ao],punto_coma+2,parentesis_2-1),cont_total[ao]))
+  }
+  #Aumentamos la variable para controlar los datos a repetir
+  suma1 <- suma1 + length(cont_total)
+}
+
+#Ya que tenemos todos los datos entonces armamos la tabla con todas estas descripciones
+var_details <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20)),
+                                       rep("20/21",length(incident_detail_20_21))),
+                          "team1" = c(teams_var_detail_19_20,teams_var_detail_20_21),
+                          "team2" = juegos, "home/away" = localia, "date" = fecha,
+                          "incident" = c(desc_incident_19_20,desc_incident_20_21),
+                          "type" = c(type_incident_19_20,type_incident_20_21),
+                          "min" = c(min_inc_19_20,min_inc_20_21))
+```
+
+```{r}
+#Primeros cinco registros de la tabla de detalles de incidentes en donde intervino el VAR
+#dentro de los partidos de cada equipo de la PL en la temporada 19/20 y 20/21
+head(var_details,5)
+```
+
+```{r,include=FALSE}
+#Iniciamos el proceso para hacer una modificación en cuanto a la localía del equipo, se pretende
+#eliminar el indicador de si es local o visitante y manejar solo las variables "team1" y "team2" 
+#para denotar localia (team1) o visita (team2)
+
+#Vectores que nos ayudarán a guardar los equipos locales y visitantes
+team1 <- NULL
+team2 <- NULL
+
+#Loop en donde identificamos si el equipo es local o visitante y lo guardamos en el vector correspondiente
+for(ap in 1:dim(var_details)[1]){
+  #Transformamos el primer equipo en character
+  equipo1 <- as.character(var_details$team1[ap])
+  #Transformamos el segundo equipo en character
+  equipo2 <- as.character(var_details$team2[ap])
+  #Transformamos el indicador de localia en character
+  local_eq <- as.character(var_details$home.away[ap])
+  #Verificamos si el indicador de localia dice que el primer equipo es local
+  if(local_eq == 'H'){
+    #Si sí es local entonces agregamos el primer equipo al vector de los locales
+    team1 <- c(team1,equipo1)
+    #Si sí es local entonces agregamos el segundo equipo al vector de los visitantes
+    team2 <- c(team2,equipo2)
+  } else {
+    #Si no es local entonces agregamos el segundo equipo al vector de los locales
+    team1 <- c(team1,equipo2)
+    #Si no es local entonces agregamos el primer equipo al vector de los visitantes
+    team2 <- c(team2,equipo1)
+  }
+}
+
+#Ya que tenemos el cambio de estos equipos según su localia, creamos la nueva tabla ya sin el 
+#indicador de localía y con las variables team1 y team2 ya indicando la localia y visitante
+var_details1 <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20)),
+                                       rep("20/21",length(incident_detail_20_21))),
+                          "team1" = team1,"team2" = team2, "date" = fecha,
+                          "incident" = c(desc_incident_19_20,desc_incident_20_21),
+                          "type" = c(type_incident_19_20,type_incident_20_21),
+                          "min" = c(min_inc_19_20,min_inc_20_21))
+
+var_details1$season <- as.character(var_details1$season)
+var_details1$team1 <- as.character(var_details1$team1)
+var_details1$team2 <- as.character(var_details1$team2)
+var_details1$date <- as.character(var_details1$date)
+var_details1$incident <- as.character(var_details1$incident)
+```
+
+```{r}
+#Primeros cinco registros de la tabla de detalles de incidentes en donde intervino el VAR
+#dentro de los partidos de cada equipo de la PL en la temporada 19/20 y 20/21 ya sin el indicador
+#de localia
+head(var_details1,5)
+```
+
+```{r,include=FALSE}
+#cambiar pl_matches por premier_league y pl_var_inc por var_details
+
+#Muchas variables estan como factores, debemos covertirlos en el tipo de variable correcto
+pl_matches$date <- as.POSIXct(pl_matches$date)
+pl_matches$league <- as.character(pl_matches$league)
+pl_matches$team1 <- as.character(pl_matches$team1)
+pl_matches$team2 <- as.character(pl_matches$team2)
+pl_ot$season <- as.character(pl_ot$season)
+pl_ot$team <- as.character(pl_ot$team)
+pl_var_inc$season <- as.character(pl_var_inc$season)
+pl_var_inc$team1 <- as.character(pl_var_inc$team1)
+pl_var_inc$team2 <- as.character(pl_var_inc$team2)
+pl_var_inc$home.away <- as.character(pl_var_inc$home.away)
+pl_var_inc$date <- as.character.Date(pl_var_inc$date)
+pl_var_inc$incident <- as.character(pl_var_inc$incident)
+pl_var_inc$type <- as.character(pl_var_inc$type)
+pl_var_inc1$season <- as.character(pl_var_inc1$season)
+pl_var_inc1$team1 <- as.character(pl_var_inc1$team1)
+pl_var_inc1$team2 <- as.character(pl_var_inc1$team2)
+pl_var_inc1$date <- as.character.Date(pl_var_inc1$date)
+pl_var_inc1$incident <- as.character(pl_var_inc1$incident)
+pl_var_inc1$type <- as.character(pl_var_inc1$type)
+```
+
+```{r,include=FALSE}
+pl_var_inc$team1 <- if_else(pl_var_inc$team1 == 'Tottenham','Tottenham Hotspur',pl_var_inc$team1)
+pl_var_inc$team2 <- if_else(pl_var_inc$team2 == 'Tottenham','Tottenham Hotspur',pl_var_inc$team2)
+pl_var_inc1$team1 <- if_else(pl_var_inc1$team1 == 'Tottenham','Tottenham Hotspur',pl_var_inc1$team1)
+pl_var_inc1$team2 <- if_else(pl_var_inc1$team2 == 'Tottenham','Tottenham Hotspur',pl_var_inc1$team2)
+
+for (i in 1:length(pl_var_inc$team2)) {
+ if(pl_var_inc$team2[i] == 'Brighton & Hove Albion'){
+   pl_var_inc$team2[i] = 'Brighton and Hove Albion'
+ }else if(pl_var_inc$team2[i] == 'Brighton'){
+   pl_var_inc$team2[i] = 'Brighton and Hove Albion'
+ }else if (pl_var_inc$team1[i] == 'Brighton & Hove Albion'){
+   pl_var_inc$team1[i] = 'Brighton and Hove Albion'
+ }else if (pl_var_inc$team2[i] == 'Man United'){
+   pl_var_inc$team2[i] = 'Manchester United'
+ }else if (pl_var_inc$team2[i] == 'Man City'){
+   pl_var_inc$team2[i] = 'Manchester City'
+ }else if (pl_var_inc$team2[i] == 'Newcastle United'){
+   pl_var_inc$team2[i] = 'Newcastle'
+ }else if (pl_var_inc$team2[i] == 'Leicester'){
+   pl_var_inc$team2[i] = 'Leicester City'
+ }else if (pl_var_inc$team2[i] == 'Norwich'){
+   pl_var_inc$team2[i] = 'Norwich City'
+ }else if (pl_var_inc$team2[i] == 'WBA'){
+   pl_var_inc$team2[i] = 'West Bromwich Albion'
+ }else if (pl_var_inc$team2[i] == 'West Brom'){
+   pl_var_inc$team2[i] = 'West Bromwich Albion'
+ }else if (pl_var_inc$team2[i] == 'Bournemouth'){
+   pl_var_inc$team2[i] = 'AFC Bournemouth'
+ }else if (pl_var_inc$team2[i] == 'Leeds'){
+   pl_var_inc$team2[i] = 'Leeds United'
+ }else if (pl_var_inc$team2[i] == 'West Ham'){
+   pl_var_inc$team2[i] = 'West Ham United'
+ }else if (pl_var_inc$team2[i] == 'Wolves'){
+   pl_var_inc$team2[i] = 'Wolverhampton'
+ }else if (pl_var_inc$team1[i] == 'West Brom'){
+   pl_var_inc$team1[i] = 'West Bromwich Albion'
+ }else if (pl_var_inc$team1[i] == 'Leeds'){
+   pl_var_inc$team1[i] = 'Leeds United'
+ }else if (pl_var_inc$team1[i] == 'West Ham'){
+   pl_var_inc$team1[i] = 'West Ham United'
+ }else if (pl_var_inc$team1[i] == 'Wolves'){
+   pl_var_inc$team1[i] = 'Wolverhampton'
+ }
+}
+```
+
+```{r,include=FALSE}
+
+bs_teams <- c('Chelsea','Liverpool','Manchester City','Manchester United','Arsenal','Tottenham Hotspur')
+
+pl_matches['big_six'] <- if_else(pl_matches$team1 == 'Chelsea' | pl_matches$team1 == 'Liverpool' |
+                                   pl_matches$team1 == 'Manchester United' | pl_matches$team1 == 'Arsenal'|
+                                   pl_matches$team1 == 'Manchester City' | 
+                                   pl_matches$team1 == 'Tottenham Hotspur' |
+                                   pl_matches$team2 == 'Chelsea' | pl_matches$team2 == 'Liverpool' |
+                                   pl_matches$team2 == 'Manchester United' | pl_matches$team2 == 'Arsenal'|
+                                   pl_matches$team2 == 'Manchester City' | 
+                                   pl_matches$team2 == 'Tottenham Hotspur',1,0)
+
+pl_var_inc['big_six'] <- if_else(pl_var_inc$team1 == 'Chelsea' | pl_var_inc$team1 == 'Liverpool' |
+                                   pl_var_inc$team1 == 'Manchester United' | pl_var_inc$team1 == 'Arsenal'|
+                                   pl_var_inc$team1 == 'Manchester City' | 
+                                   pl_var_inc$team1 == 'Tottenham Hotspur' |
+                                   pl_var_inc$team2 == 'Chelsea' | pl_var_inc$team2 == 'Liverpool' |
+                                   pl_var_inc$team2 == 'Manchester United' | pl_var_inc$team2 == 'Arsenal'|
+                                   pl_var_inc$team2 == 'Manchester City' | 
+                                   pl_var_inc$team2 == 'Tottenham Hotspur',1,0)
+
+pl_var_inc1['big_six'] <- if_else(pl_var_inc1$team1 == 'Chelsea' | pl_var_inc1$team1 == 'Liverpool' |
+                                   pl_var_inc1$team1 == 'Manchester United' | pl_var_inc1$team1 == 'Arsenal'|
+                                   pl_var_inc1$team1 == 'Manchester City' | 
+                                   pl_var_inc1$team1 == 'Tottenham Hotspur' |
+                                   pl_var_inc1$team2 == 'Chelsea' | pl_var_inc1$team2 == 'Liverpool' |
+                                   pl_var_inc1$team2 == 'Manchester United' | pl_var_inc1$team2 == 'Arsenal'|
+                                   pl_var_inc1$team2 == 'Manchester City' | 
+                                   pl_var_inc1$team2 == 'Tottenham Hotspur',1,0)
+
+pl_matches['big_six_h'] <- if_else(pl_matches$team1 == 'Chelsea' | pl_matches$team1 == 'Liverpool' |
+                                   pl_matches$team1 == 'Manchester United' | pl_matches$team1 == 'Arsenal'|
+                                   pl_matches$team1 == 'Manchester City' | 
+                                   pl_matches$team1 == 'Tottenham Hotspur',1,0)
+
+pl_var_inc['big_six_h'] <- if_else(((pl_var_inc$team1 == 'Chelsea' | pl_var_inc$team1 == 'Liverpool' |
+                                   pl_var_inc$team1 == 'Manchester United' | pl_var_inc$team1 == 'Arsenal'|
+                                   pl_var_inc$team1 == 'Manchester City' | 
+                                   pl_var_inc$team1 == 'Tottenham Hotspur') & pl_var_inc$home.away == 'H') |
+                                  ((pl_var_inc$team2 == 'Chelsea' | pl_var_inc$team2 == 'Liverpool' |
+                                   pl_var_inc$team2 == 'Manchester United' | pl_var_inc$team2 == 'Arsenal'|
+                                   pl_var_inc$team2 == 'Manchester City' | 
+                                   pl_var_inc$team2 == 'Tottenham Hotspur') & pl_var_inc$home.away == 'A'),1,0)
+
+pl_var_inc1['big_six_h'] <- if_else(pl_var_inc1$team1 == 'Chelsea' | pl_var_inc1$team1 == 'Liverpool' |
+                                   pl_var_inc1$team1 == 'Manchester United' | pl_var_inc1$team1 == 'Arsenal'|
+                                   pl_var_inc1$team1 == 'Manchester City' | 
+                                   pl_var_inc1$team1 == 'Tottenham Hotspur',1,0)
+
+pl_matches['big_six_a'] <- if_else(pl_matches$team2 == 'Chelsea' | pl_matches$team2 == 'Liverpool' |
+                                   pl_matches$team2 == 'Manchester United' | pl_matches$team2 == 'Arsenal'|
+                                   pl_matches$team2 == 'Manchester City' | 
+                                   pl_matches$team2 == 'Tottenham Hotspur',1,0)
+
+pl_var_inc['big_six_a'] <- if_else(((pl_var_inc$team1 == 'Chelsea' | pl_var_inc$team1 == 'Liverpool' |
+                                   pl_var_inc$team1 == 'Manchester United' | pl_var_inc$team1 == 'Arsenal'|
+                                   pl_var_inc$team1 == 'Manchester City' | 
+                                   pl_var_inc$team1 == 'Tottenham Hotspur') & pl_var_inc$home.away == 'A') |
+                                   ((pl_var_inc$team2 == 'Chelsea' | pl_var_inc$team2 == 'Liverpool' |
+                                   pl_var_inc$team2 == 'Manchester United' | pl_var_inc$team2 == 'Arsenal'|
+                                   pl_var_inc$team2 == 'Manchester City' | 
+                                   pl_var_inc$team2 == 'Tottenham Hotspur') & pl_var_inc$home.away == 'H'),1,0)
+
+pl_var_inc1['big_six_a'] <- if_else(pl_var_inc1$team2 == 'Chelsea' | pl_var_inc1$team2 == 'Liverpool' |
+                                   pl_var_inc1$team2 == 'Manchester United' | pl_var_inc1$team2 == 'Arsenal'|
+                                   pl_var_inc1$team2 == 'Manchester City' | 
+                                   pl_var_inc1$team2 == 'Tottenham Hotspur',1,0)
+
+pl_ot['big_six'] <- if_else(pl_ot$team == 'Chelsea' | pl_ot$team == 'Liverpool' | pl_ot$team == 'Manchester United'| 
+                                   pl_ot$team == 'Arsenal'| pl_ot$team == 'Manchester City' | 
+                                   pl_ot$team == 'Tottenham Hotspur','Big Six','No Big Six')
+
+pl_var_inc['big_six_t1'] <- if_else(pl_var_inc$team1 == 'Chelsea' | pl_var_inc$team1 == 'Liverpool' |
+                                   pl_var_inc$team1 == 'Manchester United' | pl_var_inc$team1 == 'Arsenal'|
+                                   pl_var_inc$team1 == 'Manchester City' | 
+                                   pl_var_inc$team1 == 'Tottenham Hotspur','Big Six','No Big Six')
+
+pl_var_inc['big_six_both'] <- if_else(pl_var_inc$big_six_h == 1 & pl_var_inc$big_six_a == 1, 1, 0)
+
+pl_var_inc['no_big_six_both'] <- if_else(pl_var_inc$big_six_h == 0 & pl_var_inc$big_six_a == 0, 1, 0)
+
+pl_var_inc['bs_vs_nbs'] <- if_else(pl_var_inc$big_six_both == 0 & pl_var_inc$no_big_six_both == 0,1,0)
+
+pl_matches['season2'] <- case_when(
+  pl_matches$season == 2016 ~ '16/17',
+  pl_matches$season == 2017 ~ '17/18',
+  pl_matches$season == 2018 ~ '18/19',
+  pl_matches$season == 2019 ~ '19/20',
+  pl_matches$season == 2020 ~ '20/21'
+)
+
+numero_int_var <- pl_var_inc %>% group_by(season,team1,team2) %>% summarise(int_var = n_distinct(incident))
+
+pl_matches <- pl_matches %>% left_join(numero_int_var,by=c('season2' = 'season','team1','team2'))
+```
+
+```{r,include=FALSE}
+equipos <- NULL
+faltantes <- NULL
+for(equipo in unique(pl_var_inc$team2)){
+  if(equipo %in% unique(pl_matches$team2)){
+    equipos <- c(equipos,equipo)
+  } else {
+    faltantes <- c(faltantes,equipo)
+  }
+}
+```
+
+Datos obtenidos de https://www.football-data.co.uk/englandm.php
+
+```{r epl stats, include= FALSE}
+#leemos la data
+stats_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_1617.csv') 
+stats_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_1718.csv') 
+stats_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_1819.csv') 
+stats_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_1920.csv') 
+stats_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_2021.csv') 
+
+#quitamos la columna DIV
+stats_1617 <- stats_1617[-c(1)]
+stats_1718 <- stats_1718[-c(1)]
+stats_1819 <- stats_1819[-c(1)]
+stats_1920 <- stats_1920[-c(1)]
+stats_2021 <- stats_2021[-c(1)]
+
+#agregamos la columna de season
+stats_1617['season'] <- '16/17'
+stats_1718['season'] <- '17/18'
+stats_1819['season'] <- '18/19'
+stats_1920['season'] <- '19/20'
+stats_2021['season'] <- '20/21'
+
+#empezamos a unir las tablas
+stats_merged_1 <- merge(stats_1617,stats_1718,all = T)
+stats_merged_2 <- merge(stats_merged_1,stats_1819,all = T)
+stats_merged_3 <- merge(stats_merged_2,stats_1920,all = T)
+stats_epl <- merge(stats_merged_3,stats_2021,all=T)
+
+stats_epl <- stats_epl[c('Date','Time','HomeTeam','AwayTeam','FTHG','FTAG','FTR','HTHG','HTAG','HTR','Referee','HS','AS','HST','AST','HC','AC','HF','AF','HY','AY','HR','AR','season')]
+```
+
+```{r, include=FALSE}
+#leemos la data
+cleaned_merged_seasons <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_merged_seasons.csv')
+
+#eliminamos las columnas que no nos muestran dinamismo de equipo o jugador
+cleaned_merged_seasons <- cleaned_merged_seasons[-c(1,19,11,12,27)]
+
+#reenombramos algunas columnas
+cleaned_merged_seasons <-  cleaned_merged_seasons %>% rename(season = season_x, team1 = team_x)
+```
+
+```{r}
+#leemos la data
+cleaned_players_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1617.csv')
+cleaned_players_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1718.csv')
+cleaned_players_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1819.csv')
+cleaned_players_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1920.csv')
+cleaned_players_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_2021.csv')
+
+#analizar si estas tablas individuales por temporada ya están dentro de fpl_merged_seasons
+```
+
+```{r}
+sort(names(cleaned_players_1617))
+sort(names(cleaned_players_1718))
+sort(names(cleaned_players_1819))
+sort(names(cleaned_players_1920))
+sort(names(cleaned_players_2021))
+```
+
+```{r}
+head(cleaned_players_1617)
+```
+
+```{r}
+unique(cleaned_merged_seasons$fixture)
+```
+
+```{r,include=FALSE}
+#Escribimos las tablas en archivos csv para no perderlos
+#write_csv(premier_league,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/premier_league.csv")
+#write_csv(ovrt_df,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/pl_overturns.csv")
+#write_csv(ovrt_var,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/pl_overturns_var.csv")
+#write_csv(var_details,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/var_details.csv")
+#write_csv(var_details1,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/var_details1.csv")
+#write_csv(stats_epl,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/stats_epl.csv")
+#write_csv(cleaned_merged_seasons,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/fpl_merged_seasons.csv")
+```
+
+De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016, de aquí podemos empezar a hacer análisis exploratorio.
+
+**Tal vez agregar al campeón de cada temporada, nos podría servir como indicador de algo en cuanto a métricas**
