@@ -44,7 +44,7 @@ library(gridExtra)
 
 get_df <- function(is_work_computer=F,df_number){
   
-  ruta_personal = '/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables'
+  ruta_personal = '/Users/pedrovela/Documents/Git_repos/var_epl/tables'
   ruta_trabajo = '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/VAR_soccer/tables' 
   
   df_name <- switch (as.character(df_number),
@@ -52,8 +52,11 @@ get_df <- function(is_work_computer=F,df_number){
     '2' = '/pl_overturns_var.csv',
     '3' = '/var_details.csv',
     '4' = '/var_details1.csv',
-    '5' = '/stats_epl.csv'
-  )
+    '5' = '/stats_epl.csv',
+    '6' = '/fpl_merged_seasons.csv',
+    '7' = '/fpl_merged_players.csv',
+    '8' = '/fpl_merged_gw.csv'
+    )
   
   if(is_work_computer)
     df_path <-paste(ruta_trabajo,df_name,sep = "")
@@ -81,6 +84,6 @@ El dinamismo dentro del fútbol encubre, por mencionar solo algunos, los siguien
 
 
 ```{r prob}
-pl_matches <- get_df(df_number = 4)
-plot(pl_matches$HS)
+pl_matches <- get_df(df_number = 7)
+tail(pl_matches,15)
 ```

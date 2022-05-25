@@ -1,0 +1,7 @@
+Diccionario Tabla: fpl_merged_gw
+
+Tabla que contiene métricas asociadas a jugadores y su desempeño en cada partido de la EPL, estás métricas están a nivel semana de juego (game week), algunos ejemplos de estas métricas son las siguientes: #goles ganadores, #tarjetas amarillas, xP, etc.
+
+	1. name: Nombre completo del jugador
+
+	2. 

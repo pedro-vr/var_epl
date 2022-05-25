@@ -2,7 +2,7 @@ Diccionario Tabla: fpl_merged_seasons
 
 Tabla que contiene algunas estadísticas usuales medidas en partidos de fútbol (# goles concedidos, # porterías en cero, etc), además de métricas utilizadas usualmente en ligas de Fantasy Football, todo esto a nivel jugador
 
-	1. season: indicador de temporada de la EPL (2016/2017 - 2020/2021)
+	1. season: Indicador de temporada de la EPL (2016/2017 - 2020/2021)
 
 	2. name: Nombre del jugador
 
