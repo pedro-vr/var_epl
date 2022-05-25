@@ -1,0 +1,43 @@
+Diccionario Tabla: fpl_merged_players
+
+Tabla que contiene métricas asociadas a jugadores y su desempeño en cada temporada de la EPL, algunos ejemplos de estas métricas son las siguientes: #goles anotados, #minutos jugados, #asistencias, etc. Es importante recalcar que cada métrica asociada a cada jugador muestra el total generado de cada una en toda la temporada correspondiente de la EPL.
+
+	1. first_name: Primer nombre del jugador
+
+	2. second_name: Apellido del jugador
+
+	3. goals_scored: Número total de goles anotados por el jugador en la temporada correspondiente de la EPL
+
+	4. assists: Número total de asistencias hechas por el jugador en la temporada correspondiente de la EPL
+
+	5. total_points: Número total de puntos en FPL acumulados por el jugador en la temporada correspondiente de la EPL
+
+	6. minutes: Número total de minutos jugados por el jugador en la temporada correspondiente de la EPL
+
+	7. goals_conceded: Número total de goles concedidos por el jugador en la temporada correspondiente de la EPL
+
+	8. creativity: Puntaje total atribuido a la creatividad del jugador de acuerdo a FPL en la temporada correspondiente de la EPL
+
+	9. influence: Puntaje total atribuido a la influencia del jugador de acuerdo a FPL en la temporada correspondiente de la EPL
+
+	10. threat: Puntaje total atribuido a la amenaza que implicaba el jugador de acuerdo a FPL en la temporada correspondiente de la EPL
+
+	11. bonus: Número total de puntos de bono que recibe el jugador en FPL de acuerdo a su BPS. EL jugador con mayor BPS recibe 3 puntos de bono, el jugador con segundo mejor BPS recibe 2, el jugador con el tercer mejor BPS recibe 1 punto y los demás reciben cero puntos de bono
+
+	12. bps: Bonus Points System, puntos que se le suman/restan al jugador de acuerdo a acciones que realiza durante el partido a manera de medir su desempeño en el mismo
+
+	13. ict_index: Puntaje total atribuido al ict_index (combinación de influencia, amenaza y creatividad del jugador durante cada partido) del jugador de acuerdo a FPL en la temporada correspondiente de la EPL
+
+	14. clean_sheets: Número total de porterías imbatidas acumuladas por el jugador en la temporada correspondiente de la EPL
+
+	15. red_cards: Número total de tarjetas rojas acumuladas por el jugador en la temporada correspondiente de la EPL
+
+	16. yellow_cards: Número total de tarjetas amarillas acumuladas por el jugador en la temporada correspondiente de la EPL
+
+	17. selected_by_percent: Porcentaje total de ocasiones en que el jugador ha sido seleccionado para algún equipo de FPL en cada temporada correspondiente de la EPL
+
+	18. season: Indicador de temporada de la EPL (2016/2017 - 2020/2021)
+
+	19. now_cost: Monto total del costo de cada jugador
+
+	20. element_type: Posición que ocupa el jugador en el terreno de juego (abreviaturas en inglés)

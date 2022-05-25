@@ -89,9 +89,9 @@ Se cuenta con un archivo en donde se denotan las intervenciones del VAR en la PL
 #Empezamos el proceso para obtener los datos de las intervenciones del VAR en temporadas 19/20 y 20/21 de la PL
 
 #Leemos primero todo el archivo html de la temporada 19/20
-VAR_19_20 <- htmlParse("/Users/pedrovela/Documentos/Git_repos/VAR_soccer/getting_data/VAR_in_PL_19-20.html")
+VAR_19_20 <- htmlParse("/Users/pedrovela/Documentos/Git_repos/var_epl/getting_data/VAR_in_PL_19-20.html")
 #Leemos primero todo el archivo html de la temporada 20/21
-VAR_20_21 <- htmlParse("/Users/pedrovela/Documentos/Git_repos/VAR_soccer/getting_data/VAR_in_PL_20-21.html")
+VAR_20_21 <- htmlParse("/Users/pedrovela/Documentos/Git_repos/var_epl/getting_data/VAR_in_PL_20-21.html")
 
 #Nos traemos las tablas de overturns del VAR hacia todos los equipos para la 19/20, los cuales sabemos que están en los nodos de la forma <aside class = "inline editorial float-r">
 var_overturns_19_20 <- getNodeSet(VAR_19_20, "//aside[@class='inline editorial float-r']") %>% sapply(., xmlValue)
@@ -1076,6 +1076,8 @@ stats_epl <- stats_epl[c('Date','Time','HomeTeam','AwayTeam','FTHG','FTAG','FTR'
 #leemos la data
 cleaned_merged_seasons <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_merged_seasons.csv')
 
+cleaned_merged_seasons$element[0:10]
+
 #eliminamos las columnas que no nos muestran dinamismo de equipo o jugador
 cleaned_merged_seasons <- cleaned_merged_seasons[-c(1,19,11,12,27)]
 
@@ -1091,34 +1093,138 @@ cleaned_players_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/g
 cleaned_players_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1920.csv')
 cleaned_players_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_2021.csv')
 
-#analizar si estas tablas individuales por temporada ya están dentro de fpl_merged_seasons
+#le agregamos la columna de season
+cleaned_players_1617['season'] <- '16/17'
+cleaned_players_1718['season'] <- '17/18'
+cleaned_players_1819['season'] <- '18/19'
+cleaned_players_1920['season'] <- '19/20'
+cleaned_players_2021['season'] <- '20/21'
+
+#unimos todos en uno solo
+merged_cleaned_players <- cleaned_players_1617 %>% bind_rows(cleaned_players_1718) %>% bind_rows(cleaned_players_1819) %>% bind_rows(cleaned_players_1920) %>% bind_rows(cleaned_players_2021)
+
+merged_cleaned_players$second_name <- as.character(merged_cleaned_players$second_name)
+merged_cleaned_players$first_name <- as.character(merged_cleaned_players$first_name)
+
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e9>",replacement="é")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e1>",replacement="á")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e8>",replacement="e")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<fa>",replacement="ú")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f1>",replacement="n")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f3>",replacement="ó")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e0>",replacement="á")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<ed>",replacement="í")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<eb>",replacement="e")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f6>",replacement="o")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<fc>",replacement="u")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<ef>",replacement="i")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<d6>",replacement="O")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f8>",replacement="o")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f5>",replacement="o")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e5>",replacement="a")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<c1>",replacement="Á")
+merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e4>",replacement="a")
+
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e9>",replacement="é")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e1>",replacement="á")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e8>",replacement="e")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<fa>",replacement="ú")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f1>",replacement="n")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f3>",replacement="ó")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e0>",replacement="á")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<ed>",replacement="í")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<eb>",replacement="e")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f6>",replacement="o")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<fc>",replacement="u")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<ef>",replacement="i")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<d6>",replacement="O")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f8>",replacement="o")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f5>",replacement="o")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e5>",replacement="a")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<c1>",replacement="Á")
+merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e4>",replacement="a")
 ```
 
 ```{r}
-sort(names(cleaned_players_1617))
-sort(names(cleaned_players_1718))
-sort(names(cleaned_players_1819))
-sort(names(cleaned_players_1920))
-sort(names(cleaned_players_2021))
+#leemos la data
+merged_gw_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1617.csv')
+merged_gw_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1718.csv')
+merged_gw_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1819.csv')
+merged_gw_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1920.csv')
+merged_gw_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_2021.csv')
+
+#le creamos la columna season
+merged_gw_1617['season'] <- '16/17'
+merged_gw_1718['season'] <- '17/18'
+merged_gw_1819['season'] <- '18/19'
+merged_gw_1920['season'] <- '19/20'
+merged_gw_2021['season'] <- '20/21'
+
+#unimos la data
+merged_gw <- merged_gw_1617 %>% bind_rows(merged_gw_1718) %>% bind_rows(merged_gw_1819) %>% bind_rows(merged_gw_1920) %>% bind_rows(merged_gw_2021)
+
+#eliminamos columnas
+merged_gw <- merged_gw %>% select(.,-c('ea_index','element','fixture','id','kickoff_time_formatted','round','selected'))
+
+#empezamos proceso de la limpieza de la data
+
+#corregimos nombres: quitarle guión bajo y acentos 
+merged_gw$name <- as.character(merged_gw$name)
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="_",replacement=" ")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e9>",replacement="é")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e1>",replacement="á")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e8>",replacement="e")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<fa>",replacement="ú")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<f1>",replacement="n")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<f3>",replacement="ó")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e0>",replacement="á")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<ed>",replacement="í")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<eb>",replacement="e")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<f6>",replacement="o")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<fc>",replacement="u")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<ef>",replacement="i")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<d6>",replacement="O")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<f8>",replacement="o")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<f5>",replacement="o")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e5>",replacement="a")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<c1>",replacement="Á")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e4>",replacement="a")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e3>",replacement="a")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<df>",replacement="ss")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e7>",replacement="c")
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<c7>",replacement="c")
 ```
 
-```{r}
-head(cleaned_players_1617)
-```
-
-```{r}
-unique(cleaned_merged_seasons$fixture)
+```{r,include=FALSE}
+lista_final_caracter_nombre <- NULL
+lista_only_caracteres <- NULL
+for(x in 1:dim(merged_gw)[1]){
+  nombre_player <- merged_gw$name[x]
+  is_match <- unlist(gregexpr("<",nombre_player))
+  if(is_match > 0){
+    lista_caracter1 <- unlist(gregexpr("<",nombre_player))
+    lista_caracter2 <- unlist(gregexpr(">",nombre_player))
+    for(y in 1:length(lista_caracter1)){
+      caracter_esp <- substr(nombre_player,lista_caracter1[y],lista_caracter2[y])
+      lista_only_caracteres <- c(lista_only_caracteres,caracter_esp)
+    }
+    lista_final_caracter_nombre <- c(lista_final_caracter_nombre,lista_only_caracteres,nombre_player)
+  }
+}
+lista_final_only_caracteres <- unique(lista_only_caracteres)
 ```
 
 ```{r,include=FALSE}
 #Escribimos las tablas en archivos csv para no perderlos
-#write_csv(premier_league,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/premier_league.csv")
-#write_csv(ovrt_df,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/pl_overturns.csv")
-#write_csv(ovrt_var,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/pl_overturns_var.csv")
-#write_csv(var_details,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/var_details.csv")
-#write_csv(var_details1,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/var_details1.csv")
-#write_csv(stats_epl,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/stats_epl.csv")
-#write_csv(cleaned_merged_seasons,"/Users/pedrovela/Documents/Git_repos/VAR_soccer/tables/fpl_merged_seasons.csv")
+#write_csv(premier_league,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/premier_league.csv")
+#write_csv(ovrt_df,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/pl_overturns.csv")
+#write_csv(ovrt_var,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/pl_overturns_var.csv")
+#write_csv(var_details,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/var_details.csv")
+#write_csv(var_details1,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/var_details1.csv")
+#write_csv(stats_epl,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/stats_epl.csv")
+#write_csv(cleaned_merged_seasons,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_seasons.csv")
+#write_csv(merged_cleaned_players,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_players.csv")
+#write_csv(merged_gw,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_gw.csv")
 ```
 
 De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016, de aquí podemos empezar a hacer análisis exploratorio.
