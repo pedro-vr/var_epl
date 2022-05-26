@@ -48,7 +48,7 @@ get_df <- function(is_work_computer=F,df_number){
   ruta_trabajo = '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/VAR_soccer/tables' 
   
   df_name <- switch (as.character(df_number),
-    '1' = '/premier_league.csv',
+    '1' = '/premier_league.csv', #listo
     '2' = '/pl_overturns_var.csv',
     '3' = '/var_details.csv',
     '4' = '/var_details1.csv',

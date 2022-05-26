@@ -27,6 +27,20 @@ library(XML)
 library(methods)
 ```
 
+```{r}
+#Funciones a utilizar
+
+is_big_six <- function(team_name){
+  big_six_teams <- c('arsenal','chelsea','liverpool','manchester city','manchester united','tottenham hotspur')
+  if(tolower(team_name) %in% big_six_teams)
+    big_six <- 1
+  else 
+    big_six <- 0
+  
+  big_six
+}
+```
+
 Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
 
 El primer acercamiento por supuesto es sobre el VAR como nueva medida en el fútbol, de aquí que sale el repentino interés de querer saber lo siguiente:
@@ -49,6 +63,7 @@ Fuente: https://www.marca.com/claro-mx/futbol/liga-mx/2021/03/25/605cfb42ca4741d
 
 VAR definición: https://www.marca.com/claro-mx/futbol/liga-mx/2018/10/18/5bc8a11a268e3ebb268b45ce.html
 
+## DF1: premier_league
 
 Si obtenemos el documento directamente de la página de GitHub de FiveThirtyEight se tienen los partidos actualizados al día.
 
@@ -56,7 +71,8 @@ Si obtenemos el documento directamente de la página de GitHub de FiveThirtyEigh
 #al parecer aquí ya se encuentran desde 2016 hasta hoy, se actualiza cada semana
 url <- "https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv"
 football_matches <- read.csv(url,fileEncoding = 'UTF-8',skipNul = T)
-premier_league <- filter(football_matches,league == "Barclays Premier League")
+premier_league <- football_matches %>% filter(league == "Barclays Premier League")
+#seasons <- unique(premier_league$season)
 ```
 
 En el caso de la PL, como se trata de torneos largos, aquí no se mete la variable de una "liguilla" a comparación con la liga de México. Aquí se toman en cuenta todos los partidos y lo que cambian son los ascendidos y descendidos en cada temporada.
@@ -71,16 +87,27 @@ Aquí se considerarán dos nuevas variables, a saber, las siguientes:
 premier_league <- premier_league %>% mutate(after_covid = if_else(as.POSIXct(date) > as.POSIXct('2020-03-13'),1,0))
 #Creamos la variable que nos indica si en el partido estuvo presente el VAR
 premier_league <- premier_league %>% mutate(is_VAR = if_else(as.POSIXct(date) > as.POSIXct('2019-08-08'),1,0))
-```
+#Creamos la variable en donde nos dice si el equipo local es del big six
+premier_league$team1 <- sapply(premier_league$team1,as.character)
+premier_league$team2 <- sapply(premier_league$team2,as.character)
 
-```{r,include=FALSE}
-head(premier_league,3)
-arrange(premier_league,desc(date))
-arrange(premier_league,date)
-```
+premier_league['big_six_h'] <- sapply(premier_league$team1, is_big_six)
+#Creamos la variable en donde nos dice si el equipo visitante es del big six
+premier_league['big_six_a'] <- sapply(premier_league$team2, is_big_six)
+#Creamos la variable en donde nos dice si el equipo local o visitante (cualquiera de los dos) es del big six
+premier_league <- premier_league %>% mutate(big_six = if_else(big_six_h == 1 | big_six_a == 1,1,0))
+#Modificamos la variable season para tener un estándar de esa variable en todas las tablas
+premier_league$season <- sapply(premier_league$season,as.character)
+lista_seasons <- NULL
+for(x in 1:dim(premier_league)[1]){
+  season_comp_1 <- substr(premier_league$season[x],3,4)
+  season_comp_2 <- as.character(as.integer(season_comp_1) + 1)
+  season_format <- paste(season_comp_1,season_comp_2,sep = "/")
+  lista_seasons <- c(lista_seasons,season_format)
+}
+premier_league$season <- lista_seasons
 
-```{r}
-head(premier_league,3)
+#-------------queda pendiente la variable de intercepciones del VAR
 ```
 
 Se cuenta con un archivo en donde se denotan las intervenciones del VAR en la PL de la temporada 19/20 (la primera temporada en que se implementó) y se va a hacer un data set de esos records a continuación.
@@ -89,24 +116,32 @@ Se cuenta con un archivo en donde se denotan las intervenciones del VAR en la PL
 #Empezamos el proceso para obtener los datos de las intervenciones del VAR en temporadas 19/20 y 20/21 de la PL
 
 #Leemos primero todo el archivo html de la temporada 19/20
-VAR_19_20 <- htmlParse("/Users/pedrovela/Documentos/Git_repos/var_epl/getting_data/VAR_in_PL_19-20.html")
+VAR_19_20 <- htmlParse("/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/VAR_in_PL_19-20.html")
 #Leemos primero todo el archivo html de la temporada 20/21
-VAR_20_21 <- htmlParse("/Users/pedrovela/Documentos/Git_repos/var_epl/getting_data/VAR_in_PL_20-21.html")
+VAR_20_21 <- htmlParse("/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/VAR_in_PL_20-21.html")
+#Leemos primero todo el archivo html de la temporada 21/22
+VAR_21_22 <- htmlParse("/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/VAR_in_PL_21-22.html")
 
 #Nos traemos las tablas de overturns del VAR hacia todos los equipos para la 19/20, los cuales sabemos que están en los nodos de la forma <aside class = "inline editorial float-r">
 var_overturns_19_20 <- getNodeSet(VAR_19_20, "//aside[@class='inline editorial float-r']") %>% sapply(., xmlValue)
 #Nos traemos las tablas de overturns del VAR hacia todos los equipos para la 20/21, los cuales sabemos que están en los nodos de la forma <aside class = "inline editorial float-r">
 var_overturns_20_21 <- getNodeSet(VAR_20_21, "//aside[@class='inline editorial float-r']") %>% sapply(., xmlValue)
+#Nos traemos las tablas de overturns del VAR hacia todos los equipos para la 21/22, los cuales sabemos que están en los nodos de la forma <aside class = "inline editorial float-r">
+var_overturns_21_22 <- getNodeSet(VAR_21_22, "//aside[@class='inline editorial float-r']") %>% sapply(., xmlValue)
 
 #Nos traemos los nombres de los equipos de la PL de la 19/20 con sus puntos a favor o en contra a raíz de decisiones del VAR (netscore), los cuales sabemos que están en nodos de la forma <h2>
 teams_19_20 <- getNodeSet(VAR_19_20, "//h2") %>% sapply(., xmlValue)
 #Nos traemos los nombres de los equipos de la PL de la 20/21 con sus puntos a favor o en contra a raíz de decisiones del VAR (netscore), los cuales sabemos que están en nodos de la forma <h2>
 teams_20_21 <- getNodeSet(VAR_20_21, "//h2") %>% sapply(., xmlValue)
+#Nos traemos los nombres de los equipos de la PL de la 21/22 con sus puntos a favor o en contra a raíz de decisiones del VAR (netscore), los cuales sabemos que están en nodos de la forma <h2>
+teams_21_22 <- getNodeSet(VAR_21_22, "//h2") %>% sapply(., xmlValue)
 
 #Nos traemos el detalle de las decisiones del VAR por cada equipo de la 19/20, los cuales sabemos que están en nodos del tipo <p>
 details_var_19_20 <- getNodeSet(VAR_19_20, "//p") %>% sapply(., xmlValue)
 #Nos traemos el detalle de las decisiones del VAR por cada equipo de la 20/21, los cuales sabemos que están en nodos del tipo <p>
 details_var_20_21 <- getNodeSet(VAR_20_21, "//p") %>% sapply(., xmlValue)
+#Nos traemos el detalle de las decisiones del VAR por cada equipo de la 21/22, los cuales sabemos que están en nodos del tipo <p>
+details_var_21_22 <- getNodeSet(VAR_21_22, "//p") %>% sapply(., xmlValue)
 
 #Empezamos a tratar con los datos obtenidos arriba para solo quedarnos con la info importante
 
@@ -164,8 +199,38 @@ for (d in 1:length(ovrt_20_21)) {
   }
 }
 
+#Hacemos el mismo proceso para los datos de la 21/22
+
+#Se va a guardar todos los datos "servibles" o "útiles" dentro de un solo array
+ovrt_21_22 <- NULL
+#Vamos a hacer un loop para guardar los datos acerca de los overturns de los equipos de la 21/22
+for (c in 1:length(var_overturns_21_22)) {
+  #Guardamos cada jornada como una matriz
+  ovrt_21_22 <- c(ovrt_21_22,str_split(var_overturns_21_22[c],"\n",simplify = T))
+}
+
+#ya que tenemos los datos de todos los equipos de la 21/22, ahora nos vamos a quedar solamente 
+#con los datos útiles, para esto, hacemos un loop, vamos a trimear cada entrada 
+#y si la longitud de la entrada después de trimearla es mayor a cero entonces es un dato
+#útil y lo guardamos en un nuevo array
+
+#Array en donde vamos a guardar todo
+ovrt_data_21_22 <- NULL
+#Iniciamos el loop en donde vamos a guardar todos los datos
+for (d in 1:length(ovrt_21_22)) {
+  #Trimeamos los datos para ver is es que hay datos útiles
+  data_trim <- str_trim(ovrt_21_22[d])
+  #Si la longitud de lo trimeado es mayor a cero entonces tiene datos útiles
+  if(str_length(data_trim) > 0){
+    #Guardamos el dato útil en un array 
+    ovrt_data_21_22 <- c(ovrt_data_21_22,data_trim)
+  }
+}
+
 #Empezamos a guardar los datos de los overturns en vectores separados para después unirlos en un dataset
 ovrt_data_19_20 <- ovrt_data_19_20[1:123]
+
+# ------------------------------------ aqui voy ------------------------------------------
 
 #Empezamos el loop para los datos de los equipos de ambas temporadas
 
