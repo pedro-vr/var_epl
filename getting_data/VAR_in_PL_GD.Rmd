@@ -1193,6 +1193,16 @@ merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e3>",replacement="a")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<df>",replacement="ss")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e7>",replacement="c")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<c7>",replacement="c")
+
+#leemos el archivo con los códigos para los equips en cada temporada
+teams_list <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/master_team_list.csv')
+teams_list$season <- sapply(teams_list$season,as.character) %>% sapply(.,substr,3,length(.)) %>% sapply(.,gsub,pattern="-",replacement="/")
+teams_list$team_name <- sapply(teams_list$team_name,as.character) 
+
+#juntamos ambas tablas para definir el nombre del equipo contrario
+merged_gw_formatted <- merged_gw %>% left_join(teams_list,by=c('season','opponent_team' = 'team'))
+#eliminamos la columna donde viene el código del equipo y reenombramos la nueva columna con el nombre completo
+merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('opponent_team')) %>% rename(opponent_team = team_name)
 ```
 
 ```{r,include=FALSE}
@@ -1224,7 +1234,7 @@ lista_final_only_caracteres <- unique(lista_only_caracteres)
 #write_csv(stats_epl,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/stats_epl.csv")
 #write_csv(cleaned_merged_seasons,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_seasons.csv")
 #write_csv(merged_cleaned_players,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_players.csv")
-#write_csv(merged_gw,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_gw.csv")
+#write_csv(merged_gw_formatted,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_gw.csv")
 ```
 
 De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016, de aquí podemos empezar a hacer análisis exploratorio.
