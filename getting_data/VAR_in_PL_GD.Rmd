@@ -1164,7 +1164,7 @@ merged_gw_2021['season'] <- '20/21'
 merged_gw <- merged_gw_1617 %>% bind_rows(merged_gw_1718) %>% bind_rows(merged_gw_1819) %>% bind_rows(merged_gw_1920) %>% bind_rows(merged_gw_2021)
 
 #eliminamos columnas
-merged_gw <- merged_gw %>% select(.,-c('ea_index','element','fixture','id','kickoff_time_formatted','round','selected'))
+merged_gw <- merged_gw %>% select(.,-c('ea_index','element','fixture','id','kickoff_time_formatted','round','selected','value'))
 
 #empezamos proceso de la limpieza de la data
 
