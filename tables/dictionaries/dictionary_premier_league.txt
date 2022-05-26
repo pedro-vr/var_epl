@@ -2,7 +2,7 @@ Diccionario tabla: premier_league
 
 Tabla que registra los partidos jugados en la PL desde la temporada 16/17 hasta la temporada 20/21. Dentro de esta tabla se consideran las siguientes variables:
 
-  a. season: Año en que inició la temporada de la PL
+  a. season: Indicador de la temporada correspondiente de la EPL
   
   b. date: Fecha en que se llevó a cabo el partido
   
@@ -57,7 +57,3 @@ Tabla que registra los partidos jugados en la PL desde la temporada 16/17 hasta 
   aa. big_six_h: Flag que indica si el equipo local pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
   
   ab. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
-  
-  ac. season2: Temporada en que se jugó el partido de la PL con diferente formato
-  
-  ad. int_var: Número de intervenciones que hizo el VAR durante el partido
