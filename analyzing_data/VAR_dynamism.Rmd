@@ -42,7 +42,7 @@ library(gridExtra)
 ```{r datatables, include=FALSE}
 #Datos a utilizar 
 
-get_df <- function(is_work_computer=F,df_number){
+get_df <- function(df_number,is_work_computer=F){
   
   ruta_personal = '/Users/pedrovela/Documents/Git_repos/var_epl/tables'
   ruta_trabajo = '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/VAR_soccer/tables' 

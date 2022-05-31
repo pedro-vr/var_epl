@@ -39,6 +39,46 @@ is_big_six <- function(team_name){
   
   big_six
 }
+
+teams_ovrt_names_points <- function(array_data,is_21_22 = F){
+  if(is_21_22){
+    #nombres importantes del tipo de decisión de VAR
+    var_names <- c('VAR overturns - net score','VAR overturns - decisions against','VAR overturns - decisions for')
+    }else{
+    #nombres importantes del tipo de decisión de VAR
+    var_names <- c('VAR overturns (net score)','VAR overturns - decisions for','VAR overturns - decisions against')
+    }
+  #Vector para guardar la posición de cada nombre de decisión de VAR dentro del array de datos
+  var_names_pos <- NULL
+  #Vector para guardar el nombre de cada equipo
+  ovrt_team_points <- NULL 
+  #Vector para guardar los puntos asociados a cada equipo por tipo de decisión de VAR
+  ovrt_team_names <- NULL
+  
+  #Loop para obtener los números de índice de los nombres del VAR dentro del array de datos
+  for (x in 1:length(var_names)) {
+    name_pos <- which(array_data == var_names[x])
+    var_names_pos <- c(var_names_pos,name_pos)
+  }
+  
+  for (y in 1:length(var_names_pos)) {
+    if(y == 3){
+      for(w in seq(var_names_pos[y] + 1,length(array_data),by=2)){
+        ovrt_team_names <- c(ovrt_team_names,array_data[w])
+        ovrt_team_points <- c(ovrt_team_points,as.integer(array_data[w+1]))
+      }
+    } else {
+      for(w in seq(var_names_pos[y] + 1,var_names_pos[y+1] - 1,by=2)){
+        ovrt_team_names <- c(ovrt_team_names,array_data[w])
+        ovrt_team_points <- c(ovrt_team_points,as.integer(array_data[w+1]))
+      }
+    }
+  }
+  
+  return_list = list("names" = ovrt_team_names, "points" = ovrt_team_points)
+  
+  return(return_list)
+}
 ```
 
 Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
@@ -227,77 +267,31 @@ for (d in 1:length(ovrt_21_22)) {
   }
 }
 
+#la data del season 21/22 viene con un error en los datos de unos equipos, vamos a dividir
+#el array para corregir el error
+ovrt_data_21_22_aux1 <- ovrt_data_21_22[1:72]
+ovrt_data_21_22_aux2 <- ovrt_data_21_22[75:length(ovrt_data_21_22)]
+spaces_aux1 <- unlist(gregexpr(' ',ovrt_data_21_22[73]))
+last_space_aux1 <- spaces_aux1[length(spaces_aux1)]
+team_aux1 <- substr(ovrt_data_21_22[73],1,last_space_aux1-1)
+points_aux1 <- substr(ovrt_data_21_22[73],last_space_aux1+1,nchar(ovrt_data_21_22[73]))
+spaces_aux2 <- unlist(gregexpr(' ',ovrt_data_21_22[74]))
+last_space_aux2 <- spaces_aux2[length(spaces_aux2)]
+team_aux2 <- substr(ovrt_data_21_22[74],1,last_space_aux2-1)
+points_aux2 <- substr(ovrt_data_21_22[74],last_space_aux2+1,nchar(ovrt_data_21_22[74]))
+ovrt_data_21_22 <- c(ovrt_data_21_22_aux1,team_aux1,points_aux1,team_aux2,points_aux2,ovrt_data_21_22_aux2)
+
 #Empezamos a guardar los datos de los overturns en vectores separados para después unirlos en un dataset
 ovrt_data_19_20 <- ovrt_data_19_20[1:123]
 
-# ------------------------------------ aqui voy ------------------------------------------
+#Ejecutamos la función para obtener los nombres de los equipos y puntos de VAR sobre el array de datos de cada temporada
 
-#Empezamos el loop para los datos de los equipos de ambas temporadas
-
-#Creamos un array para meter los equipos de la temporada 19/20 para cada tipo de overturn
-teams_ovrt_19_20 <- NULL
-#Creamos un array para meter los puntos a favor o en contra de cada equipo de la 19/20 por cada tipo de 
-#overturn
-ovrt_points_19_20 <- NULL
-#Creamos un array para meter los equipos de la temporada 20/21 para cada tipo de overturn
-teams_ovrt_20_21 <- NULL
-#Creamos un array para meter los puntos a favor o en contra de cada equipo de la 20/21 por cada tipo de 
-#overturn
-ovrt_points_20_21 <- NULL
-#Creamos un contador para saber si estamos en los primeros 20 overturns, ya que esos primeros 20
-#tienen un signo positivo o negativo al principio que debemos quitar
-contador_ovrt <- 0
-#Empezamos el loop con la longitud de la 19/20 y como ambos tienen la misma longitud esto no 
-#importa mucho
-for (e in 1:length(ovrt_data_19_20)) {
-  #Nos fijamos si la entrada es el título del tipo de overturn, este siempre inicia con la palabra "VAR"
-  if (substr(ovrt_data_19_20[e],1,3) == "VAR") {
-    #Si estamos en el título del tipo de overturn, entonces sabemos que son 20 equipos por lo tanto
-    #hacemos el loop recorriendo los 20 equipos de 2 en 2 que es donde están los equipos
-    for(f in seq(e+1,e+39,by=2)){
-      #Aumentamos el contador para fijarnos si son los primeros 20
-      contador_ovrt <- contador_ovrt + 1
-      #Nos fijamos si son los primeros 20 equipos
-      if(contador_ovrt <= 20){
-        #Nos traemos los puntos con el signo adecuado ya en entero
-        ovrt_points_19_20 <- c(ovrt_points_19_20,as.integer(ovrt_data_19_20[f+1]))
-        #en este loop solo lidiamos con los signos de los equipos de la temporada 19/20 por lo tanto
-        #las primeras 20 entradas del vector para la temporada 20/21 los dejamos en 0
-        ovrt_points_20_21 <- c(ovrt_points_20_21,0)
-      } else {
-        #Si ya pasamos los primeros 20 entonces ya nos traemos el puro número, estos ya no tienen signo
-        #y aquí si guardamos para ambas tenporadas
-        ovrt_points_19_20 <- c(ovrt_points_19_20,as.integer(ovrt_data_19_20[f+1]))
-        ovrt_points_20_21 <- c(ovrt_points_20_21,as.integer(ovrt_data_20_21[f+1]))
-      }
-      #Después de guardar los puntos guardamos el nombre de los equipos para ambas temporadas
-      teams_ovrt_19_20 <- c(teams_ovrt_19_20,ovrt_data_19_20[f])
-      teams_ovrt_20_21 <- c(teams_ovrt_20_21,ovrt_data_20_21[f])
-    }
-  }
-}
-
-#Como los primeros 20 puntos no coinciden necesariamente entre ambas temporadas en cuanto signo entonces
-#tratamos aquí los primeros 20 puntos de la temporada 20/21
-
-#Creamos un indice el cual nos servirá para saber en que entrada del vector ya creado para la 20/21
-#guardar el respectivo punto positivo, negativo o cero
-index_20_21 <- 0
-#empezamos el loop dentro del vector de datos de la 20/21 para obtener los primeros 20 puntos
-for(g in 1:length(ovrt_data_20_21)){
-  #Queremos solamente los puntos del tipo net score
-  if (ovrt_data_20_21[g] == "VAR overturns (net score)"){
-    #Son 20 equipos por lo tanto recorremos el vector solo los primeros 20 de dos en dos a partir 
-    #del inicio del overturn más dos lugares
-    for(h in seq(g+2,g+40,by=2)){
-      #Aumentamos el índice para ir recorriendo los primeros 20 lugares del vector de puntos 
-      #para la 20/21
-      index_20_21 <- index_20_21 + 1
-      #Nos traemos los puntos con el signo adecuado ya en entero
-      ovrt_points_20_21[index_20_21] <- as.integer(ovrt_data_20_21[h])
-    }
-  }
-}
+teams_ovrt_19_20 <- teams_ovrt_names_points(ovrt_data_19_20)$names
+ovrt_points_19_20 <- teams_ovrt_names_points(ovrt_data_19_20)$points
+teams_ovrt_20_21 <- teams_ovrt_names_points(ovrt_data_20_21)$names
+ovrt_points_20_21 <- teams_ovrt_names_points(ovrt_data_20_21)$points
+teams_ovrt_21_22 <- teams_ovrt_names_points(ovrt_data_21_22,T)$names
+ovrt_points_21_22 <- teams_ovrt_names_points(ovrt_data_21_22,T)$points
 
 #Vamos a guardar estos tres tipos de overturn en un tres tablas diferntes para cada temporada y así después unirlos en uno solo
 
@@ -306,11 +300,11 @@ for(g in 1:length(ovrt_data_20_21)){
 #da = decisions against
 
 #Tabla para el overturn "net score"
-ns_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20)), "team" = c(teams_ovrt_19_20[1:20],teams_ovrt_20_21[1:20]), "ns" = c(ovrt_points_19_20[1:20],ovrt_points_20_21[1:20]))
+ns_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20),rep("21/22",20)), "team" = c(teams_ovrt_19_20[1:20],teams_ovrt_20_21[1:20],teams_ovrt_21_22[1:20]), "ns" = c(ovrt_points_19_20[1:20],ovrt_points_20_21[1:20],ovrt_points_21_22[1:20]))
 #Tabla para el overturn "decisions for"
-desfor_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20)), "team" = c(teams_ovrt_19_20[21:40],teams_ovrt_20_21[21:40]), "df" = c(ovrt_points_19_20[21:40],ovrt_points_20_21[21:40]))
+desfor_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20),rep("21/22",20)), "team" = c(teams_ovrt_19_20[21:40],teams_ovrt_20_21[21:40],teams_ovrt_21_22[21:40]), "df" = c(ovrt_points_19_20[21:40],ovrt_points_20_21[21:40],ovrt_points_21_22[21:40]))
 #Tabla para el overturn "decisions against"
-desagnst_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20)), "team" = c(teams_ovrt_19_20[41:60],teams_ovrt_20_21[41:60]), "da" = c(ovrt_points_19_20[41:60],ovrt_points_20_21[41:60]))
+desagnst_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20),rep("21/22",20)), "team" = c(teams_ovrt_19_20[41:60],teams_ovrt_20_21[41:60],teams_ovrt_21_22[41:60]), "da" = c(ovrt_points_19_20[41:60],ovrt_points_20_21[41:60],ovrt_points_21_22[41:60]))
 #unimos las tres tablas en una sola basado en la temporada y nombre de equipo
 ovrt_df <- inner_join(ns_df,desfor_df,by=c("season","team")) %>% inner_join(.,desagnst_df,by=c("season","team"))
 ```
