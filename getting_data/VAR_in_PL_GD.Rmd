@@ -79,6 +79,90 @@ teams_ovrt_names_points <- function(array_data,is_21_22 = F){
   
   return(return_list)
 }
+
+format_ovrt_details <- function(array_data){
+  details_ovrt <- NULL
+  
+  for(i in 1:length(array_data))
+    details_ovrt <- c(details_ovrt,str_split(array_data[i],"\n",simplify = T))
+  
+  details_ovrt_data <- NULL
+  
+  for(j in 1:length(details_ovrt)){
+    data_trim <- str_trim(details_ovrt[j])
+    if(str_length(data_trim) > 0)
+      details_ovrt_data <- c(details_ovrt_data,data_trim)
+  }
+  
+  return(details_ovrt_data)
+}
+
+teams_ovrt_details <- function(array_data){
+  #Creamos los vectores en donde vamos a guardar todos los valores numéricos de los overturns 
+  #para todos los equipos en las dos temporadas
+  des_ovrt <- NULL
+  indices_overturns <- which(array_data == "Overturns:")
+  num_indices <- length(indices_overturns)
+  
+  #Iniciamos los loops en donde vamos a recorrer todos los datos de la página web y solo nos quedamos
+  #con los valores numéricos, todo esto para las dos temporadas. Se hacen en dos loops diferentes 
+  #porque el tamaño del vector es diferente entre ambas temporadas
+  
+  for(m in 1:num_indices){
+    if(m == num_indices){
+      #a partir del overturn buscamos el indice del siguiente "Game:"
+      inicio_seq <- indices_overturns[m]
+      fin_seq <- length(array_data)
+      indices_games <- which(array_data[inicio_seq:fin_seq] == 'Game:')
+      lim_seq <- indices_games[1] - 1
+      aux_cont <- 0
+      for(n in seq(inicio_seq+1,inicio_seq+lim_seq,by=2)){
+        metrica_ovrt <- array_data[n]
+        if(grepl("/",metrica_ovrt)){
+          indice_caracter <- unlist(gregexpr("/",metrica_ovrt))
+          metrica1 <- as.integer(substr(metrica_ovrt,1,indice_caracter-1))
+          metrica2 <- as.integer(substr(metrica_ovrt,indice_caracter+1,nchar(metrica_ovrt)))
+          net_metrica <- metrica1 - metrica2
+          des_ovrt <- c(des_ovrt,net_metrica)
+          aux_cont <- aux_cont + 1
+        } else {
+          des_ovrt <- c(des_ovrt,as.integer(metrica_ovrt))
+          aux_cont <- aux_cont + 1
+        }
+      }
+      if(aux_cont < 11){
+        des_ovrt <- c(des_ovrt,rep(2019,11-aux_cont))
+      }
+    } else {
+      #a partir del overturn buscamos el indice del siguiente "Game:"
+      inicio_seq <- indices_overturns[m]
+      fin_seq <- indices_overturns[m+1]
+      indices_games <- which(array_data[inicio_seq:fin_seq] == 'Game:')
+      lim_seq <- indices_games[1] - 1
+      aux_cont <- 0
+      for(n in seq(inicio_seq+1,inicio_seq+lim_seq,by=2)){
+        metrica_ovrt <- array_data[n]
+        if(grepl("/",metrica_ovrt)){
+          indice_caracter <- unlist(gregexpr("/",metrica_ovrt))
+          metrica1 <- as.integer(substr(metrica_ovrt,1,indice_caracter-1))
+          metrica2 <- as.integer(substr(metrica_ovrt,indice_caracter+1,nchar(metrica_ovrt)))
+          net_metrica <- metrica1 - metrica2
+          des_ovrt <- c(des_ovrt,net_metrica)
+          aux_cont <- aux_cont + 1
+        } else {
+          des_ovrt <- c(des_ovrt,as.integer(metrica_ovrt))
+          aux_cont <- aux_cont + 1
+        }
+      }
+      if(aux_cont < 11){
+        des_ovrt <- c(des_ovrt,rep(2019,11-aux_cont))
+      }
+    }
+  }
+  #20_21 : net_penalties (for - against)
+  #21_22 : net_penalties (for - against) , net_red_cards (for - against)
+  return(des_ovrt)
+}
 ```
 
 Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
@@ -315,97 +399,32 @@ Iniciamos el proceso para obtener la descripción de las decisiones del VAR en l
 #Empezamos a tratar con los datos obtenidos sobre los detalles del VAR en cada partido de la PL y entonces
 #solo quedarnos con la info importante
 
-#Se va a guardar todos los datos "servibles" o "útiles" dentro de un solo array
-details_19_20 <- NULL
-#Vamos a hacer un loop para guardar los datos acerca de las intervenciones del VAR de la 19/20
-for (i in 1:length(details_var_19_20)) {
-  #Guardamos cada dato como una matriz
-  details_19_20 <- c(details_19_20,str_split(details_var_19_20[i],"\n",simplify = T))
-}
-
-#ya que tenemos los datos de todos los partidos de la 19/20, ahora nos vamos a quedar solamente 
-#con los datos útiles, para esto, hacemos un loop, vamos a trimear cada entrada 
-#y si la longitud de la entrada después de trimearla es mayor a cero entonces es un dato
-#útil y lo guardamos en un nuevo array
-
-#Array en donde vamos a guardar todo
-details_data_19_20 <- NULL
-#Iniciamos el loop en donde vamos a guardar todos los datos
-for (j in 1:length(details_19_20)) {
-  #Trimeamos los datos para ver is es que hay datos útiles
-  data_trim <- str_trim(details_19_20[j])
-  #Si la longitud de lo trimeado es mayor a cero entonces tiene datos útiles
-  if(str_length(data_trim) > 0){
-    #Guardamos el dato útil en un array 
-    details_data_19_20 <- c(details_data_19_20,data_trim)
-  }
-}
-
-#Hacemos el mismo proceso para los datos de la 20/21
-
-#Se va a guardar todos los datos "servibles" o "útiles" dentro de un solo array
-details_20_21 <- NULL
-#Vamos a hacer un loop para guardar los datos acerca de los partidos de los equipos de la 20/21
-for (k in 1:length(details_var_20_21)) {
-  #Guardamos cada dato como una matriz
-  details_20_21 <- c(details_20_21,str_split(details_var_20_21[k],"\n",simplify = T))
-}
-
-#ya que tenemos los datos de todos los partidos de la 20/21, ahora nos vamos a quedar solamente 
-#con los datos útiles, para esto, hacemos un loop, vamos a trimear cada entrada 
-#y si la longitud de la entrada después de trimearla es mayor a cero entonces es un dato
-#útil y lo guardamos en un nuevo array
-
-#Array en donde vamos a guardar todo
-details_data_20_21 <- NULL
-#Iniciamos el loop en donde vamos a guardar todos los datos
-for (l in 1:length(details_20_21)) {
-  #Trimeamos los datos para ver is es que hay datos útiles
-  data_trim <- str_trim(details_20_21[l])
-  #Si la longitud de lo trimeado es mayor a cero entonces tiene datos útiles
-  if(str_length(data_trim) > 0){
-    #Guardamos el dato útil en un array 
-    details_data_20_21 <- c(details_data_20_21,data_trim)
-  }
-}
+details_data_19_20 <- format_ovrt_details(details_var_19_20)
+details_data_20_21 <- format_ovrt_details(details_var_20_21)
+details_data_21_22 <- format_ovrt_details(details_var_21_22)
 
 #Ahora que ya tenemos los datos "útiles" entonces empezamos a guardar los datos en vectores 
 
 #Empezamos el proceso para traernos la descripciones de decisiones del VAR, primero vamos a obtener
 #más métricas relacionadas a los overturns de los equipos 
 
-#Creamos los vectores en donde vamos a guardar todos los valores numéricos de los overturns 
-#para todos los equipos en las dos temporadas
-des_19_20 <- NULL
-des_20_21 <- NULL
+des_19_20 <- teams_ovrt_details(details_data_19_20)
+des_20_21 <- teams_ovrt_details(details_data_20_21)
+#en la data de la temporada 20/21 hay un dato de mas en un equipo, se elminará
+des_20_21 <- des_20_21[-133]
+#en los datos de la temporada 21/22 hay un error en un dato que hace tener varios NA
+#separaremos los datos para corregir el error
+details_data_21_22_p1 <- details_data_21_22[1:614]
+aux_nombre1 <- substr(details_data_21_22[615],1,unlist(gregexpr(":",details_data_21_22[615])))
+aux_num1 <- substr(details_data_21_22[615],unlist(gregexpr(":",details_data_21_22[615]))+2,nchar(details_data_21_22[615]))
+details_data_21_22_p2 <- details_data_21_22[616:777]
+aux_nombre2 <- substr(details_data_21_22[778],1,unlist(gregexpr(":",details_data_21_22[778])))
+aux_num2 <- substr(details_data_21_22[778],unlist(gregexpr(":",details_data_21_22[778]))+2,nchar(details_data_21_22[778]))
+details_data_21_22_p3 <- details_data_21_22[779:length(details_data_21_22)]
+details_data_21_22 <- c(details_data_21_22_p1,aux_nombre1,aux_num1,details_data_21_22_p2,aux_nombre2,aux_num2,details_data_21_22_p3)
+des_21_22 <- teams_ovrt_details(details_data_21_22)
 
-#Iniciamos los loops en donde vamos a recorrer todos los datos de la página web y solo nos quedamos
-#con los valores numéricos, todo esto para las dos temporadas. Se hacen en dos loops diferentes 
-#porque el tamaño del vector es diferente entre ambas temporadas
-
-for (m in 1:length(details_data_19_20)) {
-  #los valores numéricos para cada equipo empiezan con los "Overturns"
-  if(details_data_19_20[m] == "Overturns:"){
-    #si ya encontramos el "Overturn" entonces sabemos que después vienen 9 métricas y 
-    #son las que únicamente queremos guardar
-    for (n in seq(m+1,m+17,by=2)) {
-      #Guardamos cada número en el vector
-      des_19_20 <- c(des_19_20,details_data_19_20[n])
-    }
-  }
-}
-
-for (p in 1:length(details_data_20_21)) {
-  #los valores numéricos para cada equipo empiezan con los "Overturns"
-  if(details_data_20_21[p] == "Overturns:"){
-    #si ya encontramos el "Overturn" entonces sabemos que después vienen 9 métricas y 
-    #son las que únicamente queremos guardar
-    for (q in seq(p+1,p+17,by=2)) {
-      #Guardamos cada número en el vector
-      des_20_21 <- c(des_20_21,details_data_20_21[q])
-    }
-  }
-}
+# ------------------ aqui voy
 
 #Ahora, tenemos el vector con los valores numéricos de todas las métricas en conjunto
 #sin separación, entonces creamos los vectores individuales de cada métrica para separar
