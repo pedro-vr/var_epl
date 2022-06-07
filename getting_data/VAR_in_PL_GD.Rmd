@@ -163,6 +163,123 @@ teams_ovrt_details <- function(array_data){
   #21_22 : net_penalties (for - against) , net_red_cards (for - against)
   return(des_ovrt)
 }
+
+#función para meter los valores de la función anterior en un dataframe 
+teams_ovrt_details_df <- function(data_array,teams_names,season){
+  #Overturns totales del equipo
+  overturns_array <- NULL
+  #leading goals for
+  lgf_array <- NULL
+  #disallowed goals for  
+  dgf_array <- NULL
+  #leading goals against
+  lga_array <- NULL
+  #disallowed goals against
+  dga_array <- NULL
+  #net goal score
+  ngs_array <- NULL
+  #subjective decisions for
+  sdf_array <- NULL
+  #subjective decisions against
+  sda_array <- NULL
+  #net subjective score
+  nsc_array <- NULL
+  #penalties net score (for - against)
+  pns_array <- NULL
+  #red cards net score (for - against)
+  rcns_array <- NULL
+
+  #ya que tenemos los vectores creados entonces recorremos el vector con todos los valores numéricos
+  #y vamos guardando cada dato en su respectivo vector. Esto aplica para ambas temporadas
+  
+  tamano_array <- length(data_array)
+  num_metricas <- 11
+  
+  for (x in seq(1,tamano_array,by = num_metricas)) {
+    overturns_array <- c(overturns_array,as.integer(data_array[x]))
+    lgf_array <- c(lgf_array,as.integer(data_array[x+1]))
+    dgf_array <- c(dgf_array,as.integer(data_array[x+2]))
+    lga_array <- c(lga_array,as.integer(data_array[x+3]))
+    dga_array <- c(dga_array,as.integer(data_array[x+4]))
+    ngs_array <- c(ngs_array,as.integer(data_array[x+5]))
+    sdf_array <- c(sdf_array,as.integer(data_array[x+6]))
+    sda_array <- c(sda_array,as.integer(data_array[x+7]))
+    nsc_array <- c(nsc_array,as.integer(data_array[x+8]))
+    pns_array <- c(pns_array,as.integer(data_array[x+9]))
+    rcns_array <- c(rcns_array,as.integer(data_array[x+10]))
+  }
+
+  num_equipos <- tamano_array / num_metricas
+  season_array <- c(rep(season,num_equipos))
+  #Ya que tenemos los vectores individuales de cada métrica entonces creamos la tabla de los 
+  #equipos con estas nuevas métricas 
+  des_df <- data.frame("season" = season_array,
+                     "team" = teams_names,
+                     "ovrt" = overturns_array,"lgf" = lgf_array,"dgf" = dgf_array,
+                     "lga" = lga_array,"dga" = dga_array,"ngs" = ngs_array,
+                     "sdf" = sdf_array,"sda" = sda_array,"nsc" = nsc_array,
+                     'pns' = pns_array,"rcns" = rcns_array)
+  
+  return(des_df)
+}
+
+#funcion para dividir los detalles de incidentes del VAR por cada equipo
+var_desc_arrays <- function(data_array,data_teams_names){
+  #Vector en donde guardaremos el detalle del equipo al que se enfrentó, localia y fecha del incidente
+  game_detail <- NULL
+  #Vector en donde guardaremos la descripción del incidente y el tipo de este (a favor o en contra)
+  incident_detail <- NULL
+  #Vector auxiliar que nos va a ayudar a delimitar los incidentes de cada equipo
+  aux_index <- NULL
+
+  #Loop que nos sirve para guardar el índice de comienzo de cada equipo, 
+  #la descripción de la localía y fecha y la descripción de los incidentes 
+  #por equipo de la temporada correspondiente
+  for(s in 1:length(data_array)){
+    if(data_array[s] == "Overturns:")
+      #Guardamos el índice en donde inicia las descripciones de cada equipo
+      aux_index <- c(aux_index,s)
+    else if(data_array[s] == "Game:")
+      #Guardamos el detalle del equipo contrario, fecha y localía
+      game_detail <- c(game_detail,data_array[s+1])
+    else if(data_array[s] == "Incident:")
+      #Guardamos la descripción del incidente y el tipo de éste
+      incident_detail <- c(incident_detail,data_array[s+1])
+  }
+  
+  #agregamos el tamaño del vector de la data al vector auxiliar para referencia
+  aux_index <- c(aux_index,length(data_array))
+  
+  #Vector en donde guardaremos la cuenta del total de incidentes por equipo
+  cuenta_equipo <- NULL
+  
+  #Loop en donde guardamos el número total de incidentes por equipo para la temporada correspondiente
+  for(t in 1:(length(aux_index)-1)){
+    #Contador auxiliar que contará el número de incidentes por equipo
+    cont <- 0
+    for(u in seq(aux_index[t],aux_index[t+1])){
+      #verificamos si el dato que nos encontramos es un incidente
+      if(data_array[u] == "Incident:")
+        #Si si es un incidente entonces aumentamos la cuenta en el auxiliar
+        cont <- cont + 1
+    }
+    #Al final guardamos la cuenta total de incidentes por equipo en el vector nulo 
+    cuenta_equipo <- c(cuenta_equipo,cont)
+  }
+  
+  #Vectores que guardaran los nombres de los equipos repetidos
+  teams_names_rep <- NULL
+
+  #Iniciamos el loop en donde ya repetimos el nombre de los equipos
+  for(v in 1:length(cuenta_equipo)){
+    teams_names_rep <- c(teams_names_rep,rep(data_teams_names[v],cuenta_equipo[v]))
+  }
+  
+  lista_vectores <- list("aux_index" = aux_index,"game_detail" = game_detail,
+                         "incident_detail" = incident_detail,"teams_names_rep" = teams_names_rep)
+  
+  return(lista_vectores)
+}
 ```
 
 Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
@@ -424,84 +541,20 @@ details_data_21_22_p3 <- details_data_21_22[779:length(details_data_21_22)]
 details_data_21_22 <- c(details_data_21_22_p1,aux_nombre1,aux_num1,details_data_21_22_p2,aux_nombre2,aux_num2,details_data_21_22_p3)
 des_21_22 <- teams_ovrt_details(details_data_21_22)
 
-# ------------------ aqui voy
-
 #Ahora, tenemos el vector con los valores numéricos de todas las métricas en conjunto
 #sin separación, entonces creamos los vectores individuales de cada métrica para separar
-#los valores de cada uno. Esto aplica para ambas temporadas
+#los valores de cada uno. Esto aplica para todas las temporadas
 
-#Overturns totales del equipo
-overturns_19_20 <- NULL
-overturns_20_21 <- NULL
-#leading goals for
-lgf_19_20 <- NULL
-lgf_20_21 <- NULL
-#disallowed goals for
-dgf_19_20 <- NULL
-dgf_20_21 <- NULL
-#leading goals against
-lga_19_20 <- NULL
-lga_20_21 <- NULL
-#disallowed goals against
-dga_19_20 <- NULL
-dga_20_21 <- NULL
-#net goal score
-ngs_19_20 <- NULL
-ngs_20_21 <- NULL
-#subjective decisions for
-sdf_19_20 <- NULL
-sdf_20_21 <- NULL
-#subjective decisions against
-sda_19_20 <- NULL
-sda_20_21 <- NULL
-#net subjective score
-nsc_19_20 <- NULL
-nsc_20_21 <- NULL
+des_df_19_20 <- teams_ovrt_details_df(des_19_20,teams_ovrt_19_20[1:20],"19/20")
+des_df_20_21 <- teams_ovrt_details_df(des_20_21,teams_ovrt_20_21[1:20],"20/21")
+des_df_21_22 <- teams_ovrt_details_df(des_21_22,teams_ovrt_21_22[1:20],"21/22")
 
-#ya que tenemos los vectores creados entonces recorremos el vector con todos los valores numéricos
-#y vamos guardando cada dato en su respectivo vector. Esto aplica para ambas temporadas
-
-for (o in seq(1,9*19+1,by=9)) {
-  overturns_19_20 <- c(overturns_19_20,as.integer(des_19_20[o]))
-  lgf_19_20 <- c(lgf_19_20,as.integer(des_19_20[o+1]))
-  dgf_19_20 <- c(dgf_19_20,as.integer(des_19_20[o+2]))
-  lga_19_20 <- c(lga_19_20,as.integer(des_19_20[o+3]))
-  dga_19_20 <- c(dga_19_20,as.integer(des_19_20[o+4]))
-  ngs_19_20 <- c(ngs_19_20,as.integer(des_19_20[o+5]))
-  sdf_19_20 <- c(sdf_19_20,as.integer(des_19_20[o+6]))
-  sda_19_20 <- c(sda_19_20,as.integer(des_19_20[o+7]))
-  nsc_19_20 <- c(nsc_19_20,as.integer(des_19_20[o+8]))
-  overturns_20_21 <- c(overturns_20_21,as.integer(des_20_21[o]))
-  lgf_20_21 <- c(lgf_20_21,as.integer(des_20_21[o+1]))
-  dgf_20_21 <- c(dgf_20_21,as.integer(des_20_21[o+2]))
-  lga_20_21 <- c(lga_20_21,as.integer(des_20_21[o+3]))
-  dga_20_21 <- c(dga_20_21,as.integer(des_20_21[o+4]))
-  ngs_20_21 <- c(ngs_20_21,as.integer(des_20_21[o+5]))
-  sdf_20_21 <- c(sdf_20_21,as.integer(des_20_21[o+6]))
-  sda_20_21 <- c(sda_20_21,as.integer(des_20_21[o+7]))
-  nsc_20_21 <- c(nsc_20_21,as.integer(des_20_21[o+8]))
-}
-
-#Ya que tenemos los vectores individuales de cada métrica entonces creamos la tabla de los 
-#equipos con estas nuevas métricas 
-des_df <- data.frame("season" = c(rep("19/20",20),rep("20/21",20)),
-                     "team" = c(teams_ovrt_19_20[1:20],teams_ovrt_20_21[1:20]),
-                     "ovrt" = c(overturns_19_20,overturns_20_21),
-                     "lgf" = c(lgf_19_20,lgf_20_21),"dgf" = c(dgf_19_20,dgf_20_21),
-                     "lga" = c(lga_19_20,lga_20_21),"dga" = c(dga_19_20,dga_20_21),
-                     "ngs" = c(ngs_19_20,ngs_20_21),"sdf" = c(sdf_19_20,sdf_20_21),
-                     "sda" = c(sda_19_20,sda_20_21),"nsc" = c(nsc_19_20,nsc_20_21))
+#Unificamos los dfs de cada temporada
+des_df <- des_df_19_20 %>% bind_rows(des_df_20_21) %>% bind_rows(des_df_21_22)
 
 #ya que tenemos la tabla creada la unimos con la primera que obtuvimos atrás para ampliar las métricas
-ovrt_var <- inner_join(ovrt_df,des_df,by=c("season","team"))
-
-ovrt_var$season <- as.character(ovrt_var$season)
-ovrt_var$team <- as.character(ovrt_var$team)
-```
-
-```{r}
 #Tabla que contiene las métricas en cuanto overturns por equipo 
-ovrt_var
+ovrt_var <- inner_join(ovrt_df,des_df,by=c("season","team"))
 ```
 
 Ya que tenemos la tabla con los overturns de cada equipo entonces obtenemos la descripción de cada intervención del VAR para cada equipo
@@ -512,98 +565,28 @@ Ya que tenemos la tabla con los overturns de cada equipo entonces obtenemos la d
 
 #Primero vamos a obtener el detalle de los juegos e incidentes por cada equipo de las dos temporadas
 
-#Vectores en donde guardaremos el detalle del equipo al que se enfrentó, localia y fecha del incidente
-game_detail_19_20 <- NULL
-game_detail_20_21 <- NULL
-#Vectores en donde guardaremos la descripción del incidente y el tipo de este (a favor o en contra)
-incident_detail_19_20 <- NULL
-incident_detail_20_21 <- NULL
 #Vectores auxiliares que nos van a ayudar a delimitar los incidentes de cada equipo
-aux_1 <- NULL
-aux_2 <- NULL
-#Vectores en donde guardaremos la cuenta del total de incidentes por equipo
-cuenta_equipo_19_20 <- NULL
-cuenta_equipo_20_21 <- NULL
+aux_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$aux_index
+aux_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$aux_index
+aux_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$aux_index
 
-#ya una vez que tenemos los vectores entonces iniciamos los loops para guardar la información
-#en cada vector
+#Vectores en donde guardaremos la descripción del incidente y el tipo de este (a favor o en contra)
+incident_detail_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$incident_detail
+incident_detail_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$incident_detail
+incident_detail_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$incident_detail
 
-#Loop que nos sirve para guardar el índice de comienzo de cada equipo, la descripción de la localía y fecha
-#y la descripción de los incidentes por equipo de la temporada 19/20
-for(s in 1:length(details_data_19_20)){
-  if(details_data_19_20[s] == "Overturns:")
-    #Guardamos el índice en donde inicia las descripciones de cada equipo
-    aux_1 <- c(aux_1,s)
-  else if(details_data_19_20[s] == "Game:")
-    #Guardamos el detalle del equipo contrario, fecha y localía
-    game_detail_19_20 <- c(game_detail_19_20,details_data_19_20[s+1])
-  else if(details_data_19_20[s] == "Incident:")
-    #Guardamos la descripción del incidente y el tipo de éste
-    incident_detail_19_20 <- c(incident_detail_19_20,details_data_19_20[s+1])
-}
+#Vectores en donde guardaremos el detalle del equipo al que se enfrentó, localia y fecha del incidente
+game_detail_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$game_detail
+game_detail_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$game_detail
+game_detail_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$game_detail
 
-#Loop que nos sirve para guardar el índice de comienzo de cada equipo, la descripción de la localía y fecha
-#y la descripción de los incidentes por equipo de la temporada 20/21
-for(z in 1:length(details_data_20_21)){
-  if(details_data_20_21[z] == "Overturns:")
-    #Guardamos el índice en donde inicia las descripciones de cada equipo
-    aux_2 <- c(aux_2,z)
-  else if(details_data_20_21[z] == "Game:")
-    #Guardamos el detalle del equipo contrario, fecha y localía
-    game_detail_20_21 <- c(game_detail_20_21,details_data_20_21[z+1])
-  else if(details_data_20_21[z] == "Incident:")
-    #Guardamos la descripción del incidente y el tipo de éste
-    incident_detail_20_21 <- c(incident_detail_20_21,details_data_20_21[z+1])
-}
+#Vectores que guardaran los nombres de los equipos repetidos por cada incidente que haya tenido
+#en cada temporada
+teams_names_rep_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$teams_names_rep
+teams_names_rep_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$teams_names_rep
+teams_names_rep_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$teams_names_rep
 
-#Al final agregamos la longitud del vector de los detalles para delimitar los incidentes 
-#del último equipo, esto aplica oara ambas temporadas
-aux_1 <- c(aux_1,length(details_data_19_20))
-aux_2 <- c(aux_2,length(details_data_20_21))
-
-#ya que tenemos los vectores auxiliares iniciamos los loops para contar el número total 
-#de incidentes por equipo
-
-#Loop en donde guardamos el número total de incidentes por equipo para la temporada 19/20
-for(t in 1:(length(aux_1)-1)){
-  #Contador auxiliar que contará el número de incidentes por equipo
-  cont <- 0
-  for(u in seq(aux_1[t],aux_1[t+1])){
-    #verificamos si el dato que nos encontramos es un incidente
-    if(details_data_19_20[u] == "Incident:")
-      #Si si es un incidente entonces aumentamos la cuenta en el auxiliar
-      cont <- cont + 1
-  }
-  #Al final guardamos la cuenta total de incidentes por equipo en el vector nulo 
-  cuenta_equipo_19_20 <- c(cuenta_equipo_19_20,cont)
-}
-
-#Loop en donde guardamos el número total de incidentes por equipo para la temporada 20/21
-for(r in 1:(length(aux_2)-1)){
-  #Contador auxiliar que contará el número de incidentes por equipo
-  cont <- 0
-  for(aa in seq(aux_2[r],aux_2[r+1])){
-    #verificamos si el dato que nos encontramos es un incidente
-    if(details_data_20_21[aa] == "Incident:")
-      #Si si es un incidente entonces aumentamos la cuenta en el auxiliar
-      cont <- cont + 1
-  }
-  #Al final guardamos la cuenta total de incidentes por equipo en el vector nulo
-  cuenta_equipo_20_21 <- c(cuenta_equipo_20_21,cont)
-}
-
-#Ya que tenemos el número total de incidentes por equipo entonces vamos a repetir el nombre 
-#de cada equipo por el número total de incidentes que tenga cada uno
-
-#Vectores que guardaran los nombres de los equipos repetidos
-teams_var_detail_19_20 <- NULL
-teams_var_detail_20_21 <- NULL 
-
-#Iniciamos el loop en donde ya repetimos el nombre de los equipos
-for(v in 1:length(cuenta_equipo_19_20)){
-  teams_var_detail_19_20 <- c(teams_var_detail_19_20,rep(teams_ovrt_19_20[v],cuenta_equipo_19_20[v]))
-  teams_var_detail_20_21 <- c(teams_var_detail_20_21,rep(teams_ovrt_20_21[v],cuenta_equipo_20_21[v]))
-}
+# -------------- aqui voy
 
 #Ya que tenemos el nombre de los equipos repetidos entonces empezamos por desglozar la descripción
 #de los incidentes que tuvo cada equipo, se dividen en la descripción como tal, el minuto en que
