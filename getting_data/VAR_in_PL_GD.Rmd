@@ -280,6 +280,144 @@ var_desc_arrays <- function(data_array,data_teams_names){
   
   return(lista_vectores)
 }
+
+var_desc <- function(data_array){
+  #Vector en donde guardaremos la descripción como tal del incidente
+  desc_incident <- NULL
+  #Vector en donde guardaremos el minuto en que ocurrió el incidente
+  min_incident <- NULL
+  #Vector en donde guardaremos el tipo de incidente
+  type_incident <- NULL
+  
+  for(y in 1:length(data_array)){
+    #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
+    #se encuentra alguna comna, esto porque lo que separa la descripción del incidente y el 
+    #minuto en donde ocurrio es una coma
+    coma_1 <- str_locate_all(data_array[y],",")
+    #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
+    #se encuentra algún guión, esto porque lo que separa el minuto del incidente y el 
+    #tipo del mismo es un guión
+    guion_1 <- str_locate_all(data_array[y],"-")
+    
+    #en caso de que si haya comas, nos traemos la posición de la última coma
+    coma_2 <- coma_1[[1]][dim(coma_1[[1]])[1]]
+    #en caso de que si haya guion, nos traemos la posición del último guión
+    guion_2 <- guion_1[[1]][dim(guion_1[[1]])[1]]
+    
+    #numero de comas que tiene la descripcion
+    num_comas <- dim(coma_1[[1]])
+    #numero de guiones que tiene la descripcion
+    num_guiones <- dim(guion_1[[1]])
+    
+    #nos fijamos si la descripcion no tiene comas
+    if(num_comas[1] == 0){
+      #si no tiene comas quiere decir que viene solamente la pura descripción en texto
+      desc_incident <- c(desc_incident,data_array[y])
+      #no contiene el minuto
+      min_incident <- c(min_incident,0)
+      #no contiene el tipo de incidente
+      type_incident <- c(type_incident,"None")
+    #ahora nos fijamos si contiene el minuto
+    } else if (!grepl("minute",data_array[y])){
+      #Traemos la pura descripción del incidente
+      desc_incident <- c(desc_incident,substr(data_array[y],1,guion_2-2))
+      #Traemos el puro tipo de incidente
+      type_incident <- c(type_incident,substr(data_array[y],guion_2+2,str_length(data_array[y])))
+      #En este caso no hay minuto de incidente entonces le asignamos un cero
+      min_incident <- c(min_incident,0)
+    #en este caso es donde si tiene descripción, minuto y tipo
+    } else {
+      #Traemos la pura descripción del incidente
+      desc_incident <- c(desc_incident,substr(data_array[y],1,coma_2-1))
+      #Traemos el puro tipo de incidente
+      type_incident <- c(type_incident,substr(data_array[y],guion_2+2,str_length(data_array[y])))
+      #Traemos el puro minuto del incidente
+      min_texto <- substr(data_array[y],coma_2+2,guion_2-2)
+      #obtenemos la posición del espacio
+      espacio <- str_locate(min_texto, " ")[1]
+      #nos quedamos con el puro número
+      min_entero <- as.integer(substr(min_texto,1,espacio-3))
+      #guardamos el minuto en el array
+      min_incident <- c(min_incident,min_entero)
+    }
+  }
+  
+  lista_descripciones <- list("description" = desc_incident, "minute" = min_incident, 
+                              "type" = type_incident)
+  
+  return(lista_descripciones)
+}
+
+var_desc_teams <- function(data_array,aux,data_game_detail){
+  #Vector en donde guardaremos los nombres de los equipos contrincantes
+  juegos <- NULL
+  #Vector en donde guardaremos si es que el equipo es local o visitante
+  localia <- NULL
+  #Vector en donde guardaremos la fecha del partido en donde suscitó el incidente
+  fecha <- NULL
+  #Variable que nos ayudará a controlar el número de incidentes que se suscitaron en un 
+  #mismo partido
+  suma <- 0
+  
+  #Loop en donde separaremos el nombre del equipo contrincante, el tipo de localia y la fecha del incidente
+  for(z in 1:(length(aux)-1)){
+    #Vector que nos va a ayudar a concatenar los índices en donde se encuentra un partido para cada equipo
+    vector1 <- NULL
+    #Loop en donde obtenemos el índice donde se encuentra cada partido para cada equipo
+    for(w in seq(aux[z],aux[z+1])){
+      #verificamos que sea un partido
+      if(data_array[w] == 'Game:'){
+        #Si sí es un partido entonces guardamos el número de índice
+        vector1 <- c(vector1,w)
+      }
+    }
+    #Al final, cuando ya tengamos todos los índices, concatenamos el último para abarcar todos los juegos
+    vector1 <- c(vector1,aux[z+1])
+    #Vector nulo que nos ayudará a saber cuántos incidentes hubo dentro de cada juego para cada equipo
+    cont_total <- NULL
+    #Loop para guardar el número de incidentes para cada partido de cada equipo
+    for(t in 1:(length(vector1)-1)){
+      #Variable que va a acumular el número de incidentes por partido
+      cont_inc <- 0
+      #Loop que nos va a ayudar a identificar los incidentes por partido y sumarlos
+      for(u in seq(vector1[t],vector1[t+1])){
+        #Verificamos que sea un incidente
+        if(data_array[u] == 'Incident:'){
+          #Si sí es un incidente entonces incrementamos la cuenta
+          cont_inc <- cont_inc + 1
+        }
+      }
+      #Al final concatenamos el total de incidentes por cada partido
+      cont_total <- c(cont_total,cont_inc)
+    }
+    #Ya que tenemos el conteo de incidentes por cada partido de cada equipo, hacemos el loop para 
+    #entonces si separar todos los datos del partido (equipo contrincante, localia y fecha)
+    for(v in 1:length(cont_total)){
+      #Encontramos el índice en donde se encuentra el primer paréntesis
+      parentesis_1 <- str_locate(data_game_detail[suma+v],"\\(")[1]
+      #Encontramos el índice en donde se encuentra el segundo paréntesis
+      parentesis_2 <- str_locate(data_game_detail[suma+v],"\\)")[1]
+      #Encontramos el índice en donde se encuentra el punto y coma
+      punto_coma <- str_locate(data_game_detail[suma+v],";")[1]
+      #Nos traemos el nombre del equipo contrincante y lo repetimos por el número de 
+      #incidentes que tuvo en un mismo partido
+      juegos <- c(juegos,rep(substr(data_game_detail[suma+v],1,parentesis_1-2),cont_total[v]))
+      #Nos traemos la localia y lo repetimos por el número de incidentes que tuvo en un mismo partido
+      localia <- c(localia,rep(substr(data_game_detail[suma+v],parentesis_1+1,punto_coma-1),
+                               cont_total[v]))
+      #Nos traemos la fecha del partido y lo repetimos por el número de incidentes que tuvo en un 
+      #mismo partido
+      fecha <- c(fecha,rep(substr(data_game_detail[suma+v],punto_coma+2,parentesis_2-1),
+                           cont_total[v]))
+    }
+    #Aumentamos la variable para controlar los datos a repetir
+    suma <- suma + length(cont_total)
+  }
+  
+  lista_equipos <- list("teams" = juegos,"venue_type" = localia, "date" = fecha)
+  
+  return(lista_equipos)
+}
 ```
 
 Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
@@ -586,289 +724,58 @@ teams_names_rep_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$te
 teams_names_rep_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$teams_names_rep
 teams_names_rep_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$teams_names_rep
 
-# -------------- aqui voy
-
 #Ya que tenemos el nombre de los equipos repetidos entonces empezamos por desglozar la descripción
 #de los incidentes que tuvo cada equipo, se dividen en la descripción como tal, el minuto en que
 #ocurrió el incidente y el tipo de incidente (a favor o en contra)
 
 #Vectores en donde guardaremos la descripción como tal del incidente
-desc_incident_19_20 <- NULL
-desc_incident_20_21 <- NULL
+desc_incident_19_20 <- var_desc(incident_detail_19_20)$description
+desc_incident_20_21 <- var_desc(incident_detail_20_21)$description
+desc_incident_21_22 <- var_desc(incident_detail_21_22)$description
 #Vectores en donde guardaremos el minuto en que ocurrió el incidente
-min_incident_19_20 <- NULL
-min_incident_20_21 <- NULL
+min_incident_19_20 <- var_desc(incident_detail_19_20)$minute
+min_incident_20_21 <- var_desc(incident_detail_20_21)$minute
+min_incident_21_22 <- var_desc(incident_detail_21_22)$minute
 #Vectores en donde guardaremos el tipo de incidente
-type_incident_19_20 <- NULL
-type_incident_20_21 <- NULL
-
-#iniciamos con los loops en donde guardaremos todos estos datos de los incidentes
-
-#Loop en donde guardaremos el detalle de los incidentes por minuto, tipo, etc., para los equipos 
-#de la temporada 19/20
-for(w in 1:length(incident_detail_19_20)){
-  #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
-  #se encuentra alguna comna, esto porque lo que separa la descripción del incidente y el 
-  #minuto en donde ocurrio es una coma
-  coma_1 <- str_locate_all(incident_detail_19_20[w],",")
-  #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
-  #se encuentra algún guión, esto porque lo que separa el minuto del incidente y el 
-  #tipo del mismo es un guión
-  guion_1 <- str_locate_all(incident_detail_19_20[w],"-")
-  #ya que tenemos el o los índices de las comas nos traemos siempre el último índice 
-  #para así siempre asegurar que nos traemos la descripción del incidente por completo
-  coma_2 <- coma_1[[1]][dim(coma_1[[1]])[1]]
-  #ya que tenemos el o los índices de los guiones nos traemos siempre el último índice 
-  #para así siempre asegurar que nos traemos el minuto y el tipo del incidente
-  guion_2 <- guion_1[[1]][dim(guion_1[[1]])[1]]
-  #para el caso de la temporada 19/20 en los incidentes con el índice 84 y 113 son diferentes 
-  #porque no traen el minuto de incidente entonces los tratamos por aparte
-  if(w == 84 | w == 113){
-    #Traemos la pura descripción del incidente
-    desc_incident_19_20 <- c(desc_incident_19_20,substr(incident_detail_19_20[w],1,guion_2-2))
-    #Traemos el puro tipo de incidente
-    type_incident_19_20 <- c(type_incident_19_20,substr(incident_detail_19_20[w],guion_2+2,
-                                                        str_length(incident_detail_19_20[w])))
-    #En este caso no hay minuto de incidente entonces le asignamos un cero
-    min_incident_19_20 <- c(min_incident_19_20,"0")
-  } else {
-    #Traemos la pura descripción del incidente
-    desc_incident_19_20 <- c(desc_incident_19_20,substr(incident_detail_19_20[w],1,coma_2-1))
-    #Traemos el puro tipo de incidente
-    type_incident_19_20 <- c(type_incident_19_20,substr(incident_detail_19_20[w],guion_2+2,
-                                                        str_length(incident_detail_19_20[w])))
-    #Traemos el puro minuto del incidente
-    min_incident_19_20 <- c(min_incident_19_20,substr(incident_detail_19_20[w],coma_2+2,guion_2-2))
-  }
-}
-
-#Loop en donde guardaremos el detalle de los incidentes por minuto, tipo, etc., para los equipos 
-#de la temporada 20/21
-for(ab in 1:length(incident_detail_20_21)){
-  #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
-  #se encuentra alguna comna, esto porque lo que separa la descripción del incidente y el 
-  #minuto en donde ocurrio es una coma
-  coma_1 <- str_locate_all(incident_detail_20_21[ab],",")
-  #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
-  #se encuentra algún guión, esto porque lo que separa el minuto del incidente y el 
-  #tipo del mismo es un guión
-  guion_1 <- str_locate_all(incident_detail_20_21[ab],"-")
-  #ya que tenemos el o los índices de las comas nos traemos siempre el último índice 
-  #para así siempre asegurar que nos traemos la descripción del incidente por completo
-  coma_2 <- coma_1[[1]][dim(coma_1[[1]])[1]]
-  #ya que tenemos el o los índices de los guiones nos traemos siempre el último índice 
-  #para así siempre asegurar que nos traemos el minuto y el tipo del incidente
-  guion_2 <- guion_1[[1]][dim(guion_1[[1]])[1]]
-  #para el caso de la temporada 20/21 en el incidente con el índice 170 es diferente
-  #porque no trae el minuto de incidente ni el tipo del mismo, entonces lo tratamos por aparte
-  if(ab == 170){
-    #Traemos la pura descripción del incidente
-    desc_incident_20_21 <- c(desc_incident_20_21,incident_detail_20_21[ab])
-    #En este caso no hay tipo de incidente entonces le asignamos un "None"
-    type_incident_20_21 <- c(type_incident_20_21,"None")
-    #En este caso no hay minuto de incidente entonces le asignamos un cero
-    min_incident_20_21 <- c(min_incident_20_21,"0")
-  #para el caso de la temporada 20/21 en los incidentes con el índice 3 y 137 son diferentes 
-  #porque no traen el minuto de incidente entonces los tratamos por aparte
-  } else if(ab == 3 | ab == 137){
-    #Traemos la pura descripción del incidente
-    desc_incident_20_21 <- c(desc_incident_20_21,substr(incident_detail_20_21[ab],1,guion_2-2))
-    #Traemos el puro tipo de incidente
-    type_incident_20_21 <- c(type_incident_20_21,substr(incident_detail_20_21[ab],guion_2+2,
-                                                          str_length(incident_detail_20_21[ab])))
-    #En este caso no hay minuto de incidente entonces le asignamos un cero
-    min_incident_20_21 <- c(min_incident_20_21,"0")
-  } else {
-    #Traemos la pura descripción del incidente
-    desc_incident_20_21 <- c(desc_incident_20_21,substr(incident_detail_20_21[ab],1,coma_2-1))
-    #Traemos el puro tipo de incidente
-    type_incident_20_21 <- c(type_incident_20_21,substr(incident_detail_20_21[ab],guion_2+2,
-                                                          str_length(incident_detail_20_21[ab])))
-    #Traemos el puro minuto del incidente
-    min_incident_20_21 <- c(min_incident_20_21,substr(incident_detail_20_21[ab],coma_2+2,guion_2-2))
-  }
-}
-
-#Ya que desglosamos todo el incidente en sus partes ahora tenemos que transformar el minuto
-#del incidente para quedarnos con el simple número
-
-#Vectores en donde guardaremos el puro número del minuto de incidente
-min_inc_19_20 <- NULL
-min_inc_20_21 <- NULL
-
-#Loop en do de procesaremos los minutos obtenidos anteriormente y nos quedamos con el simple
-#número
-for (x in 1:length(min_incident_19_20)) {
-  #Dentro del minuto, ubicamos el índice donde esta el espacio para delimitar el puro número
-  espacio <- str_locate(min_incident_19_20[x]," ")[1]
-  #Para el caso de la temporada 19/20 en los índices 84 y 113 no tenemos números entonces 
-  #los tratamos diferente
-  if(x == 84 | x == 113)
-    #En este caso no hay minuto como tal entonces agregamos un cero
-    min_inc_19_20 <- c(min_inc_19_20,0)
-  else
-    #Nos quedamos con el puro número en entero
-    min_inc_19_20 <- c(min_inc_19_20,as.integer(substr(min_incident_19_20[x],1,espacio-3)))
-}
-
-#Loop en do de procesaremos los minutos obtenidos anteriormente y nos quedamos con el simple
-#número
-for(ac in 1:length(min_incident_20_21)){
-  #Dentro del minuto, ubicamos el índice donde esta el espacio para delimitar el puro número
-  espacio <- str_locate(min_incident_20_21[ac]," ")[1]
-  #Para el caso de la temporada 20/21 en los índices 170, 3 y 137 no tenemos números entonces 
-  #los tratamos diferente
-  if(ac == 170 | ac == 3 | ac == 137)
-    #En este caso no hay minuto como tal entonces agregamos un cero
-    min_inc_20_21 <- c(min_inc_20_21,0)
-  else
-    #Nos quedamos con el puro número en entero
-    min_inc_20_21 <- c(min_inc_20_21,as.integer(substr(min_incident_20_21[ac],1,espacio-3)))
-}
+type_incident_19_20 <- var_desc(incident_detail_19_20)$type
+type_incident_20_21 <- var_desc(incident_detail_20_21)$type
+type_incident_21_22 <- var_desc(incident_detail_21_22)$type
 
 #ya que tenemos los minutos en número entonces iniciamos el proceso para desglozar los datos 
 #de cada partido en donde ocurrió un incidente por equipo
 
-#Vector en donde guardaremos los nombres de los equipos contrincantes
-juegos <- NULL
-#Vector en donde guardaremos si es que el equipo es local o visitante
-localia <- NULL
-#Vector en donde guardaremos la fecha del partido en donde suscitó el incidente
-fecha <- NULL
-#Variable que nos ayudará a controlar el número de incidentes que se suscitaron en un 
-#mismo partido
-suma <- 0
-
-#Loop en donde separaremos el nombre del equipo contrincante, el tipo de localia y la fecha del incidente
-for(aj in 1:(length(aux_1)-1)){
-  #Vector que nos va a ayudar a concatenar los índices en donde se encuentra un partido para cada equipo
-  vector1 <- NULL
-  #Loop en donde obtenemos el índice donde se encuentra cada partido para cada equipo
-  for(af in seq(aux_1[aj],aux_1[aj+1])){
-    #Verificamos que sea un partido
-    if(details_data_19_20[af] == "Game:"){
-      #Si sí es un partido entonces guardamos el número de índice
-      vector1 <- c(vector1,af)
-    }
-  }
-  #Al final, cuando ya tengamos todos los índices, concatenamos el último para abarcar todos los juegos
-  vector1 <- c(vector1,aux_1[aj+1])
-  #Vector nulo que nos ayudará a saber cuántos incidentes hubo dentro de cada juego para cada equipo
-  cont_total <- NULL
-  #Loop para guardar el número de incidentes para cada partido de cada equipo
-  for(ag in 1:(length(vector1)-1)){
-    #Variable que va a acumular el número de incidentes por partido
-    cont_inc <- 0
-    #Loop que nos va a ayudar a identificar los incidentes por partido y sumarlos
-    for(ah in seq(vector1[ag],vector1[ag+1])){
-      #Verificamos que sea un incidente
-      if(details_data_19_20[ah] == "Incident:"){
-        #Si sí es un incidente entonces incrementamos la cuenta
-        cont_inc <- cont_inc + 1
-      }
-    }
-    #Al final concatenamos el total de incidentes por cada partido
-    cont_total <- c(cont_total,cont_inc)
-  }
-  #Ya que tenemos el conteo de incidentes por cada partido de cada equipo, hacemos el loop para 
-  #entonces si separar todos los datos del partido (equipo contrincante, localia y fecha)
-  for(ai in 1:length(cont_total)){
-    #Encontramos el índice en donde se encuentra el primer paréntesis
-    parentesis_1 <- str_locate(game_detail_19_20[suma+ai],"\\(")[1]
-    #Encontramos el índice en donde se encuentra el segundo paréntesis
-    parentesis_2 <- str_locate(game_detail_19_20[suma+ai],"\\)")[1]
-    #Encontramos el índice en donde se encuentra el punto y coma
-    punto_coma <- str_locate(game_detail_19_20[suma+ai],";")[1]
-    #Nos traemos el nombre del equipo contrincante y lo repetimos por el número de 
-    #incidentes que tuvo en un mismo partido
-    juegos <- c(juegos,rep(substr(game_detail_19_20[suma+ai],1,parentesis_1-2),cont_total[ai]))
-    #Nos traemos la localia y lo repetimos por el número de incidentes que tuvo en un mismo partido
-    localia <- c(localia,rep(substr(game_detail_19_20[suma+ai],parentesis_1+1,punto_coma-1),cont_total[ai]))
-    #Nos traemos la fecha del partido y lo repetimos por el número de incidentes que tuvo en un 
-    #mismo partido
-    fecha <- c(fecha,rep(substr(game_detail_19_20[suma+ai],punto_coma+2,parentesis_2-1),cont_total[ai]))
-  }
-  #Aumentamos la variable para controlar los datos a repetir
-  suma <- suma + length(cont_total)
-}
-
-#Variable que nos ayudará a controlar el número de incidentes que se suscitaron en un 
-#mismo partido
-suma1 <- 0
-
-#Loop en donde separaremos el nombre del equipo contrincante, el tipo de localia y la fecha del incidente
-for(ak in 1:(length(aux_2)-1)){
-  #Vector que nos va a ayudar a concatenar los índices en donde se encuentra un partido para cada equipo
-  vector1 <- NULL
-  #Loop en donde obtenemos el índice donde se encuentra cada partido para cada equipo
-  for(al in seq(aux_2[ak],aux_2[ak+1])){
-    #Verificamos que sea un partido
-    if(details_data_20_21[al] == "Game:"){
-      #Si sí es un partido entonces guardamos el número de índice
-      vector1 <- c(vector1,al)
-    }
-  }
-  #Al final, cuando ya tengamos todos los índices, concatenamos el último para abarcar todos los juegos
-  vector1 <- c(vector1,aux_2[ak+1])
-  #Vector nulo que nos ayudará a saber cuántos incidentes hubo dentro de cada juego para cada equipo
-  cont_total <- NULL
-  #Loop para guardar el número de incidentes para cada partido de cada equipo
-  for(am in 1:(length(vector1)-1)){
-    #Variable que va a acumular el número de incidentes por partido
-    cont_inc <- 0
-    #Loop que nos va a ayudar a identificar los incidentes por partido y sumarlos
-    for(an in seq(vector1[am],vector1[am+1])){
-      #Verificamos que sea un incidente
-      if(details_data_20_21[an] == "Incident:"){
-        #Si sí es un incidente entonces incrementamos la cuenta
-        cont_inc <- cont_inc + 1
-      }
-    }
-    #Al final concatenamos el total de incidentes por cada partido
-    cont_total <- c(cont_total,cont_inc)
-  }
-  #Ya que tenemos el conteo de incidentes por cada partido de cada equipo, hacemos el loop para 
-  #entonces si separar todos los datos del partido (equipo contrincante, localia y fecha)
-  for(ao in 1:length(cont_total)){
-    #Encontramos el índice en donde se encuentra el primer paréntesis
-    parentesis_1 <- str_locate(game_detail_20_21[suma1+ao],"\\(")[1]
-    #Encontramos el índice en donde se encuentra el segundo paréntesis
-    parentesis_2 <- str_locate(game_detail_20_21[suma1+ao],"\\)")[1]
-    #Encontramos el índice en donde se encuentra el punto y coma
-    punto_coma <- str_locate(game_detail_20_21[suma1+ao],";")[1]
-    #Nos traemos el nombre del equipo contrincante y lo repetimos por el número de 
-    #incidentes que tuvo en un mismo partido
-    juegos <- c(juegos,rep(substr(game_detail_20_21[suma1+ao],1,parentesis_1-2),cont_total[ao]))
-    #Nos traemos la localia y lo repetimos por el número de incidentes que tuvo en un mismo partido
-    localia <- c(localia,rep(substr(game_detail_20_21[suma1+ao],parentesis_1+1,punto_coma-1),cont_total[ao]))
-    #Nos traemos la fecha del partido y lo repetimos por el número de incidentes que tuvo en un 
-    #mismo partido
-    fecha <- c(fecha,rep(substr(game_detail_20_21[suma1+ao],punto_coma+2,parentesis_2-1),cont_total[ao]))
-  }
-  #Aumentamos la variable para controlar los datos a repetir
-  suma1 <- suma1 + length(cont_total)
-}
+#Vectores en donde guardaremos los nombres de los equipos contrincantes
+juegos_19_20 <- var_desc_teams(details_data_19_20,aux_19_20,game_detail_19_20)$teams
+juegos_20_21 <- var_desc_teams(details_data_20_21,aux_20_21,game_detail_20_21)$teams
+juegos_21_22 <- var_desc_teams(details_data_21_22,aux_21_22,game_detail_21_22)$teams
+#Vectores en donde guardaremos si es que el equipo es local o visitante
+localia_19_20 <- var_desc_teams(details_data_19_20,aux_19_20,game_detail_19_20)$venue_type
+localia_20_21 <- var_desc_teams(details_data_20_21,aux_20_21,game_detail_20_21)$venue_type
+localia_21_22 <- var_desc_teams(details_data_21_22,aux_21_22,game_detail_21_22)$venue_type
+#Vectores en donde guardaremos la fecha del partido en donde suscitó el incidente
+fechas_19_20 <- var_desc_teams(details_data_19_20,aux_19_20,game_detail_19_20)$date
+fechas_20_21 <- var_desc_teams(details_data_20_21,aux_20_21,game_detail_20_21)$date
+fechas_21_22 <- var_desc_teams(details_data_21_22,aux_21_22,game_detail_21_22)$date
 
 #Ya que tenemos todos los datos entonces armamos la tabla con todas estas descripciones
 var_details <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20)),
-                                       rep("20/21",length(incident_detail_20_21))),
-                          "team1" = c(teams_var_detail_19_20,teams_var_detail_20_21),
-                          "team2" = juegos, "home/away" = localia, "date" = fecha,
-                          "incident" = c(desc_incident_19_20,desc_incident_20_21),
-                          "type" = c(type_incident_19_20,type_incident_20_21),
-                          "min" = c(min_inc_19_20,min_inc_20_21))
+                                       rep("20/21",length(incident_detail_20_21)),
+                                       rep("21/22",length(incident_detail_21_22))),
+                          "team1" = c(teams_names_rep_19_20,teams_names_rep_20_21,
+                                      teams_names_rep_21_22),
+                          "team2" = c(juegos_19_20,juegos_20_21,juegos_21_22), 
+                          "home/away" = c(localia_19_20,localia_20_21,localia_21_22), 
+                          "date" = c(fechas_19_20,fechas_20_21,fechas_21_22),
+                          "incident" = c(desc_incident_19_20,desc_incident_20_21,desc_incident_21_22),
+                          "type" = c(type_incident_19_20,type_incident_20_21,type_incident_21_22),
+                          "min" = c(min_incident_19_20,min_incident_20_21,min_incident_21_22))
 ```
 
-```{r}
-#Primeros cinco registros de la tabla de detalles de incidentes en donde intervino el VAR
-#dentro de los partidos de cada equipo de la PL en la temporada 19/20 y 20/21
-head(var_details,5)
-```
+Iniciamos el proceso para hacer una modificación en cuanto a la localía del equipo, se pretende eliminar el indicador de si es local o visitante y manejar solo las variables "team1" y "team2" para denotar localia (team1) o visita (team2)
 
 ```{r,include=FALSE}
-#Iniciamos el proceso para hacer una modificación en cuanto a la localía del equipo, se pretende
-#eliminar el indicador de si es local o visitante y manejar solo las variables "team1" y "team2" 
-#para denotar localia (team1) o visita (team2)
+
+# -------------------- aqui voy
 
 #Vectores que nos ayudarán a guardar los equipos locales y visitantes
 team1 <- NULL

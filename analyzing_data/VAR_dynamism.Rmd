@@ -50,7 +50,7 @@ get_df <- function(df_number,is_work_computer=F){
   df_name <- switch (as.character(df_number),
     '1' = '/premier_league.csv', #listo
     '2' = '/pl_overturns_var.csv', #listo
-    '3' = '/var_details.csv',
+    '3' = '/var_details.csv',#listo
     '4' = '/var_details1.csv',
     '5' = '/stats_epl.csv',
     '6' = '/fpl_merged_seasons.csv',
