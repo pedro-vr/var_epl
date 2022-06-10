@@ -82,7 +82,7 @@ season,team1,team2,date,incident,type,min
 19/20,Leicester City,Southampton,Jan. 11,Penalty for Southampton cancelled for offside against Shane Long in build-up,FOR,63
 19/20,Leicester City,Southampton,Jan. 11,Jonny Evans goal ruled out for offside,AGAINST,90
 19/20,Wolves,Leicester City,Feb. 14,Wolves goal for Willy Boly disallowed for offside in build-up by Pedro Neto,FOR,44
-19/20,Leicester City,Man City,Feb. 22,Penalty (missed by Sergio Aguero) awarded for handball against Dennis Praet,AGAINST,0
+19/20,Leicester City,Man City,Feb. 22,Penalty (missed by Sergio Aguero) awarded for handball against Dennis Praet - AGAINST,None,0
 19/20,Norwich,Leicester City,Feb. 28,Goal for Kelechi Iheanacho disallowed for handball,AGAINST,49
 19/20,Everton,Leicester City,July 1,Penalty awarded (scored by Gylfi Sigurdsson) for handball against Wilfred Ndidi,AGAINST,13
 19/20,Arsenal,Leicester City,July 7,Edward Nketiah sent off for foul on James Justin,FOR,75
@@ -111,7 +111,7 @@ season,team1,team2,date,incident,type,min
 19/20,Manchester City,Everton,Jan. 1,Goal for Phil Foden ruled out for offside in build-up by Joao Cancelo,AGAINST,12
 19/20,Manchester City,Crystal Palace,Jan. 18,Penalty for handball against Jairo Riedewald cancelled,AGAINST,72
 19/20,Tottenham,Manchester City,Feb. 2,Penalty (missed by Ilkay Gundogan) awarded for foul by Serge Aurier on Sergio Aguero,FOR,38
-19/20,Leicester,Manchester City,Feb. 22,Penalty (missed by Sergio Aguero) awarded for handball against Dennis Praet,FOR,0
+19/20,Leicester,Manchester City,Feb. 22,Penalty (missed by Sergio Aguero) awarded for handball against Dennis Praet - FOR,None,0
 19/20,Manchester City,Burnley,June 22,Penalty given (scored by Riyad Mahrez) for a foul by Ben Mee on Sergio Aguero,FOR,45
 19/20,Chelsea,Manchester City,June 25,"Fernandinho sent off for deliberate handball on the goalline, penalty scored by Willian",AGAINST,77
 19/20,Manchester City,Liverpool,July 2,City goal for Riyad Mahrez ruled out for handball by Phil Foden in the build-up,AGAINST,90
@@ -469,3 +469,243 @@ season,team1,team2,date,incident,type,min
 20/21,West Brom,Brighton,Feb. 27,Penalty conceded (missed by Pascal Gross) for handball against Okay Yokuslu,AGAINST,17
 20/21,West Brom,Brighton,Feb. 27,Lewis Dunk goal disallowed as referee Lee Mason had blown his whistle before the ball crossed the line,FOR,37
 20/21,Crystal Palace,West Brom,March 13,Penalty conceded (scored by Luka Milivojevic) for handball against Darnell Furlong,AGAINST,34
+21/22,Liverpool,Burnley,Aug. 21,Mohamed Salah goal disallowed for offside,AGAINST,26
+21/22,Liverpool,Chelsea,Aug. 28,"Penalty awarded (scored by Mohamed Salah) after handball on the line by Reece James, who was sent off",FOR,45
+21/22,Brentford,Liverpool,Sept. 25,Mohamed Salah goal awarded after incorrect offside,FOR,54
+21/22,Man United,Liverpool,Oct. 24,Cristiano Ronaldo goal disallowed for offside,FOR,52
+21/22,Man United,Liverpool,Oct. 24,Paul Pogba yellow card upgraded to red for challenge on Naby Keita,FOR,69
+21/22,Liverpool,Brighton,Oct. 30,Sadio Mane goal disallowed for handball,AGAINST,33
+21/22,Tottenham,Liverpool,Dec. 19,Andrew Robertson sent off for challenge on Emerson Royal,AGAINST,75
+21/22,Crystal Palace,Liverpool,Jan. 23,Penalty awarded (scored by Fabinho) for a foul on Diogo Jota by Vicente Guaita,FOR,85
+21/22,Liverpool,Watford,April 2,Penalty awarded (scored by Fabinho) for a foul on Diogo Jota by Juraj Kucka,FOR,86
+21/22,Man City,Liverpool,April 10,Raheem Sterling goal disallowed for offside,FOR,63
+21/22,Newcastle,West Ham,Aug. 15,Aaron Cresswell goal allowed after being originally ruled out for offside,FOR,18
+21/22,West Ham,Leicester,Aug. 23,Ayoze Perez sent off for challenge on Pablo Fornals,FOR,38
+21/22,West Ham,Man United,Sept. 19,Penalty conceded (missed by Mark Noble) for handball by Luke Shaw,FOR,92
+21/22,Leeds,West Ham,Sept. 25,Tomas Soucek goal ruled out for a foul on Illan Meslier by Michail Antonio,AGAINST,53
+21/22,Aston Villa,West Ham,Oct. 31,Ezri Konsa yellow card upgraded to red for challenge on Jarrod Bowen (DOGSO),FOR,49
+21/22,West Ham,Brighton,Dec. 1,Michail Antonio goal ruled out for offside,AGAINST,48
+21/22,West Ham,Southampton,Dec. 26,Penalty conceded (scored by James Ward-Prowse) for foul by Craig Dawson on Armando Broja,AGAINST,57
+21/22,Watford,West Ham,Dec. 28,Jarrod Bowen goal disallowed for a foul in the build-up by Tomas Soucek on Emmanuel Dennis,AGAINST,48
+21/22,Watford,West Ham,Dec. 28,Penalty awarded (scored by Mark Noble) for foul on Jarrod Bowen by Daniel Bachmann,FOR,56
+21/22,Crystal Palace,West Ham,Jan. 1,Penalty conceded (scored by Manuel Lanzini) for handball by Luka Milivojevic,FOR,45
+21/22,West Ham,Norwich,Jan. 12,Jarrod Bowen goal allowed after being originally ruled out for offside,FOR,82
+21/22,West Ham,Leeds,Jan. 16,Rodrigo goal ruled out for offside on the goal-line,FOR,73
+21/22,Chelsea,West Ham,April 24,Craig Dawson yellow card upgraded to red for challenge on Romelu Lukaku (DOGSO),AGAINST,85
+21/22,Norwich,West Ham,May 8,Sam Byram goal ruled out for handball,FOR,47
+21/22,Norwich,West Ham,May 8,Penalty awarded (scored by Manuel Lanzini) for handball by Jacob Sorensen,FOR,62
+21/22,West Ham,Man City,May 15,Penalty awarded (missed by Riyad Mahrez) for challenge by Craig Dawson on Gabriel Jesus,AGAINST,83
+21/22,Burnley,Arsenal,Sept. 18,Penalty cancelled after Aaron Ramsdale originally penalised for bringing down Matej Vydra,FOR,69
+21/22,Arsenal,Aston Villa,Oct. 22,Penalty conceded (missed by Pierre-Emerick Aubameyang but scored on the rebound) for a foul by Matt Targett on Alexandre Lacazette,FOR,45
+21/22,Arsenal,Watford,Nov. 7,Bukayo Saka goal disallowed for offside,AGAINST,7
+21/22,Man United,Arsenal,Dec. 2,Emile Smith Rowe goal allowed after VAR rules the ball had crossed the line before the referee's whistle was blown to stop play,FOR,13
+21/22,Man United,Arsenal,Dec. 2,Penalty awarded (scored by Cristiano Ronaldo) for a foul by Martin Odegaard on Fred,AGAINST,68
+21/22,Everton,Arsenal,Dec. 6,Richarlison goal disallowed for offside,FOR,44
+21/22,Everton,Arsenal,Dec. 6,Richarlison goal disallowed for offside,FOR,57
+21/22,Arsenal,Man City,Jan. 1,Penalty awarded (scored by Riyad Mahrez) for a foul by Granit Xhaka on Bernardo Silva,AGAINST,53
+21/22,Arsenal,Brentford,Feb. 19,Christian Norgaard goal allowed after incorrect offside,AGAINST,90
+21/22,Arsenal,Leicester,March 13,Penalty awarded (scored by Alexandre Lacazette) for handball by Caglar Soyuncu,FOR,55
+21/22,Arsenal,Brighton,April 9,Gabriel Martinelli goal disallowed for offside,AGAINST,45
+21/22,Arsenal,Man United,April 23,Eddie Nketiah goal disallowed for offside,AGAINST,27
+21/22,Arsenal,Man United,April 23,Penalty awarded (scored by Bukayo Saka) for a foul by Alex Telles on Saka,FOR,27
+21/22,Arsenal,Leeds,May 8,Luke Ayling yellow card upgraded to red for challenge on Gabriel Martinelli,FOR,25
+21/22,Arsenal,Everton,May 22,Penalty awarded (scored by Gabriel Martinelli) for handball by Alex Iwobi,FOR,23
+21/22,Wolves,Brentford,Sept. 18,"Ivan Toney goal which was originally ruled out for offside, was shown to be onside on review, but eventually ruled out on review for handball by the goal scorer",NEUTRAL,29
+21/22,Brentford,Liverpool,Sept. 25,Mohamed Salah goal awarded after incorrect offside,AGAINST,54
+21/22,Burnley,Brentford,Oct. 30,Maxwel Cornet goal disallowed for offside in the build-up against Chris Wood,FOR,15
+21/22,Brentford,Norwich,Nov. 6,Bryan Mbeumo goal disallowed for offside,AGAINST,49
+21/22,Brentford,Everton,Nov. 28,Penalty awarded (scored by Ivan Toney) for foul on Frank Onyeka by Andros Townsend,FOR,20
+21/22,Brentford,Man City,Dec. 29,Aymeric Laporte goal disallowed for offside,FOR,87
+21/22,Brentford,Wolves,Jan. 22,Red card for Toti rescinded following challenge on Kristoffer Ajer,AGAINST,68
+21/22,Brentford,Wolves,Jan. 22,Adama Traore goal disallowed for offside,FOR,90
+21/22,Arsenal,Brentford,Feb. 19,Christian Norgaard goal allowed after incorrect offside,FOR,90
+21/22,Brentford,Newcastle,Feb. 26,Josh Dasilva sent off for challenge on Matt Targett,AGAINST,9
+21/22,Norwich,Brentford,March 5,Penalty awarded (scored by Ivan Toney) for foul on Pontus Jansson by Ben Gibson,FOR,49
+21/22,Norwich,Brentford,March 5,Milot Rashica goal disallowed for offside in the build-up against Teemu Pukki,FOR,67
+21/22,Norwich,Brentford,March 5,Bryan Mbeumo goal disallowed for offside in the build-up against Ethan Pinnock,AGAINST,76
+21/22,Watford,Brentford,April 16,Emmanuel Dennis goal allowed after incorrect offside in the build-up against Ismaila Sarr,AGAINST,55
+21/22,Man United,Brentford,May 2,Cristiano Ronaldo goal disallowed for offside,FOR,44
+21/22,Brentford,Leeds,May 22,Joe Gelhardt goal disallowed for offside,FOR,19
+21/22,Manchester City,Norwich,Aug. 21,Ferran Torres goal ruled out for foul by Bernardo Silva on Milot Rashica in build-up,AGAINST,15
+21/22,Manchester City,Southampton,Sept. 18,Penalty and red card for Kyle Walker cancelled after being awarded for foul on Adam Armstrong,FOR,61
+21/22,Manchester City,Crystal Palace,Oct. 30,Gabriel Jesus goal disallowed for offside in the build-up against Phil Foden,AGAINST,60
+21/22,Manchester City,Everton,Nov. 21,Penalty cancelled after Michael Keane adjudged not to have fouled Raheem Sterling,AGAINST,35
+21/22,Newcastle,Manchester City,Dec. 19,Riyad Mahrez goal allowed after being originally ruled out for offside,FOR,63
+21/22,Manchester City,Leicester,Dec. 26,Penalty awarded (scored by Riyad Mahrez) for foul on Aymeric Laporte by Youri Tielemans,FOR,12
+21/22,Brentford,Manchester City,Dec. 29,Aymeric Laporte goal disallowed for offside,AGAINST,87
+21/22,Arsenal,Manchester City,Jan. 1,Penalty awarded (scored by Riyad Mahrez) for a foul by Granit Xhaka on Bernardo Silva,FOR,53
+21/22,Manchester City,Tottenham,Feb. 19,Harry Kane goal ruled out for offside in the build-up against Dejan Kulusevski,FOR,73
+21/22,Manchester City,Tottenham,Feb. 19,Penalty awarded (scored by Riyad Mahrez) for handball against Cristian Romero,FOR,89
+21/22,Manchester City,Man United,March 6,Riyad Mahrez goal allowed after incorrect offside,FOR,90
+21/22,Manchester City,Liverpool,April 10,Raheem Sterling goal disallowed for offside,AGAINST,63
+21/22,West Ham,Manchester City,May 15,Penalty awarded (missed by Riyad Mahrez) for challenge by Craig Dawson on Gabriel Jesus,FOR,83
+21/22,Newcastle,Southampton,Aug. 28,Penalty awarded (scored by James Ward-Prowse) for foul by Jamaal Lascelles on Adam Armstrong,FOR,90
+21/22,Man City,Southampton,Sept. 18,Penalty and red card for Kyle Walker cancelled after being awarded for foul on Adam Armstrong,AGAINST,61
+21/22,Chelsea,Southampton,Oct. 2,Timo Werner goal disallowed for a foul in the build-up by Cesar Azpilicueta on Kyle Walker-Peters,FOR,41
+21/22,Chelsea,Southampton,Oct. 2,James Ward-Prowse yellow card upgraded to red following foul on Jorginho,AGAINST,74
+21/22,West Ham,Southampton,Dec. 26,Penalty conceded (scored by James Ward-Prowse) for foul by Craig Dawson on Armando Broja,FOR,57
+21/22,Southampton,Tottenham,Dec. 28,Harry Kane goal disallowed for offside,FOR,53
+21/22,Wolves,Southampton,Jan. 15,Penalty awarded (scored by Raul Jimenez) for foul by Jan Bednarek on Rayan Ait-Nouri,AGAINST,33
+21/22,Tottenham,Southampton,Feb. 9,Steven Bergwijn goal disallowed for offside,FOR,90
+21/22,Burnley,Southampton,April 21,Jack Cork goal disallowed for offside,FOR,63
+21/22,Norwich,Watford,Sept. 18,Ismaila Sarr goal allowed after being initially ruled out for offside against Josh King,FOR,80
+21/22,Everton,Watford,Oct. 23,Josh King goal allowed after incorrect offside,FOR,13
+21/22,Arsenal,Watford,Nov. 7,Bukayo Saka goal disallowed for offside,FOR,7
+21/22,Watford,Man United,Nov. 20,Kiko Femenia goal disallowed after he encroached into the area to score a penalty rebound; Ismaila Sarr missed the retaken penalty,AGAINST,9
+21/22,Watford,West Ham,Dec. 28,Jarrod Bowen goal disallowed for a foul in the build-up by Tomas Soucek on Emmanuel Dennis,FOR,48
+21/22,Watford,West Ham,Dec. 28,Penalty awarded (scored by Mark Noble) for foul on Jarrod Bowen by Daniel Bachmann,AGAINST,56
+21/22,Liverpool,Watford,Apr. 2,Penalty awarded (scored by Fabinho) for a foul on Diogo Jota by Juraj Kucka,AGAINST,86
+21/22,Watford,Brentford,April 16,Emmanuel Dennis goal allowed after incorrect offside in the build-up against Ismaila Sarr,FOR,55
+21/22,Watford,Burnley,April 30,Penalty overturned as Moussa Sissoko's challenge on Dwight McNeil outside the area,FOR,27
+21/22,Liverpool,Brighton & Hove Albion,Oct. 30,Sadio Mane goal disallowed for handball,FOR,33
+21/22,Brighton & Hove Albion,Newcastle,Nov. 6,Penalty awarded (scored by Leandro Trossard) for foul on Trossard by Ciaran Clark,FOR,20
+21/22,Brighton & Hove Albion,Newcastle,Nov. 6,Robert Sanchez sent off for DOGSO on Callum Wilson,AGAINST,90
+21/22,West Ham,Brighton & Hove Albion,Dec. 1,Michail Antonio goal ruled out for offside,FOR,48
+21/22,Everton,Brighton & Hove Albion,Jan. 2,Penalty awarded (missed by Dominic Calvert-Lewin) for foul on Anthony Gordon by Enock Mwepu,AGAINST,22
+21/22,Brighton & Hove Albion,Crystal Palace,Jan. 14,Penalty awarded (missed by Pascal Gross) for foul on Joel Veltman by Will Hughes,FOR,34
+21/22,Brighton & Hove Albion,Crystal Palace,Jan. 14,Neal Maupay goal disallowed for a foul on Jack Butland,AGAINST,38
+21/22,Man United,Brighton & Hove Albion,Feb. 15,Lewis Dunk yellow card upgraded to red for denying a goal-scoring chance on Anthony Elanga,AGAINST,53
+21/22,Arsenal,Brighton & Hove Albion,April 9,Gabriel Martinelli goal disallowed for offside,FOR,45
+21/22,Wolves,Brighton & Hove Albion,April 30,Penalty awarded (missed by Alexis Mac Allister) for handball by Romain Saiss,FOR,31
+21/22,Liverpool,Chelsea,Aug. 28,"Penalty awarded (scored by Mohamed Salah) after handball on the line by Reece James, who was sent off",AGAINST,45
+21/22,Chelsea,Southampton,Oct. 2,Timo Werner goal disallowed for a foul in the build-up by Cesar Azpilicueta on Kyle Walker-Peters,AGAINST,41
+21/22,Chelsea,Southampton,Oct. 2,James Ward-Prowse yellow card upgraded to red following foul on Jorginho,FOR,74
+21/22,Chelsea,Norwich,Oct. 23,Penalty awarded (missed by Mason Mount) after handball by Mathias Normann,FOR,83
+21/22,Chelsea,Norwich,Oct. 23,Penalty retake ordered (scored by Mason Mount) after encroachment by Tim Krul,FOR,85
+21/22,Chelsea,Leeds,Dec. 11,Penalty awarded (scored by Jorginho) for foul on Antonio Rudiger by Raphinha,FOR,55
+21/22,Crystal Palace,Chelsea,Feb. 19,Hakim Ziyech goal disallowed for offside against Romelu Lukaku in the build-up,AGAINST,75
+21/22,Norwich,Chelsea,March 10,Penalty awarded (scored by Teemu Pukki) for handball against Trevoh Chalobah,AGAINST,67
+21/22,Chelsea,West Ham,April 24,Craig Dawson yellow card upgraded to red for challenge on Romelu Lukaku (DOGSO),FOR,85
+21/22,Chelsea,Wolves,May 7,Ruben Loftus-Cheek goal disallowed for offside,AGAINST,38
+21/22,Chelsea,Wolves,May 7,Penalty awarded (scored by Romelu Lukaku) for foul on Lukaku by Romain Saiss,FOR,52
+21/22,Newcastle,Tottenham Hotspur,Oct. 17,Harry Kane goal allowed after being originally ruled out for offside,FOR,22
+21/22,Everton,Tottenham Hotspur,Nov. 7,Penalty cancelled with Hugo Lloris adjudged not to have fouled Richarlison,FOR,64
+21/22,Everton,Tottenham Hotspur,Nov. 7,Mason Holgate sent off for challenge on Pierre-Emile Hojbjerg,FOR,90
+21/22,Tottenham Hotspur,Liverpool,Dec. 19,Andrew Robertson sent off for challenge on Emerson Royal,FOR,75
+21/22,Southampton,Tottenham Hotspur,Dec. 28,Harry Kane goal disallowed for offside,AGAINST,53
+21/22,Tottenham Hotspur,Southampton,Feb. 9,Steven Bergwijn goal disallowed for offside,AGAINST,90
+21/22,Man City,Tottenham Hotspur,Feb. 19,Harry Kane goal ruled out for offside in the build-up against Dejan Kulusevski,AGAINST,73
+21/22,Man City,Tottenham Hotspur,Feb. 19,Penalty awarded (scored by Riyad Mahrez) for handball against Cristian Romero,AGAINST,89
+21/22,Tottenham Hotspur,Burnley,May 15,Penalty awarded (scored by Harry Kane) for handball by Ashley Barnes,FOR,45
+21/22,Aston Villa,Newcastle,Aug. 21,Penalty conceded (scored by Anwar El Ghazi) for handball by Jamaal Lascelles,FOR,58
+21/22,Aston Villa,Newcastle,Aug. 21,Penalty for Newcastle cancelled for offside in the build-up against Callum Wilson,FOR,76
+21/22,Arsenal,Aston Villa,Oct. 22,Penalty conceded (missed by Pierre-Emerick Aubameyang but scored on the rebound) for a foul by Matt Targett on Alexandre Lacazette,AGAINST,45
+21/22,Aston Villa,West Ham,Oct. 31,Ezri Konsa yellow card upgraded to red for challenge on Jarrod Bowen (DOGSO),AGAINST,49
+21/22,Crystal Palace,Aston Villa,Nov. 27,Douglas Luiz red card rescinded following challenge on Cheikhou Kouyate,FOR,72
+21/22,Aston Villa,Leicester,Dec. 5,Jacob Ramsey goal disallowed for kicking the ball from the possession of Kasper Schmeichel,AGAINST,45
+21/22,Newcastle,Aston Villa,Feb. 13,"Penalty for Calum Chambers' challenge on Joe Willock cancelled, outside area",FOR,32
+21/22,Newcastle,Aston Villa,Feb. 13,Ollie Watkins goal ruled out for offside,AGAINST,61
+21/22,Crystal Palace,Newcastle,Oct. 23,Christian Benteke goal disallowed for foul by Marc Guehi on Ciaran Clark,AGAINST,87
+21/22,Man City,Crystal Palace,Oct. 30,Gabriel Jesus goal disallowed for offside in the build-up against Phil Foden,FOR,60
+21/22,Crystal Palace,Wolves,Nov. 6,Wilfried Zaha goal allowed after incorrect offside,FOR,61
+21/22,Crystal Palace,Wolves,Nov. 6,Penalty cancelled as Joel Ward's challenge on Rayan Ait-Nouri was outside the box,FOR,69
+21/22,Crystal Palace,Aston Villa,Nov. 27,Douglas Luiz red card rescinded following challenge on Cheikhou Kouyate,AGAINST,72
+21/22,Leeds,Crystal Palace,Nov. 30,Penalty awarded (scored by Raphinha) for handball against Marc Guehi,AGAINST,90
+21/22,Crystal Palace,West Ham,Jan. 1,Penalty conceded (scored by Manuel Lanzini) for handball by Luka Milivojevic,AGAINST,45
+21/22,Brighton,Crystal Palace,Jan. 14,Penalty awarded (missed by Pascal Gross) for foul on Joel Veltman by Will Hughes,AGAINST,34
+21/22,Brighton,Crystal Palace,Jan. 14,Neal Maupay goal disallowed for a foul on Jack Butland,FOR,38
+21/22,Crystal Palace,Liverpool,Jan. 23,Penalty awarded (scored by Fabinho) for a foul on Diogo Jota by Vicente Guaita,AGAINST,85
+21/22,Crystal Palace,Chelsea,Feb. 19,Hakim Ziyech goal disallowed for offside against Romelu Lukaku in he build-up,FOR,75
+21/22,Leicester,Crystal Palace,April 10,Penalty scored on the rebound by Wilfried Zaha after VAR ordered retake on initial penalty for encroaching by Caglar Soyuncu,FOR,66
+21/22,Leeds,Everton,Aug. 21,Penalty awarded (scored by Dominic Calvert-Lewin) for foul on Calvert-Lewin by Liam Cooper,AGAINST,26
+21/22,Leeds,West Ham,Sept. 25,Tomas Soucek goal ruled out for a foul on Illan Meslier by Michail Antonio,FOR,53
+21/22,Leeds,Leicester,Nov. 7,Ademola Lookman goal ruled out for offside,FOR,67
+21/22,Leeds,Crystal Palace,Nov. 30,Penalty awarded (scored by Raphinha) for handball against Marc Guehi,FOR,90
+21/22,Chelsea,Leeds,Dec. 11,Penalty awarded (scored by Jorginho) for foul on Antonio Rudiger by Raphinha,AGAINST,55
+21/22,West Ham,Leeds,Jan. 16,Rodrigo goal ruled out for offside on the goal-line,AGAINST,73
+21/22,Leeds,Norwich,March 13,Penalty cancelled after Luke Ayling originally penalised for bringing down Milot Rashica,FOR,76
+21/22,Arsenal,Leeds,May 8,Luke Ayling yellow card upgraded to red for challenge on Gabriel Martinelli,AGAINST,25
+21/22,Brentford,Leeds,May 22,Joe Gelhardt goal disallowed for offside,AGAINST,19
+21/22,Newcastle,West Ham,Aug. 15,Aaron Cresswell goal allowed after being originally ruled out for offside,AGAINST,18
+21/22,Aston Villa,Newcastle,Aug. 21,Penalty conceded (scored by Anwar El Ghazi) for handball by Jamaal Lascelles,AGAINST,58
+21/22,Aston Villa,Newcastle,Aug. 21,Penalty for Newcastle cancelled for offside in the build-up against Callum Wilson,AGAINST,76
+21/22,Newcastle,Southampton,Aug. 28,Penalty awarded (scored by James Ward-Prowse) for foul by Jamaal Lascelles on Adam Armstrong,AGAINST,90
+21/22,Newcastle,Tottenham,Oct. 17,Harry Kane goal allowed after being originally ruled out for offside,AGAINST,22
+21/22,Crystal Palace,Newcastle,Oct. 23,Christian Benteke goal disallowed for foul by Marc Guehi on Ciaran Clark,FOR,87
+21/22,Newcastle,Newcastle,Nov. 6,Penalty awarded (scored by Leandro Trossard) for foul on Trossard by Ciaran Clark,AGAINST,20
+21/22,Newcastle,Newcastle,Nov. 6,Robert Sanchez sent off for DOGSO on Callum Wilson,FOR,90
+21/22,Newcastle,Norwich,Nov. 30,Penalty awarded (scored by Callum Wilson) for handball against Billy Gilmour,FOR,57
+21/22,Newcastle,Man City,Dec. 19,Riyad Mahrez goal allowed after being originally ruled out for offside,AGAINST,63
+21/22,Newcastle,Aston Villa,Feb. 13,"Penalty for Calum Chambers' challenge on Joe Willock cancelled, outside area",AGAINST,32
+21/22,Newcastle,Aston Villa,Feb. 13,Ollie Watkins goal ruled out for offside,FOR,61
+21/22,Brentford,Newcastle,Feb. 26,Josh Dasilva sent off for challenge on Matt Targett,FOR,9
+21/22,Everton,Newcastle,March 17,Allan sent off for challenge on Allan Saint-Maximin,FOR,80
+21/22,Newcastle,Wolves,April 8,Chris Wood goal disallowed for offside against Bruno Guimaraes in the build-up,AGAINST,23
+21/22,Newcastle,Leicester,April 17,Bruno Guimaraes goal allowed after being originally ruled out for a foul on goalkeeper Kasper Schmeichel,FOR,30
+21/22,Burnley,Newcastle,May 22,Penalty awarded (scored by Callum Wilson) for handball by Nathan Collins,FOR,17
+21/22,West Ham,Manchester United,Sept. 19,Penalty conceded (missed by Mark Noble) for handball by Luke Shaw,AGAINST,92
+21/22,Manchester United,Everton,Oct. 2,Yerry Mina goal disallowed for offside,FOR,85
+21/22,Manchester United,Liverpool,Oct. 24,Cristiano Ronaldo goal disallowed for offside,AGAINST,52
+21/22,Manchester United,Liverpool,Oct. 24,Paul Pogba yellow card upgraded to red for challenge on Naby Keita,AGAINST,69
+21/22,Watford,Manchester United,Nov. 20,Kiko Femenia goal disallowed after he encroached into the area to score a penalty rebound; Ismaila Sarr missed the retaken penalty,FOR,9
+21/22,Manchester United,Arsenal,Dec. 2,Emile Smith Rowe goal allowed after VAR rules the ball had crossed the line before the referee's whistle was blown to stop play,AGAINST,13
+21/22,Manchester United,Arsenal,Dec. 2,Penalty awarded (scored by Cristiano Ronaldo) for a foul by Martin Odegaard on Fred,FOR,68
+21/22,Burnley,Manchester United,Feb. 8,Raphael Varane goal disallowed for offside against Harry Maguire,AGAINST,12
+21/22,Manchester United,Brighton,Feb. 15,Lewis Dunk yellow card upgraded to red for denying a goal-scoring chance on Anthony Elanga,FOR,53
+21/22,Man City,Manchester United,March 6,Riyad Mahrez goal allowed after incorrect offside,AGAINST,90
+21/22,Manchester United,Leicester,Apr. 2,James Maddison goal disallowed for a foul in the build-up by Kelechi Iheanacho on Raphael Varane,FOR,80
+21/22,Arsenal,Manchester United,April 23,Eddie Nketiah goal disallowed for offside,FOR,27
+21/22,Arsenal,Manchester United,April 23,Penalty awarded (scored by Bukayo Saka) for a foul by Alex Telles on Saka,AGAINST,27
+21/22,Manchester United,Brentford,May 2,Cristiano Ronaldo goal disallowed for offside,AGAINST,44
+21/22,Wolves,Brentford,Sept. 18,"Ivan Toney goal which was originally ruled out for offside, was shown to be onside on review, but eventually ruled out on review for handball by the goal scorer",NEUTRAL,29
+21/22,Wolves,Everton,Nov. 1,Hwang Hee-Chan goal disallowed for offside,AGAINST,15
+21/22,Crystal Palace,Wolves,Nov. 6,Wilfried Zaha goal allowed after incorrect offside,AGAINST,61
+21/22,Crystal Palace,Wolves,Nov. 6,Penalty cancelled as Joel Ward's challenge on Rayan Ait-Nouri was outside the box,AGAINST,69
+21/22,Wolves,Southampton,Jan. 15,Penalty awarded (scored by Raul Jimenez) for foul by Jan Bednarek on Rayan Ait-Nouri,FOR,33
+21/22,Brentford,Wolves,Jan. 22,Red card for Toti rescinded following challenge on Kristoffer Ajer,FOR,68
+21/22,Brentford,Wolves,Jan. 22,Adama Traore goal disallowed for offside,AGAINST,90
+21/22,Newcastle,Wolves,April 8,Chris Wood goal disallowed for offside against Bruno Guimaraes in the build-up,FOR,23
+21/22,Wolves,Brighton,April 30,Penalty awarded (missed by Alexis Mac Allister) for handball by Romain Saiss,AGAINST,31
+21/22,Wolves,Wolves,May 7,Ruben Loftus-Cheek goal disallowed for offside,FOR,38
+21/22,Wolves,Wolves,May 7,Penalty awarded (scored by Romelu Lukaku) for foul on Lukaku by Romain Saiss,AGAINST,52
+21/22,Leeds,Everton,Aug. 21,Penalty awarded (scored by Dominic Calvert-Lewin) for foul on Calvert-Lewin by Liam Cooper,FOR,26
+21/22,Everton,Norwich,Sept. 25,Penalty awarded (scored by Andros Townsend) for foul on Allan by Ozan Kabak,FOR,25
+21/22,Man United,Everton,Oct. 2,Yerry Mina goal disallowed for offside,AGAINST,85
+21/22,Everton,Watford,Oct. 23,Josh King goal allowed after incorrect offside,AGAINST,13
+21/22,Wolves,Everton,Nov. 1,Hwang Hee-Chan goal disallowed for offside,FOR,15
+21/22,Everton,Tottenham,Nov. 7,Penalty cancelled with Hugo Lloris adjudged not to have fouled Richarlison,AGAINST,64
+21/22,Everton,Tottenham,Nov. 7,Mason Holgate sent off for challenge on Pierre-Emile Hojbjerg,AGAINST,90
+21/22,Man City,Everton,Nov. 21,Penalty cancelled after Michael Keane adjudged not to have fouled Raheem Sterling,FOR,35
+21/22,Brentford,Everton,Nov. 28,Penalty awarded (scored by Ivan Toney) for foul on Frank Onyeka by Andros Townsend,AGAINST,20
+21/22,Everton,Arsenal,Dec. 6,Richarlison goal disallowed for offside,AGAINST,44
+21/22,Everton,Arsenal,Dec. 6,Richarlison goal disallowed for offside,AGAINST,57
+21/22,Everton,Brighton,Jan. 2,Penalty awarded (missed by Dominic Calvert-Lewin) for foul on Anthony Gordon by Enock Mwepu,FOR,22
+21/22,Everton,Newcastle,March 17,Allan sent off for challenge on Allan Saint-Maximin,AGAINST,80
+21/22,Burnley,Everton,Apr. 6,Penalty awarded (scored by Richarlison) for foul by Aaron Lennon on Vitalii Mykolenko,FOR,38
+21/22,Arsenal,Everton,May 22,Penalty awarded (scored by Gabriel Martinelli) for handball by Alex Iwobi,AGAINST,23
+21/22,Liverpool,Burnley,Aug. 21,Mohamed Salah goal disallowed for offside,FOR,26
+21/22,Burnley,Arsenal,Sept. 18,Penalty cancelled after Aaron Ramsdale originally penalised for bringing down Matej Vydra,AGAINST,69
+21/22,Leicester,Burnley,Sept. 25,Chris Wood goal disallowed for offside,AGAINST,90
+21/22,Burnley,Brentford,Oct. 30,Maxwel Cornet goal disallowed for offside in the build-up against Chris Wood,AGAINST,15
+21/22,Burnley,Man United,Feb. 8,Raphael Varane goal disallowed for offside against Harry Maguire,FOR,12
+21/22,Burnley,Everton,Apr. 6,Penalty awarded (scored by Richarlison) for foul by Aaron Lennon on Vitalii Mykolenko,AGAINST,38
+21/22,Burnley,Southampton,April 21,Jack Cork goal disallowed for offside,AGAINST,63
+21/22,Watford,Burnley,April 30,Penalty overturned as Moussa Sissoko's challenge on Dwight McNeil outside the area,AGAINST,27
+21/22,Tottenham,Burnley,May 15,Penalty awarded (scored by Harry Kane) for handball by Ashley Barnes,AGAINST,45
+21/22,Burnley,Newcastle,May 22,Penalty awarded (scored by Callum Wilson) for handball by Nathan Collins,AGAINST,17
+21/22,West Ham,Leicester City,Aug. 23,Ayoze Perez sent off for challenge on Pablo Fornals,AGAINST,38
+21/22,Norwich,Leicester City,Aug. 28,Penalty awarded (scored by Teemu Pukki) for foul on Pierre Lees-Melou by Caglar Soyuncu,AGAINST,40
+21/22,Leicester City,Burnley,Sept. 25,Chris Wood goal disallowed for offside,FOR,90
+21/22,Leeds,Leicester City,Nov. 7,Ademola Lookman goal ruled out for offside,AGAINST,67
+21/22,Aston Villa,Leicester City,Dec. 5,Jacob Ramsey goal disallowed for kicking the ball from the possession of Kasper Schmeichel,FOR,45
+21/22,Man City,Leicester City,Dec. 26,Penalty awarded (scored by Riyad Mahrez) for foul on Aymeric Laporte by Youri Tielemans,AGAINST,12
+21/22,Arsenal,Leicester City,March 13,Penalty awarded (scored by Alexandre Lacazette) for handball by Caglar Soyuncu,AGAINST,55
+21/22,Man United,Leicester City,Apr. 2,James Maddison goal disallowed for a foul in the build-up by Kelechi Iheanacho on Raphael Varane,AGAINST,80
+21/22,Leicester City,Crystal Palace,April 10,Penalty scored on the rebound by Wilfried Zaha after VAR ordered retake on initial penalty for encroaching by Caglar Soyuncu,AGAINST,66
+21/22,Newcastle,Leicester City,April 17,Bruno Guimaraes goal allowed after being originally ruled out for a foul on goalkeeper Kasper Schmeichel,AGAINST,30
+21/22,Man City,Norwich,Aug. 21,Ferran Torres goal ruled out for foul by Bernardo Silva on Milot Rashica in build-up,FOR,15
+21/22,Norwich,Leicester,Aug. 28,Penalty awarded (scored by Teemu Pukki) for foul on Pierre Lees-Melou by Caglar Soyuncu,FOR,40
+21/22,Norwich,Watford,Sept. 18,Ismaila Sarr goal allowed after being initially ruled out for offside against Josh King,AGAINST,80
+21/22,Everton,Norwich,Sept. 25,Penalty awarded (scored by Andros Townsend) for foul on Allan by Ozan Kabak,AGAINST,25
+21/22,Chelsea,Norwich,Oct. 23,Penalty awarded (missed by Mason Mount) after handball by Mathias Normann,AGAINST,83
+21/22,Chelsea,Norwich,Oct. 23,Penalty retake ordered (scored by Mason Mount) after encroachment by Tim Krul,AGAINST,85
+21/22,Brentford,Norwich,Nov. 6,Bryan Mbeumo goal disallowed for offside,FOR,49
+21/22,Newcastle,Norwich,Nov. 30,Penalty awarded (scored by Callum Wilson) for handball against Billy Gilmour,AGAINST,57
+21/22,West Ham,Norwich,Jan. 12,Jarrod Bowen goal allowed after being originally ruled out for offside,AGAINST,82
+21/22,Norwich,Norwich,March 5,Penalty awarded (scored by Ivan Toney) for foul on Pontus Jansson by Ben Gibson,AGAINST,49
+21/22,Norwich,Norwich,March 5,Milot Rashica goal disallowed for offside in the build-up against Teemu Pukki,AGAINST,67
+21/22,Norwich,Norwich,March 5,Bryan Mbeumo goal disallowed for offside in the build-up against Ethan Pinnock,FOR,76
+21/22,Norwich,Chelsea,March 10,Penalty awarded (scored by Teemu Pukki) for handball against Trevoh Chalobah,FOR,67
+21/22,Leeds,Norwich,March 13,Penalty cancelled after Luke Ayling originally penalised for bringing down Milot Rashica,AGAINST,76
+21/22,Norwich,West Ham,May 8,Sam Byram goal ruled out for handball,AGAINST,47
+21/22,Norwich,West Ham,May 8,Penalty awarded (scored by Manuel Lanzini) for handball by Jacob Sorensen,AGAINST,62
