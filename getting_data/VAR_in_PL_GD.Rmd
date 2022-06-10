@@ -418,6 +418,39 @@ var_desc_teams <- function(data_array,aux,data_game_detail){
   
   return(lista_equipos)
 }
+
+#funcion para que, a partir del df de las descripciones de var, desglozar los campos team1 y team2 
+#en donde ya se considera al team1 como el local y al team2 como el visitante
+var_desc_1 <- function(data_frame){
+  #Vectores que nos ayudarán a guardar los equipos locales y visitantes
+  team1 <- NULL
+  team2 <- NULL
+  
+  for(a in 1:dim(data_frame)[1]){
+    #Transformamos el primer equipo en character
+    equipo1 <- as.character(data_frame$team1[a])
+    #Transformamos el segundo equipo en character
+    equipo2 <- as.character(data_frame$team2[a])
+    #Transformamos el indicador de localia en character
+    local_eq <- as.character(data_frame$home.away[a])
+    #Verificamos si el indicador de localia dice que el primer equipo es local
+    if(local_eq == 'H'){
+      #Si sí es local entonces agregamos el primer equipo al vector de los locales
+      team1 <- c(team1,equipo1)
+      #Si sí es local entonces agregamos el segundo equipo al vector de los visitantes
+      team2 <- c(team2,equipo2)
+    } else {
+      #Si no es local entonces agregamos el segundo equipo al vector de los locales
+      team1 <- c(team1,equipo2)
+      #Si no es local entonces agregamos el primer equipo al vector de los visitantes
+      team2 <- c(team2,equipo1)
+    }
+  }
+  
+  lista_equipos <- list("local_team" = team1, "away_team" = team2)
+  
+  return(lista_equipos)
+}
 ```
 
 Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
@@ -775,83 +808,29 @@ Iniciamos el proceso para hacer una modificación en cuanto a la localía del eq
 
 ```{r,include=FALSE}
 
-# -------------------- aqui voy
-
-#Vectores que nos ayudarán a guardar los equipos locales y visitantes
-team1 <- NULL
-team2 <- NULL
-
-#Loop en donde identificamos si el equipo es local o visitante y lo guardamos en el vector correspondiente
-for(ap in 1:dim(var_details)[1]){
-  #Transformamos el primer equipo en character
-  equipo1 <- as.character(var_details$team1[ap])
-  #Transformamos el segundo equipo en character
-  equipo2 <- as.character(var_details$team2[ap])
-  #Transformamos el indicador de localia en character
-  local_eq <- as.character(var_details$home.away[ap])
-  #Verificamos si el indicador de localia dice que el primer equipo es local
-  if(local_eq == 'H'){
-    #Si sí es local entonces agregamos el primer equipo al vector de los locales
-    team1 <- c(team1,equipo1)
-    #Si sí es local entonces agregamos el segundo equipo al vector de los visitantes
-    team2 <- c(team2,equipo2)
-  } else {
-    #Si no es local entonces agregamos el segundo equipo al vector de los locales
-    team1 <- c(team1,equipo2)
-    #Si no es local entonces agregamos el primer equipo al vector de los visitantes
-    team2 <- c(team2,equipo1)
-  }
-}
+#Vector que contiene a equipos locales
+team1 <- var_desc_1(var_details)$local_team
+#Vector que contiene a equipos visitantes
+team2 <- var_desc_1(var_details)$away_team
 
 #Ya que tenemos el cambio de estos equipos según su localia, creamos la nueva tabla ya sin el 
 #indicador de localía y con las variables team1 y team2 ya indicando la localia y visitante
 var_details1 <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20)),
-                                       rep("20/21",length(incident_detail_20_21))),
-                          "team1" = team1,"team2" = team2, "date" = fecha,
-                          "incident" = c(desc_incident_19_20,desc_incident_20_21),
-                          "type" = c(type_incident_19_20,type_incident_20_21),
-                          "min" = c(min_inc_19_20,min_inc_20_21))
-
-var_details1$season <- as.character(var_details1$season)
-var_details1$team1 <- as.character(var_details1$team1)
-var_details1$team2 <- as.character(var_details1$team2)
-var_details1$date <- as.character(var_details1$date)
-var_details1$incident <- as.character(var_details1$incident)
+                                       rep("20/21",length(incident_detail_20_21)),
+                                       rep("21/22",length(incident_detail_21_22))),
+                          "team1" = team1,
+                          "team2" = team2, 
+                          "date" = c(fechas_19_20,fechas_20_21,fechas_21_22),
+                          "incident" = c(desc_incident_19_20,desc_incident_20_21,desc_incident_21_22),
+                          "type" = c(type_incident_19_20,type_incident_20_21,type_incident_21_22),
+                          "min" = c(min_incident_19_20,min_incident_20_21,min_incident_21_22))
 ```
 
-```{r}
-#Primeros cinco registros de la tabla de detalles de incidentes en donde intervino el VAR
-#dentro de los partidos de cada equipo de la PL en la temporada 19/20 y 20/21 ya sin el indicador
-#de localia
-head(var_details1,5)
-```
+Incluimos nuevas variables en los dataframes
 
 ```{r,include=FALSE}
-#cambiar pl_matches por premier_league y pl_var_inc por var_details
+#------------------------- aqui voy
 
-#Muchas variables estan como factores, debemos covertirlos en el tipo de variable correcto
-pl_matches$date <- as.POSIXct(pl_matches$date)
-pl_matches$league <- as.character(pl_matches$league)
-pl_matches$team1 <- as.character(pl_matches$team1)
-pl_matches$team2 <- as.character(pl_matches$team2)
-pl_ot$season <- as.character(pl_ot$season)
-pl_ot$team <- as.character(pl_ot$team)
-pl_var_inc$season <- as.character(pl_var_inc$season)
-pl_var_inc$team1 <- as.character(pl_var_inc$team1)
-pl_var_inc$team2 <- as.character(pl_var_inc$team2)
-pl_var_inc$home.away <- as.character(pl_var_inc$home.away)
-pl_var_inc$date <- as.character.Date(pl_var_inc$date)
-pl_var_inc$incident <- as.character(pl_var_inc$incident)
-pl_var_inc$type <- as.character(pl_var_inc$type)
-pl_var_inc1$season <- as.character(pl_var_inc1$season)
-pl_var_inc1$team1 <- as.character(pl_var_inc1$team1)
-pl_var_inc1$team2 <- as.character(pl_var_inc1$team2)
-pl_var_inc1$date <- as.character.Date(pl_var_inc1$date)
-pl_var_inc1$incident <- as.character(pl_var_inc1$incident)
-pl_var_inc1$type <- as.character(pl_var_inc1$type)
-```
-
-```{r,include=FALSE}
 pl_var_inc$team1 <- if_else(pl_var_inc$team1 == 'Tottenham','Tottenham Hotspur',pl_var_inc$team1)
 pl_var_inc$team2 <- if_else(pl_var_inc$team2 == 'Tottenham','Tottenham Hotspur',pl_var_inc$team2)
 pl_var_inc1$team1 <- if_else(pl_var_inc1$team1 == 'Tottenham','Tottenham Hotspur',pl_var_inc1$team1)
@@ -1208,3 +1187,4 @@ lista_final_only_caracteres <- unique(lista_only_caracteres)
 De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016, de aquí podemos empezar a hacer análisis exploratorio.
 
 **Tal vez agregar al campeón de cada temporada, nos podría servir como indicador de algo en cuanto a métricas**
+
