@@ -18,16 +18,8 @@ Tabla que contiene la descripción de las intervenciones del VAR de cada partido
 
 	h. min: número del minuto en que se llevó a cabo la intervención del VAR
 
-	i. big_six: Flag que indica si alguno de los dos equipos pertenece al grupo del Big Six (0 = no pertenece, 1 = pertenece)
-
-	j. big_six_h: Flag que indica que si el equipo 1 pertenece al grupo del Big Six (0 = no pertenece, 1 = pertenece)
-
-	k. big_six_a: Flag que indica que si el equipo 2 pertenece al grupo del Big Six (0 = no pertenece, 1 = pertenece)
-
-	l. big_six_t1: Flag que indica que si el equipo 1 pertenece al grupo del Big Six (No Big Six, Big Six)
-
-	m. big_six_both: Flag que indica si tanto equipo 1 como equipo 2 pertenecen al grupo del Big Six (0 = no pertenecen, 1 = pertenecen)
-
-	n. no_big_six_both: Flag que indica si tanto equipo 1 como equipo 2 no pertenecen al grupo del Big Six (0 = no pertenecen, 1 = pertenecen)
-
-	o. bs_vs_nbs: Flag que indica si en el partido se enfrenta un equipo del grupo de Big Six vs uno que no pertenece (0 = no, 1 = si)
+	i. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  	j. big_six_h: Flag que indica si el equipo local pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  	k. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
