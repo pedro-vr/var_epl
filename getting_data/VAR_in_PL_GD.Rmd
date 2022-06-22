@@ -451,6 +451,15 @@ var_desc_1 <- function(data_frame){
   
   return(lista_equipos)
 }
+
+sub_value_df <- function(df_column,old_value,new_value){
+  for(x in 1:length(df_column)){
+    if(df_column[x] == old_value)
+      df_column[x] = new_value
+  }
+  
+  return(df_column)
+}
 ```
 
 Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
@@ -829,161 +838,72 @@ var_details1 <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20
 Incluimos nuevas variables en los dataframes
 
 ```{r,include=FALSE}
-#------------------------- aqui voy
+#Vamos a arreglar algunas variables de los dfs
 
-pl_var_inc$team1 <- if_else(pl_var_inc$team1 == 'Tottenham','Tottenham Hotspur',pl_var_inc$team1)
-pl_var_inc$team2 <- if_else(pl_var_inc$team2 == 'Tottenham','Tottenham Hotspur',pl_var_inc$team2)
-pl_var_inc1$team1 <- if_else(pl_var_inc1$team1 == 'Tottenham','Tottenham Hotspur',pl_var_inc1$team1)
-pl_var_inc1$team2 <- if_else(pl_var_inc1$team2 == 'Tottenham','Tottenham Hotspur',pl_var_inc1$team2)
+#homologamos el nombre de los equipos en todos los dfs
 
-for (i in 1:length(pl_var_inc$team2)) {
- if(pl_var_inc$team2[i] == 'Brighton & Hove Albion'){
-   pl_var_inc$team2[i] = 'Brighton and Hove Albion'
- }else if(pl_var_inc$team2[i] == 'Brighton'){
-   pl_var_inc$team2[i] = 'Brighton and Hove Albion'
- }else if (pl_var_inc$team1[i] == 'Brighton & Hove Albion'){
-   pl_var_inc$team1[i] = 'Brighton and Hove Albion'
- }else if (pl_var_inc$team2[i] == 'Man United'){
-   pl_var_inc$team2[i] = 'Manchester United'
- }else if (pl_var_inc$team2[i] == 'Man City'){
-   pl_var_inc$team2[i] = 'Manchester City'
- }else if (pl_var_inc$team2[i] == 'Newcastle United'){
-   pl_var_inc$team2[i] = 'Newcastle'
- }else if (pl_var_inc$team2[i] == 'Leicester'){
-   pl_var_inc$team2[i] = 'Leicester City'
- }else if (pl_var_inc$team2[i] == 'Norwich'){
-   pl_var_inc$team2[i] = 'Norwich City'
- }else if (pl_var_inc$team2[i] == 'WBA'){
-   pl_var_inc$team2[i] = 'West Bromwich Albion'
- }else if (pl_var_inc$team2[i] == 'West Brom'){
-   pl_var_inc$team2[i] = 'West Bromwich Albion'
- }else if (pl_var_inc$team2[i] == 'Bournemouth'){
-   pl_var_inc$team2[i] = 'AFC Bournemouth'
- }else if (pl_var_inc$team2[i] == 'Leeds'){
-   pl_var_inc$team2[i] = 'Leeds United'
- }else if (pl_var_inc$team2[i] == 'West Ham'){
-   pl_var_inc$team2[i] = 'West Ham United'
- }else if (pl_var_inc$team2[i] == 'Wolves'){
-   pl_var_inc$team2[i] = 'Wolverhampton'
- }else if (pl_var_inc$team1[i] == 'West Brom'){
-   pl_var_inc$team1[i] = 'West Bromwich Albion'
- }else if (pl_var_inc$team1[i] == 'Leeds'){
-   pl_var_inc$team1[i] = 'Leeds United'
- }else if (pl_var_inc$team1[i] == 'West Ham'){
-   pl_var_inc$team1[i] = 'West Ham United'
- }else if (pl_var_inc$team1[i] == 'Wolves'){
-   pl_var_inc$team1[i] = 'Wolverhampton'
- }
-}
-```
+#iniciamos con los nombres de los equipos locales
+var_details$team1 <- as.character(var_details$team1)
+var_details1$team1 <- as.character(var_details1$team1)
 
-```{r,include=FALSE}
+var_details$team1 <- sub_value_df(var_details$team1,'Norwich','Norwich City')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Bournemouth', 'AFC Bournemouth')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Brighton', 'Brighton & Hove Albion')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Leicester', 'Leicester City')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Man City', 'Manchester City')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Man United', 'Manchester United')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Norwich', 'Norwich City')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Tottenham', 'Tottenham Hotspur')
+var_details1$team1 <- sub_value_df(var_details1$team1,'WBA', 'West Brom')
 
-bs_teams <- c('Chelsea','Liverpool','Manchester City','Manchester United','Arsenal','Tottenham Hotspur')
+#seguimos con los nombres de los equipos visitantes
+var_details$team2 <- as.character(var_details$team2)
+var_details1$team2 <- as.character(var_details1$team2)
 
-pl_matches['big_six'] <- if_else(pl_matches$team1 == 'Chelsea' | pl_matches$team1 == 'Liverpool' |
-                                   pl_matches$team1 == 'Manchester United' | pl_matches$team1 == 'Arsenal'|
-                                   pl_matches$team1 == 'Manchester City' | 
-                                   pl_matches$team1 == 'Tottenham Hotspur' |
-                                   pl_matches$team2 == 'Chelsea' | pl_matches$team2 == 'Liverpool' |
-                                   pl_matches$team2 == 'Manchester United' | pl_matches$team2 == 'Arsenal'|
-                                   pl_matches$team2 == 'Manchester City' | 
-                                   pl_matches$team2 == 'Tottenham Hotspur',1,0)
+var_details$team2 <- sub_value_df(var_details$team2,'Leicester','Leicester City')
+var_details$team2 <- sub_value_df(var_details$team2,'Man City', 'Manchester City')
+var_details$team2 <- sub_value_df(var_details$team2,'Man United', 'Manchester United')
+var_details$team2 <- sub_value_df(var_details$team2,'Newcastle', 'Newcastle United')
+var_details$team2 <- sub_value_df(var_details$team2,'Norwich', 'Norwich City')
+var_details$team2 <- sub_value_df(var_details$team2,'Tottenham', 'Tottenham Hotspur')
+var_details$team2 <- sub_value_df(var_details$team2,'WBA', 'West Brom')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Leicester','Leicester City')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Man City', 'Manchester City')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Man United', 'Manchester United')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Newcastle', 'Newcastle United')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Norwich', 'Norwich City')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Tottenham', 'Tottenham Hotspur')
 
-pl_var_inc['big_six'] <- if_else(pl_var_inc$team1 == 'Chelsea' | pl_var_inc$team1 == 'Liverpool' |
-                                   pl_var_inc$team1 == 'Manchester United' | pl_var_inc$team1 == 'Arsenal'|
-                                   pl_var_inc$team1 == 'Manchester City' | 
-                                   pl_var_inc$team1 == 'Tottenham Hotspur' |
-                                   pl_var_inc$team2 == 'Chelsea' | pl_var_inc$team2 == 'Liverpool' |
-                                   pl_var_inc$team2 == 'Manchester United' | pl_var_inc$team2 == 'Arsenal'|
-                                   pl_var_inc$team2 == 'Manchester City' | 
-                                   pl_var_inc$team2 == 'Tottenham Hotspur',1,0)
+#vamos con el df de overturns
+ovrt_var$team <- as.character(ovrt_var$team)
 
-pl_var_inc1['big_six'] <- if_else(pl_var_inc1$team1 == 'Chelsea' | pl_var_inc1$team1 == 'Liverpool' |
-                                   pl_var_inc1$team1 == 'Manchester United' | pl_var_inc1$team1 == 'Arsenal'|
-                                   pl_var_inc1$team1 == 'Manchester City' | 
-                                   pl_var_inc1$team1 == 'Tottenham Hotspur' |
-                                   pl_var_inc1$team2 == 'Chelsea' | pl_var_inc1$team2 == 'Liverpool' |
-                                   pl_var_inc1$team2 == 'Manchester United' | pl_var_inc1$team2 == 'Arsenal'|
-                                   pl_var_inc1$team2 == 'Manchester City' | 
-                                   pl_var_inc1$team2 == 'Tottenham Hotspur',1,0)
+ovrt_var$team <- sub_value_df(ovrt_var$team,'Newcastle', 'Newcastle United')
+ovrt_var$team <- sub_value_df(ovrt_var$team,'Norwich', 'Norwich City')
 
-pl_matches['big_six_h'] <- if_else(pl_matches$team1 == 'Chelsea' | pl_matches$team1 == 'Liverpool' |
-                                   pl_matches$team1 == 'Manchester United' | pl_matches$team1 == 'Arsenal'|
-                                   pl_matches$team1 == 'Manchester City' | 
-                                   pl_matches$team1 == 'Tottenham Hotspur',1,0)
+#vamos con el df de premier league
+premier_league$team1 <- as.character(premier_league$team1)
+premier_league$team2 <- as.character(premier_league$team2)
 
-pl_var_inc['big_six_h'] <- if_else(((pl_var_inc$team1 == 'Chelsea' | pl_var_inc$team1 == 'Liverpool' |
-                                   pl_var_inc$team1 == 'Manchester United' | pl_var_inc$team1 == 'Arsenal'|
-                                   pl_var_inc$team1 == 'Manchester City' | 
-                                   pl_var_inc$team1 == 'Tottenham Hotspur') & pl_var_inc$home.away == 'H') |
-                                  ((pl_var_inc$team2 == 'Chelsea' | pl_var_inc$team2 == 'Liverpool' |
-                                   pl_var_inc$team2 == 'Manchester United' | pl_var_inc$team2 == 'Arsenal'|
-                                   pl_var_inc$team2 == 'Manchester City' | 
-                                   pl_var_inc$team2 == 'Tottenham Hotspur') & pl_var_inc$home.away == 'A'),1,0)
+premier_league$team1 <- sub_value_df(premier_league$team1,'Leeds United','Leeds')
+premier_league$team1 <- sub_value_df(premier_league$team1,'Newcastle', 'Newcastle United')
+premier_league$team1 <- sub_value_df(premier_league$team1,'West Bromwich Albion', 'West Brom')
+premier_league$team1 <- sub_value_df(premier_league$team1,'West Ham United', 'West Ham')
+premier_league$team1 <- sub_value_df(premier_league$team1,'Wolverhampton', 'Wolves')
+premier_league$team2 <- sub_value_df(premier_league$team2,'Leeds United','Leeds')
+premier_league$team2 <- sub_value_df(premier_league$team2,'Newcastle', 'Newcastle United')
+premier_league$team2 <- sub_value_df(premier_league$team2,'West Bromwich Albion', 'West Brom')
+premier_league$team2 <- sub_value_df(premier_league$team2,'West Ham United', 'West Ham')
+premier_league$team2 <- sub_value_df(premier_league$team2,'Wolverhampton', 'Wolves')
 
-pl_var_inc1['big_six_h'] <- if_else(pl_var_inc1$team1 == 'Chelsea' | pl_var_inc1$team1 == 'Liverpool' |
-                                   pl_var_inc1$team1 == 'Manchester United' | pl_var_inc1$team1 == 'Arsenal'|
-                                   pl_var_inc1$team1 == 'Manchester City' | 
-                                   pl_var_inc1$team1 == 'Tottenham Hotspur',1,0)
-
-pl_matches['big_six_a'] <- if_else(pl_matches$team2 == 'Chelsea' | pl_matches$team2 == 'Liverpool' |
-                                   pl_matches$team2 == 'Manchester United' | pl_matches$team2 == 'Arsenal'|
-                                   pl_matches$team2 == 'Manchester City' | 
-                                   pl_matches$team2 == 'Tottenham Hotspur',1,0)
-
-pl_var_inc['big_six_a'] <- if_else(((pl_var_inc$team1 == 'Chelsea' | pl_var_inc$team1 == 'Liverpool' |
-                                   pl_var_inc$team1 == 'Manchester United' | pl_var_inc$team1 == 'Arsenal'|
-                                   pl_var_inc$team1 == 'Manchester City' | 
-                                   pl_var_inc$team1 == 'Tottenham Hotspur') & pl_var_inc$home.away == 'A') |
-                                   ((pl_var_inc$team2 == 'Chelsea' | pl_var_inc$team2 == 'Liverpool' |
-                                   pl_var_inc$team2 == 'Manchester United' | pl_var_inc$team2 == 'Arsenal'|
-                                   pl_var_inc$team2 == 'Manchester City' | 
-                                   pl_var_inc$team2 == 'Tottenham Hotspur') & pl_var_inc$home.away == 'H'),1,0)
-
-pl_var_inc1['big_six_a'] <- if_else(pl_var_inc1$team2 == 'Chelsea' | pl_var_inc1$team2 == 'Liverpool' |
-                                   pl_var_inc1$team2 == 'Manchester United' | pl_var_inc1$team2 == 'Arsenal'|
-                                   pl_var_inc1$team2 == 'Manchester City' | 
-                                   pl_var_inc1$team2 == 'Tottenham Hotspur',1,0)
-
-pl_ot['big_six'] <- if_else(pl_ot$team == 'Chelsea' | pl_ot$team == 'Liverpool' | pl_ot$team == 'Manchester United'| 
-                                   pl_ot$team == 'Arsenal'| pl_ot$team == 'Manchester City' | 
-                                   pl_ot$team == 'Tottenham Hotspur','Big Six','No Big Six')
-
-pl_var_inc['big_six_t1'] <- if_else(pl_var_inc$team1 == 'Chelsea' | pl_var_inc$team1 == 'Liverpool' |
-                                   pl_var_inc$team1 == 'Manchester United' | pl_var_inc$team1 == 'Arsenal'|
-                                   pl_var_inc$team1 == 'Manchester City' | 
-                                   pl_var_inc$team1 == 'Tottenham Hotspur','Big Six','No Big Six')
-
-pl_var_inc['big_six_both'] <- if_else(pl_var_inc$big_six_h == 1 & pl_var_inc$big_six_a == 1, 1, 0)
-
-pl_var_inc['no_big_six_both'] <- if_else(pl_var_inc$big_six_h == 0 & pl_var_inc$big_six_a == 0, 1, 0)
-
-pl_var_inc['bs_vs_nbs'] <- if_else(pl_var_inc$big_six_both == 0 & pl_var_inc$no_big_six_both == 0,1,0)
-
-pl_matches['season2'] <- case_when(
-  pl_matches$season == 2016 ~ '16/17',
-  pl_matches$season == 2017 ~ '17/18',
-  pl_matches$season == 2018 ~ '18/19',
-  pl_matches$season == 2019 ~ '19/20',
-  pl_matches$season == 2020 ~ '20/21'
-)
-
-numero_int_var <- pl_var_inc %>% group_by(season,team1,team2) %>% summarise(int_var = n_distinct(incident))
-
-pl_matches <- pl_matches %>% left_join(numero_int_var,by=c('season2' = 'season','team1','team2'))
-```
-
-```{r,include=FALSE}
-equipos <- NULL
-faltantes <- NULL
-for(equipo in unique(pl_var_inc$team2)){
-  if(equipo %in% unique(pl_matches$team2)){
-    equipos <- c(equipos,equipo)
-  } else {
-    faltantes <- c(faltantes,equipo)
-  }
-}
+#les agregamos las variables de big_six
+ovrt_df['big_six'] <- sapply(ovrt_df$team,is_big_six)
+ovrt_var['big_six'] <- sapply(ovrt_var$team,is_big_six)
+var_details['big_six_h'] <- sapply(var_details$team1, is_big_six)
+var_details['big_six_a'] <- sapply(var_details$team2, is_big_six)
+var_details['big_six'] <- if_else(var_details$big_six_h == 1 | var_details$big_six_a == 1,1,0)
+var_details1['big_six_h'] <- sapply(var_details1$team1, is_big_six)
+var_details1['big_six_a'] <- sapply(var_details1$team2, is_big_six)
+var_details1['big_six'] <- if_else(var_details1$big_six_h == 1 | var_details1$big_six_a == 1,1,0)
 ```
 
 Datos obtenidos de https://www.football-data.co.uk/englandm.php

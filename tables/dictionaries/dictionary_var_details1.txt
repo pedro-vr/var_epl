@@ -15,3 +15,9 @@ Tabla que contiene la descripción de las intervenciones del VAR de cada partido
 	f. type: Flag que indica si la intervención del VAR fue a favor (FOR) o en contra (AGAINST) del equipo 1
 
 	g. min: número del minuto en que se llevó a cabo la intervención del VAR
+
+	h. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  	i. big_six_h: Flag que indica si el equipo local pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  	j. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
