@@ -973,22 +973,23 @@ stats_epl['big_six'] <- if_else(stats_epl$big_six_a == 1 | stats_epl$big_six_h =
 #leemos la data
 cleaned_merged_seasons <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_merged_seasons.csv')
 
-cleaned_merged_seasons$element[0:10]
-
 #eliminamos las columnas que no nos muestran dinamismo de equipo o jugador
 cleaned_merged_seasons <- cleaned_merged_seasons[-c(1,19,11,12,27)]
 
 #reenombramos algunas columnas
 cleaned_merged_seasons <-  cleaned_merged_seasons %>% rename(season = season_x, team1 = team_x)
+
+#-----------falta actualizacion 21/22
 ```
 
-```{r}
+```{r fpl_merged_players}
 #leemos la data
 cleaned_players_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1617.csv')
 cleaned_players_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1718.csv')
 cleaned_players_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1819.csv')
 cleaned_players_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1920.csv')
 cleaned_players_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_2021.csv')
+cleaned_players_2022 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_2022.csv')
 
 #le agregamos la columna de season
 cleaned_players_1617['season'] <- '16/17'
@@ -996,9 +997,10 @@ cleaned_players_1718['season'] <- '17/18'
 cleaned_players_1819['season'] <- '18/19'
 cleaned_players_1920['season'] <- '19/20'
 cleaned_players_2021['season'] <- '20/21'
+cleaned_players_2022['season'] <- '21/22'
 
 #unimos todos en uno solo
-merged_cleaned_players <- cleaned_players_1617 %>% bind_rows(cleaned_players_1718) %>% bind_rows(cleaned_players_1819) %>% bind_rows(cleaned_players_1920) %>% bind_rows(cleaned_players_2021)
+merged_cleaned_players <- cleaned_players_1617 %>% bind_rows(cleaned_players_1718) %>% bind_rows(cleaned_players_1819) %>% bind_rows(cleaned_players_1920) %>% bind_rows(cleaned_players_2021) %>% bind_rows(cleaned_players_2022)
 
 merged_cleaned_players$second_name <- as.character(merged_cleaned_players$second_name)
 merged_cleaned_players$first_name <- as.character(merged_cleaned_players$first_name)
@@ -1042,13 +1044,14 @@ merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gs
 merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e4>",replacement="a")
 ```
 
-```{r}
+```{r merged_gw_formatted}
 #leemos la data
 merged_gw_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1617.csv')
 merged_gw_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1718.csv')
 merged_gw_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1819.csv')
 merged_gw_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1920.csv')
 merged_gw_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_2021.csv')
+merged_gw_2022 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_2022.csv')
 
 #le creamos la columna season
 merged_gw_1617['season'] <- '16/17'
@@ -1056,9 +1059,10 @@ merged_gw_1718['season'] <- '17/18'
 merged_gw_1819['season'] <- '18/19'
 merged_gw_1920['season'] <- '19/20'
 merged_gw_2021['season'] <- '20/21'
+merged_gw_2022['season'] <- '21/22'
 
 #unimos la data
-merged_gw <- merged_gw_1617 %>% bind_rows(merged_gw_1718) %>% bind_rows(merged_gw_1819) %>% bind_rows(merged_gw_1920) %>% bind_rows(merged_gw_2021)
+merged_gw <- merged_gw_1617 %>% bind_rows(merged_gw_1718) %>% bind_rows(merged_gw_1819) %>% bind_rows(merged_gw_1920) %>% bind_rows(merged_gw_2021) %>% bind_rows(merged_gw_2022)
 
 #eliminamos columnas
 merged_gw <- merged_gw %>% select(.,-c('ea_index','element','fixture','id','kickoff_time_formatted','round','selected','value'))
@@ -1100,25 +1104,11 @@ teams_list$team_name <- sapply(teams_list$team_name,as.character)
 merged_gw_formatted <- merged_gw %>% left_join(teams_list,by=c('season','opponent_team' = 'team'))
 #eliminamos la columna donde viene el código del equipo y reenombramos la nueva columna con el nombre completo
 merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('opponent_team')) %>% rename(opponent_team = team_name)
-```
 
-```{r,include=FALSE}
-lista_final_caracter_nombre <- NULL
-lista_only_caracteres <- NULL
-for(x in 1:dim(merged_gw)[1]){
-  nombre_player <- merged_gw$name[x]
-  is_match <- unlist(gregexpr("<",nombre_player))
-  if(is_match > 0){
-    lista_caracter1 <- unlist(gregexpr("<",nombre_player))
-    lista_caracter2 <- unlist(gregexpr(">",nombre_player))
-    for(y in 1:length(lista_caracter1)){
-      caracter_esp <- substr(nombre_player,lista_caracter1[y],lista_caracter2[y])
-      lista_only_caracteres <- c(lista_only_caracteres,caracter_esp)
-    }
-    lista_final_caracter_nombre <- c(lista_final_caracter_nombre,lista_only_caracteres,nombre_player)
-  }
-}
-lista_final_only_caracteres <- unique(lista_only_caracteres)
+#Homologamos el nombre de los equipos con los demas dfs
+
+
+#Agregamos el flag de big six
 ```
 
 ```{r,include=FALSE}
