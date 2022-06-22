@@ -26,3 +26,6 @@ AY = Away Team Yellow Cards
 HR = Home Team Red Cards
 AR = Away Team Red Cards
 season = code for the season in number (16/17,17/18,18/19,19/20,20/21)
+big_six = Flag which indicates if whether the home or away team belong to Big Six (1 if True, 0 Otherwise)
+big_six_h = Flag which indicates if the home team belongs to Big Six (1 if True, 0 Otherwise)
+big_six_a = Flag which indicates if the away team belongs to Big Six (1 if True, 0 Otherwise)
