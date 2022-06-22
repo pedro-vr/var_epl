@@ -52,7 +52,7 @@ get_df <- function(df_number,is_work_computer=F){
     '2' = '/pl_overturns_var.csv', #listo
     '3' = '/var_details.csv',#listo
     '4' = '/var_details1.csv', #listo
-    '5' = '/stats_epl.csv',
+    '5' = '/stats_epl.csv', #listo
     '6' = '/fpl_merged_seasons.csv',
     '7' = '/fpl_merged_players.csv',
     '8' = '/fpl_merged_gw.csv'
@@ -84,6 +84,6 @@ El dinamismo dentro del fútbol encubre, por mencionar solo algunos, los siguien
 
 
 ```{r prob}
-pl_matches <- get_df(df_number = 8)
+pl_matches <- get_df(df_number = 2)
 pl_matches %>% filter(!is.na(team))
 ```

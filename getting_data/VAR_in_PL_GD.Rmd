@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, include = FALSE}
+```{r librerias, include = FALSE}
 #librerias a utilizar 
 #install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt",
             #       "urltools"))
@@ -27,7 +27,7 @@ library(XML)
 library(methods)
 ```
 
-```{r}
+```{r Funciones}
 #Funciones a utilizar
 
 is_big_six <- function(team_name){
@@ -488,7 +488,7 @@ VAR definición: https://www.marca.com/claro-mx/futbol/liga-mx/2018/10/18/5bc8a1
 
 Si obtenemos el documento directamente de la página de GitHub de FiveThirtyEight se tienen los partidos actualizados al día.
 
-```{r}
+```{r read fivethirtyeight data}
 #al parecer aquí ya se encuentran desde 2016 hasta hoy, se actualiza cada semana
 url <- "https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv"
 football_matches <- read.csv(url,fileEncoding = 'UTF-8',skipNul = T)
@@ -914,7 +914,8 @@ stats_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_dat
 stats_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_1718.csv') 
 stats_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_1819.csv') 
 stats_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_1920.csv') 
-stats_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_2021.csv') 
+stats_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_2021.csv')
+stats_2022 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/stats_epl_2022.csv')
 
 #quitamos la columna DIV
 stats_1617 <- stats_1617[-c(1)]
@@ -922,6 +923,7 @@ stats_1718 <- stats_1718[-c(1)]
 stats_1819 <- stats_1819[-c(1)]
 stats_1920 <- stats_1920[-c(1)]
 stats_2021 <- stats_2021[-c(1)]
+stats_2022 <- stats_2022[-c(1)]
 
 #agregamos la columna de season
 stats_1617['season'] <- '16/17'
@@ -929,17 +931,45 @@ stats_1718['season'] <- '17/18'
 stats_1819['season'] <- '18/19'
 stats_1920['season'] <- '19/20'
 stats_2021['season'] <- '20/21'
+stats_2022['season'] <- '21/22'
 
 #empezamos a unir las tablas
-stats_merged_1 <- merge(stats_1617,stats_1718,all = T)
-stats_merged_2 <- merge(stats_merged_1,stats_1819,all = T)
-stats_merged_3 <- merge(stats_merged_2,stats_1920,all = T)
-stats_epl <- merge(stats_merged_3,stats_2021,all=T)
+stats_epl <- merge(stats_1617,stats_1718,all = T) %>% merge(.,stats_1819,all = T) %>% merge(.,stats_1920,all = T) %>% merge(.,stats_2021,all=T) %>% merge(.,stats_2022,all=T)
 
+#Nos quedamos solo con las columnas que nos interesan
 stats_epl <- stats_epl[c('Date','Time','HomeTeam','AwayTeam','FTHG','FTAG','FTR','HTHG','HTAG','HTR','Referee','HS','AS','HST','AST','HC','AC','HF','AF','HY','AY','HR','AR','season')]
+
+#Homologamos el nombre de los equipos con los demas dfs
+stats_epl$HomeTeam <- as.character(stats_epl$HomeTeam)
+stats_epl$AwayTeam <- as.character(stats_epl$AwayTeam)
+
+#Reemplazamos los valores NA
+stats_epl$HomeTeam[is.na(stats_epl$HomeTeam)] <- ""
+stats_epl$AwayTeam[is.na(stats_epl$AwayTeam)] <- ""
+
+#Sustituimos los nombres para homologar
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Bournemouth', 'AFC Bournemouth')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Brighton', 'Brighton & Hove Albion')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Leicester', 'Leicester City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Man City', 'Manchester City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Man United', 'Manchester United')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Norwich', 'Norwich City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Tottenham', 'Tottenham Hotspur')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Bournemouth', 'AFC Bournemouth')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Brighton', 'Brighton & Hove Albion')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Leicester', 'Leicester City')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Man City', 'Manchester City')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Man United', 'Manchester United')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Norwich', 'Norwich City')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Tottenham', 'Tottenham Hotspur')
+
+#Agregamos el flag de big_six
+stats_epl['big_six_h'] <- sapply(stats_epl$HomeTeam,is_big_six)
+stats_epl['big_six_a'] <- sapply(stats_epl$AwayTeam,is_big_six)
+stats_epl['big_six'] <- if_else(stats_epl$big_six_a == 1 | stats_epl$big_six_h == 1,1,0)
 ```
 
-```{r, include=FALSE}
+```{r cleaned merged seasons, include=FALSE}
 #leemos la data
 cleaned_merged_seasons <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_merged_seasons.csv')
 
