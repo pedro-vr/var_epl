@@ -1106,9 +1106,41 @@ merged_gw_formatted <- merged_gw %>% left_join(teams_list,by=c('season','opponen
 merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('opponent_team')) %>% rename(opponent_team = team_name)
 
 #Homologamos el nombre de los equipos con los demas dfs
+merged_gw_formatted$team <- as.character(merged_gw_formatted$team)
+merged_gw_formatted$opponent_team <- as.character(merged_gw_formatted$opponent_team)
+merged_gw_formatted$team[is.na(merged_gw_formatted$team)] <- ""
+merged_gw_formatted$opponent_team[is.na(merged_gw_formatted$opponent_team)] <- ""
 
+merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Brighton','Brighton & Hove Albion')
+merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Leicester','Leicester City')
+merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Man City','Manchester City')
+merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Man Utd','Manchester United')
+merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Norwich','Norwich City')
+merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Sheffield Utd','Sheffield United')
+merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Spurs','Tottenham Hotspur')
+
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Bournemouth','AFC Bournemouth')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Brighton','Brighton & Hove Albion')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Leicester','Leicester City')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Man City','Manchester City')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Man Utd','Manchester United')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Norwich','Norwich City')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Sheffield Utd','Sheffield United')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Spurs','Tottenham Hotspur')
 
 #Agregamos el flag de big six
+
+#Creamos columnas auxiliares nuevas para hacer más fácil la comparación
+merged_gw_formatted['bs_t'] <- sapply(merged_gw_formatted$team, is_big_six)
+merged_gw_formatted['bs_ot'] <- sapply(merged_gw_formatted$opponent_team, is_big_six)
+
+#aplicamos las reglas para big_six
+merged_gw_formatted['big_six_h'] <- if_else((merged_gw_formatted$bs_t == 1 & merged_gw_formatted$was_home == 'True') | (merged_gw_formatted$bs_ot == 1 & merged_gw_formatted$was_home == 'False'),1,0)
+merged_gw_formatted['big_six_a'] <- if_else((merged_gw_formatted$bs_t == 1 & merged_gw_formatted$was_home == 'False') | (merged_gw_formatted$bs_ot == 1 & merged_gw_formatted$was_home == 'True'),1,0)
+merged_gw_formatted['big_six'] <- if_else(merged_gw_formatted$big_six_h == 1 | merged_gw_formatted$big_six_a == 1,1,0)
+
+#eliminamos las columnas auxiliares
+merged_gw_formatted <- merged_gw_formatted[-c(53,54)]
 ```
 
 ```{r,include=FALSE}

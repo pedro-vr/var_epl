@@ -54,61 +54,63 @@ Tabla que contiene métricas asociadas a jugadores y su desempeño en cada parti
 
 	26. open_play_crosses: Número total de pases largos (cambios de juego) realizados por el jugador en la jornada correspondiente de la EPL
 
-	27. ****** opponent_team ******: Nombre del equipo contrario
+	27. own_goals: Número total de goles en propia puerta hechas por el jugador en la jornada correspondiente de la EPL
 
-	28. own_goals: Número total de goles en propia puerta hechas por el jugador en la jornada correspondiente de la EPL
+	28. penalties_conceded: Número total de penalties concedidos por el jugador en la jornada correspondiente de la EPL
 
-	29. penalties_conceded: Número total de penalties concedidos por el jugador en la jornada correspondiente de la EPL
+	39. penalties_missed: Número total de penalties fallados por el jugador en la jornada correspondiente de la EPL
 
-	30. penalties_missed: Número total de penalties fallados por el jugador en la jornada correspondiente de la EPL
+	30. penalties_saved: Número total de penalties atajados por el jugador en la jornada correspondiente de la EPL
 
-	31. penalties_saved: Número total de penalties atajados por el jugador en la jornada correspondiente de la EPL
+	31. recoveries: Número total de recuperaciones de balón hechas por el jugador en la jornada correspondiente de la EPL
 
-	32. recoveries: Número total de recuperaciones de balón hechas por el jugador en la jornada correspondiente de la EPL
+	32. red_cards: Número total de tarjetas rojas mostradas al jugador en la jornada correspondiente de la EPL
 
-	33. red_cards: Número total de tarjetas rojas mostradas al jugador en la jornada correspondiente de la EPL
+	33. saves: Número total de atajadas realizadas por el jugador en la jornada correspondiente de la EPL
 
-	34. saves: Número total de atajadas realizadas por el jugador en la jornada correspondiente de la EPL
+	34. tackled: Número total de tacleadas sufridas por el jugador en la jornada correspondiente de la EPL
 
-	35. tackled: Número total de tacleadas sufridas por el jugador en la jornada correspondiente de la EPL
+	35. tackles: Número total de tacleadas realizadas por el jugador en la jornada correspondiente de la EPL
 
-	36. tackles: Número total de tacleadas realizadas por el jugador en la jornada correspondiente de la EPL
+	36. target_missed: Número total de tiros sin dirección a gol realizados por el jugador en la jornada correspondiente de la EPL
 
-	37. target_missed: Número total de tiros sin dirección a gol realizados por el jugador en la jornada correspondiente de la EPL
+	37. team_a_score: Número total de goles anotados por el equipo visitante en la jornada correspondiente de la EPL
 
-	38. team_a_score: Número total de goles anotados por el equipo visitante en la jornada correspondiente de la EPL
+	38. team_h_score: Número total de goles anotados por el equipo local en la jornada correspondiente de la EPL
 
-	39. team_h_score: Número total de goles anotados por el equipo local en la jornada correspondiente de la EPL
+	39. threat: Puntaje total atribuido a la amenaza que implicaba el jugador de acuerdo a FPL en la jornada correspondiente de la EPL
 
-	40. threat: Puntaje total atribuido a la amenaza que implicaba el jugador de acuerdo a FPL en la jornada correspondiente de la EPL
+	40. total_points: Número total de puntos en FPL acumulados por el jugador en la jornada correspondiente de la EPL
 
-	41. total_points: Número total de puntos en FPL acumulados por el jugador en la jornada correspondiente de la EPL
+	41. transfers_balance: Balance del número total de transferencias en que estuvo involucrado el jugador dentro de FPL (transfers_in - transfers_out)
 
-	42. transfers_balance: Balance del número total de transferencias en que estuvo involucrado el jugador dentro de FPL (transfers_in - transfers_out)
+	42. transfers_in: Número total de transferencias hechas en FPL en que el jugador fue llevado a un equipo
 
-	43. transfers_in: Número total de transferencias hechas en FPL en que el jugador fue llevado a un equipo
+	43. transfers_out: Número total de transferencias hechas en FPL en que el jugador salió de un equipo
 
-	44. transfers_out: Número total de transferencias hechas en FPL en que el jugador salió de un equipo
+	44. was_home: Flag que indica si el jugador correspondiente jugaba en condición de local (True/False)
 
-	45. was_home: Flag que indica si el jugador correspondiente jugaba en condición de local (True/False)
+	45. winning_goals: Número total de goles ganadores que anotó el jugador en la jornada correspondiente de la EPL
 
-	46. winning_goals: Número total de goles ganadores que anotó el jugador en la jornada correspondiente de la EPL
+	46. yellow_cards: Número total de tarjetas amarillas mostradas al jugador en la jornada correspondiente de la EPL
 
-	47. yellow_cards: Número total de tarjetas amarillas mostradas al jugador en la jornada correspondiente de la EPL
+	47. GW: Número de jornada de la EPL
 
-	48. GW: Número de jornada de la EPL
+	48. season: Indicador de temporada de la EPL (2016/2017 - 2020/2021)
 
-	49. season: Indicador de temporada de la EPL (2016/2017 - 2020/2021)
+	49. position: Nombre de la posición que ocupa el jugador dentro del terreno de juego
 
-	50. position: Nombre de la posición que ocupa el jugador dentro del terreno de juego
+	50. team: Nombre del equipo al que pertenece el jugador
 
-	51. team: Nombre del equipo al que pertenece el jugador
+	51. xP: Expected Passes, número de pases esperados por el jugador en la jornada correspondiente de la EPL
 
-	52. xP: Expected Passes, número de pases esperados por el jugador en la jornada correspondiente de la EPL
+	52. opponent_team: Nombre del equipo contrincante con respecto a la columna team
 
-
-
-
+	53. big_six_h: Flag que indica si el equipo local pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  	54. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+ 	55. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
 
 
 
