@@ -110,7 +110,7 @@ Tabla que contiene métricas asociadas a jugadores y su desempeño en cada parti
   
   	54. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
   
- 	55. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+ 	55. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso) 
 
 
 
