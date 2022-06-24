@@ -55,7 +55,7 @@ get_df <- function(df_number,is_work_computer=F){
     '5' = '/stats_epl.csv', #listo
     '6' = '/fpl_merged_seasons.csv',
     '7' = '/fpl_merged_players.csv',#listo
-    '8' = '/fpl_merged_gw.csv'
+    '8' = '/fpl_merged_gw.csv' #listo
     )
   
   if(is_work_computer)
