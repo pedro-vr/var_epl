@@ -1013,8 +1013,6 @@ cleaned_merged_seasons['big_six'] <- if_else(cleaned_merged_seasons$big_six_h ==
 
 #eliminamos las columnas auxiliares
 cleaned_merged_seasons <- cleaned_merged_seasons[-c(34,35)]
-
-#-----------falta actualizacion 21/22
 ```
 
 ```{r fpl_merged_players}
