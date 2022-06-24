@@ -503,7 +503,7 @@ Aquí se considerarán dos nuevas variables, a saber, las siguientes:
 - after_covid: flag que denota si el partido se jugó en pandemia o pre-pandemia. La PL se suspendió un 13 de marzo de 2020 según ESPN
 - is_VAR: flag que denota si en el partido ya está implemnentado el VAR o no. EL VAR se implementó en la PL a partir de la temporada 19/20, es decir, a partir del 9 de agosto de 2019.
 
-```{r,include=FALSE}
+```{r premier_league,include=FALSE}
 #Creamos otra variable para determinar en qué momento inició COVID
 premier_league <- premier_league %>% mutate(after_covid = if_else(as.POSIXct(date) > as.POSIXct('2020-03-13'),1,0))
 #Creamos la variable que nos indica si en el partido estuvo presente el VAR
@@ -533,7 +533,7 @@ premier_league$season <- lista_seasons
 
 Se cuenta con un archivo en donde se denotan las intervenciones del VAR en la PL de la temporada 19/20 (la primera temporada en que se implementó) y se va a hacer un data set de esos records a continuación.
 
-```{r,include=FALSE}
+```{r ovrt_df,include=FALSE}
 #Empezamos el proceso para obtener los datos de las intervenciones del VAR en temporadas 19/20 y 20/21 de la PL
 
 #Leemos primero todo el archivo html de la temporada 19/20
@@ -692,7 +692,7 @@ ovrt_df <- inner_join(ns_df,desfor_df,by=c("season","team")) %>% inner_join(.,de
 
 Iniciamos el proceso para obtener la descripción de las decisiones del VAR en los partidos de la Premier League en las temporadas 19/20 y 20/21
 
-```{r,include=FALSE}
+```{r ovrt_var,include=FALSE}
 #Empezamos a tratar con los datos obtenidos sobre los detalles del VAR en cada partido de la PL y entonces
 #solo quedarnos con la info importante
 
@@ -739,7 +739,7 @@ ovrt_var <- inner_join(ovrt_df,des_df,by=c("season","team"))
 
 Ya que tenemos la tabla con los overturns de cada equipo entonces obtenemos la descripción de cada intervención del VAR para cada equipo
 
-```{r,include=FALSE}
+```{r var_details,include=FALSE}
 #Empezamos con el proceso para obtener los detalles del VAR en ciertos partidos para cada equipo
 #de la PL durante las dos temporadas
 
@@ -815,7 +815,7 @@ var_details <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20)
 
 Iniciamos el proceso para hacer una modificación en cuanto a la localía del equipo, se pretende eliminar el indicador de si es local o visitante y manejar solo las variables "team1" y "team2" para denotar localia (team1) o visita (team2)
 
-```{r,include=FALSE}
+```{r var_details1,include=FALSE}
 
 #Vector que contiene a equipos locales
 team1 <- var_desc_1(var_details)$local_team
@@ -837,7 +837,7 @@ var_details1 <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20
 
 Incluimos nuevas variables en los dataframes
 
-```{r,include=FALSE}
+```{r edit previous dfs,include=FALSE}
 #Vamos a arreglar algunas variables de los dfs
 
 #homologamos el nombre de los equipos en todos los dfs
@@ -978,6 +978,41 @@ cleaned_merged_seasons <- cleaned_merged_seasons[-c(1,19,11,12,27)]
 
 #reenombramos algunas columnas
 cleaned_merged_seasons <-  cleaned_merged_seasons %>% rename(season = season_x, team1 = team_x)
+
+#Homologamos el nombre de los equipos con los demas dfs
+cleaned_merged_seasons$team1 <- as.character(cleaned_merged_seasons$team1)
+cleaned_merged_seasons$opp_team_name <- as.character(cleaned_merged_seasons$opp_team_name)
+
+cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Brighton','Brighton & Hove Albion')
+cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Leicester','Leicester City')
+cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Man City','Manchester City')
+cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Man Utd','Manchester United')
+cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Norwich','Norwich City')
+cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Sheffield Utd','Sheffield United')
+cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Spurs','Tottenham Hotspur')
+
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Bournemouth','AFC Bournemouth')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Brighton','Brighton & Hove Albion')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Leicester','Leicester City')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Man City','Manchester City')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Man Utd','Manchester United')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Norwich','Norwich City')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Sheffield Utd','Sheffield United')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Spurs','Tottenham Hotspur')
+
+#Agregamos las columnas de big_six
+
+#creamos columnas auxiliares nuevas para facilitar la lógica
+cleaned_merged_seasons['bs_t'] <- sapply(cleaned_merged_seasons$team1, is_big_six)
+cleaned_merged_seasons['bs_ot'] <- sapply(cleaned_merged_seasons$opp_team_name, is_big_six)
+
+#aplicamos las reglas para big_six
+cleaned_merged_seasons['big_six_h'] <- if_else((cleaned_merged_seasons$bs_t == 1 & cleaned_merged_seasons$was_home == 'True') | (cleaned_merged_seasons$bs_ot == 1 & cleaned_merged_seasons$was_home == 'False'),1,0)
+cleaned_merged_seasons['big_six_a'] <- if_else((cleaned_merged_seasons$bs_t == 1 & cleaned_merged_seasons$was_home == 'False') | (cleaned_merged_seasons$bs_ot == 1 & cleaned_merged_seasons$was_home == 'True'),1,0)
+cleaned_merged_seasons['big_six'] <- if_else(cleaned_merged_seasons$big_six_h == 1 | cleaned_merged_seasons$big_six_a == 1,1,0)
+
+#eliminamos las columnas auxiliares
+cleaned_merged_seasons <- cleaned_merged_seasons[-c(34,35)]
 
 #-----------falta actualizacion 21/22
 ```

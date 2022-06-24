@@ -66,7 +66,13 @@ Tabla que contiene algunas estadísticas usuales medidas en partidos de fútbol 
 
 	32. yellow_cards: Número de tarjetas amarillas mostradas al jugador
 
-	33. GW: Número de jornada
+	33. GW: Número de jornada correspondiente de la EPL
+
+	34. big_six_h: Flag que indica si el equipo local pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  	35. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  
+  	36. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso) 
 
 
 Referencias:
