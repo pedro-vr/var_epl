@@ -72,7 +72,7 @@ Tabla que contiene algunas estadísticas usuales medidas en partidos de fútbol 
   
   	35. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
   
-  	36. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso) 
+  	36. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso)  
 
 
 Referencias:
