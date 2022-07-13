@@ -1,5 +1,5 @@
 ---
-title: "Efecto del VAR en el dinamismo del fútbol"
+title: "El VAR dentro del fútbol"
 author: "Pedro Alan Velázquez Romero"
 date: "4/21/2022"
 output: html_document
@@ -12,8 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r libraries,include=FALSE}
 #librerias a utilizar
 
-#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt",
- #               "urltools","fmsb","devtools","vcd","aplpack","GGally","wesanderson","e1071"))
+#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt","urltools","fmsb","devtools","vcd","aplpack","GGally","wesanderson","e1071"))
 #devtools::install_github("ricardo-bion/ggradar", dependencies=TRUE)
 library(dplyr)
 library(ggplot2)
@@ -39,8 +38,8 @@ library(wesanderson)
 library(gridExtra)
 ```
 
-```{r datatables, include=FALSE}
-#Datos a utilizar 
+```{r funciones, include=FALSE}
+#Funcion para leer la tabla a analizar
 
 get_df <- function(df_number,is_work_computer=F){
   
@@ -67,8 +66,49 @@ get_df <- function(df_number,is_work_computer=F){
 }
 ```
 
-# El efecto del VAR en el dinamismo del fútbol
-#### Caso especial estudiado dentro de la EPL
+### 1. JUSTIFICACIÓN
+
+El VAR es una herramienta tecnológica de reciente implementación dentro del fútbol que promete grandes avances en cuanto a decisiones arbitrales en cada partido que se juegue, sin embargo, existe la disputa de aquellos que afirman que el VAR en realidad no aporta nada extra al fútbol, incluso hay algunas personas que llegan a afirmar que éste funge más como un detractor del fútbol que una ayuda al mismo. Sobre este debate es que se inspira al realizar la presente investigación, para así poder afirmar, o negar, con datos, dichas declaraciones hacia con el VAR. Por lo tanto, lo que se busca aquí es descubrir el verdadero aporte del VAR dentro del fútbol profesional.
+
+### 2. DELIMITACIÓN DEL PROBLEMA
+
+"El efecto (papel/desempeño) del VAR dentro de partidos oficiales del fútbol profesional inglés desde su implementación (2019) al día de hoy"
+
+  - <u>**Espacial**</u>: Inglaterra - Premier League (PL)
+  - <u>**Temporal**</u>: 2016-2022 (Tomando en cuenta solamente partidos oficiales de la PL)
+
+### 3. OBJETIVOS
+
+#### 3.1 Generales
+
+Analizar el efecto del VAR dentro de partidos oficiales del fútbol profesional inglés desde su implementación (2019) al día de hoy
+
+#### 3.2 Específicos
+
+  a) Analizar efecto en el dinamismo de los equipos dentro de cada partido que juegan
+  b) Analizar efecto en generación de oportunidades de gol, ¿Los jugadores toman mayores riesgos en equipo con la presencia del VAR?
+  c) Analizar efecto en individualidades y trabajo en equipo
+  d) ¿Realmente se genera <u>**justicia deportiva**</u> con el VAR?
+  
+### 4. PREGUNTA DE INVESTIGACIÓN
+
+<u> ¿Cuáles son las ventajas y desventajas de la implementación del VAR dentro de los partidos en el fútbol profesional inglés? </u>
+
+El VAR es la herramienta tecnológica más reciente que se ha implementado dentro del fútbol profesional en todo el mundo. El propósito pricipal de esta implementación es generar mayor justicia deportiva en cada partido de fútbol con respecto a decisiones arbitrales, sin embargo, al ser una herramienta dce tecnología moderna y totalmente nueva dentro del ambiente del fútbol, ésta puede presentar mayores fallas en su funcionamiento y esto, a su vez, puede llegar a ocasionar mayores repercusiones dentro del fútbol y el desarrollo de los partidos (en dinamismo, desempeño de los equipos, etc.). 
+
+Por lo tanto, es impoprtante hacer un análisis acerca de las ventajas y desventajas que ha traído el VAR hasta el día de hoy dentro del fútbol y con ello poder discernir sobre si es una herramienta que vale la pena implementar dentro del fútbol moderno.
+
+### 5. HIPÓTESIS
+
+Si bien el VAR es una herramienta que permite grandes avances tecnológicos y arbitrales dentro del fútbol moderno, es bien sabido que su desempeño no ha sido la óptima dentro de cada partido de fútbol. En varias ocasiones se ha podido observar que el VAR ha generado más complicaciones en cada partido de fútbol, por ejemplo, pérdida de tiempo de jugo a la hora de consultar el VAR, malas intervenciones del VAR en decisiones arbitrales (tanto en equivocaciones a la hora de tomar la decisión arbitral, como en negligencia de intervención cuando se necesita, entre otros). 
+
+Con ello, se podría llegar a pensar que el VAR está trayendo consigo más aspectos negativos que positivos en el fútbol moderno, así, la hipótesis central de esta investigación es la siguiente:
+
+<div align="center"> **El VAR influye negativamente en el desarrollo de los partidos profesionales de fútbol inglés ,desde su implementación, hasta el día de hoy** </div>
+
+### 6. DESARROLLO
+
+#### 6.1 Análisis exploratorio
 
 El dinamismo dentro del fútbol encubre, por mencionar solo algunos, los siguientes aspectos:
 
@@ -82,8 +122,18 @@ El dinamismo dentro del fútbol encubre, por mencionar solo algunos, los siguien
     * Número de encaramientos durante el partido: ¿Qué tanto se da el juego 1 vs 1 durante el partido?, ¿cuántos de ellos terminan en gol?
 3. Analizar el trabajo en conjunto de todos los involucrados en el equipo: Qué tanto ocasiona el VAR que se juegue a base de más individualidades
 
+## Dinámica de pases
+
+Para la dinámica de pases dentro del equipo de fútbol, analizaremos las siguientes variables:
+
+1. Pases hacia en frente (hacia el campo contrario)
+2. Pases hacia atrás (hacia propio campo)
+3. Pases laterales (Se puede?)
+4. Número de asistencias
+
 
 ```{r prob}
-pl_matches <- get_df(df_number = 2)
-pl_matches %>% filter(!is.na(team))
+pl_matches <- get_df(df_number = 4)
+#ggplot(pl_matches,aes(xg1,probtie)) + geom_point(aes(color=as.factor(big_six))) + ggtitle('XG1 vs ProbTie') + xlab('XG1') + ylab('ProbTie') + geom_rug() + scale_fill_discrete(name='Is Big Six',labels=c('No','Yes'))
+head(pl_matches)
 ```
