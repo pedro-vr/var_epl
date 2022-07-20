@@ -40,9 +40,9 @@ Tabla que registra los partidos jugados en la PL desde la temporada 16/17 hasta 
   
   s. xg2: Número de goles esperados del equipo visitante basado en las oportunidades creadas y terminadas por el mismo equipo
   
-  t. nsxg1: Número de goles esperados del equipo local basado en las posiciones y carreos de balón que no terminan en tiro a portería
+  t. nsxg1: Número de goles esperados del equipo local basado en las posiciones y acarreos de balón que no terminan en tiro a portería
   
-  u. nsxg2: Número de goles esperados del equipo visitante basado en las posiciones y carreos de balón que no terminan en tiro a portería
+  u. nsxg2: Número de goles esperados del equipo visitante basado en las posiciones y acarreos de balón que no terminan en tiro a portería
   
   v. adj_score1: Cuenta las condiciones en que el equipo local anotó los goles resultantes en el partido
   
