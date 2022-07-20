@@ -38,7 +38,7 @@ library(wesanderson)
 library(gridExtra)
 ```
 
-```{r funciones, include=FALSE}
+```{r functions, include=FALSE}
 #Funcion para leer la tabla a analizar
 
 get_df <- function(df_number,is_work_computer=F){
@@ -110,7 +110,9 @@ Con ello, se podría llegar a pensar que el VAR está trayendo consigo más aspe
 
 #### 6.1 Análisis exploratorio
 
-El dinamismo dentro del fútbol encubre, por mencionar solo algunos, los siguientes aspectos:
+Como primer acercamiento hacia la prueba de la hipótesis planteada anteriormente, se analizarán los datos que nos arrojó, por una parte, el fútbol profesional jugado en Inglaterra desde la temporada 2016/2017 hasta el día de hoy (temporada 2021/2022), y por otro lado, el desempeño del VAR dentro de esta misma liga profesional de fútbol desde la temporada 2019/2020 (pimera implementación) hasta el día de hoy (temporada 2021/2022).
+
+A su vez, como se planteó desde el punto 3, la intención del presente análisis sobre el VAR va dirigida hacia con el dinamismo de los equipos de fútbol, y por consiguiente de los partidos, dentro de la liga profesional de Inglaterra. Por lo tanto, algunos de los puntos que se pretenden lograr analizar son los siguientes:
 
 1. Dinámica de pases dentro del equipo (pass map)
 2. Dinámica de movimientos del equipo, dividido en lo siguiente:
@@ -120,20 +122,34 @@ El dinamismo dentro del fútbol encubre, por mencionar solo algunos, los siguien
     * Número de faltas cometidas por equipo durante el partido: Número de intervenciones del VAR
     * La dinámica del equipo para con la "estrella" de cada equipo. ¿Juegan con base en él o lejos de él?
     * Número de encaramientos durante el partido: ¿Qué tanto se da el juego 1 vs 1 durante el partido?, ¿cuántos de ellos terminan en gol?
-3. Analizar el trabajo en conjunto de todos los involucrados en el equipo: Qué tanto ocasiona el VAR que se juegue a base de más individualidades
+3. Analizar el trabajo en conjunto de todos los involucrados en el equipo: Qué tanto ocasiona el VAR que se juegue a base de más individualidades.
 
-## Dinámica de pases
+A continuación, se analizarán, por separado, cada uno de los puntos mencionados.
 
-Para la dinámica de pases dentro del equipo de fútbol, analizaremos las siguientes variables:
+##### 6.1.1 Dinámica de pases
 
-1. Pases hacia en frente (hacia el campo contrario)
+La dinámica de pases en el fútbol se entiende aquí como la manera o el comportamiento de los pases que los jugadores hacen dentro de cada partido hacia con sus compañeros. Esta dinámica se puede dividir, a su vez, en los siguientes tipos de pases que pueden suceder dentro de un partido de fútbol:
+
+1. Pases hacia enfrente (hacia campo contrario)
 2. Pases hacia atrás (hacia propio campo)
-3. Pases laterales (Se puede?)
-4. Número de asistencias
+3. Pases laterales (posibles cambios de juego) (nsxg1)
+4. Asistencias 
 
+La dinámica de los **pases hacia enfrente** los analizaremos con la ayuda de las siguientes variables:
 
-```{r prob}
-pl_matches <- get_df(df_number = 4)
-#ggplot(pl_matches,aes(xg1,probtie)) + geom_point(aes(color=as.factor(big_six))) + ggtitle('XG1 vs ProbTie') + xlab('XG1') + ylab('ProbTie') + geom_rug() + scale_fill_discrete(name='Is Big Six',labels=c('No','Yes'))
-head(pl_matches)
+* Número de asistencias (8,7,6)
+* Número de pases intentados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales (8)
+* Número de grandes oportunidades de gol creados (8)
+* Número de pases completados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales (8)
+* Número de pases clave: aquí se hace la suposición de que los jugadores realizan pases clave hacia la portería contraria (intentos claves de gol) (8)
+
+**Comportamiento esperado según hipótesis:** Una disminución de pases hacia enfrente con la llegada del VAR
+
+```{r forward_passes, include=FALSE}
+fwd_passes <- get_df(df_number = 8)[c('assists','attempted_passes')]
+plt_fwd_passes <- ggplot(fwd_passes,aes(attempted_passes)) + geom_histogram() + ggtitle('XG1 vs ProbTie') + xlab('XG1') + ylab('ProbTie') + geom_rug() #+ scale_fill_discrete(name='Is Big Six',labels=c('No','Yes'))
+```
+
+```{r plt_fwd_passes}
+plt_fwd_passes
 ```
