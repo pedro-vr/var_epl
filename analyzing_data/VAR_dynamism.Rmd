@@ -138,18 +138,39 @@ La dinámica de pases en el fútbol se entiende aquí como la manera o el compor
 La dinámica de los **pases hacia enfrente** los analizaremos con la ayuda de las siguientes variables:
 
 * Número de asistencias (8,7,6)
-* Número de pases intentados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales (8)
+* Número de pases intentados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales. Se considera que un jugador de fútbol siempre tiene la opción de dar cualquiera de los tres pases antes mencionados. (8)
 * Número de grandes oportunidades de gol creados (8)
-* Número de pases completados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales (8)
+* Número de pases completados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales. Se considera que un jugador de fútbol siempre tiene la opción de dar cualquiera de los tres pases antes mencionados. (8)
 * Número de pases clave: aquí se hace la suposición de que los jugadores realizan pases clave hacia la portería contraria (intentos claves de gol) (8)
 
 **Comportamiento esperado según hipótesis:** Una disminución de pases hacia enfrente con la llegada del VAR
 
-```{r forward_passes, include=FALSE}
-fwd_passes <- get_df(df_number = 8)[c('assists','attempted_passes')]
-plt_fwd_passes <- ggplot(fwd_passes,aes(attempted_passes)) + geom_histogram() + ggtitle('XG1 vs ProbTie') + xlab('XG1') + ylab('ProbTie') + geom_rug() #+ scale_fill_discrete(name='Is Big Six',labels=c('No','Yes'))
+La primera variable que tomamos en cuenta dentro de este rubro es el número de asistencias que realizan los diferentes equipos de la PL. En primera instancia, revisaremos el total de asistencias hechas por los jugadores jornada a jornada desde la temporada 16/17 hasta la temporads 21/22, esto con el motivo de analizar el comportamiento general de las asistencias en los partidos y poder observar, con algo de suerte, un comportamiento "extraño" del total de asistencias por jornada y así poder enfocar nuestro análisis en ciertas jornadas.
+
+```{r load_dfs, include=FALSE}
+#Cargamos el df con las estadisticas por GW
+fpl_gw <- get_df(df_number = 8)
+#Damos formato de fecha al campo kickoff_time
+fpl_gw$kickoff_time <- fpl_gw$kickoff_time %>% gsub("T"," ",.) %>% gsub("Z","",.) %>% as.POSIXct(.,"Europe/London")
 ```
 
-```{r plt_fwd_passes}
-plt_fwd_passes
+```{r plt_assists,include=FALSE}
+assists_per_GW <- fpl_gw %>% group_by(GW) %>% summarise(sum_assists = sum(assists))
+plt_assists <- ggplot(assists_per_GW,aes(GW,sum_assists)) + geom_line(color="brown") + geom_point(color="orange") + geom_hline(yintercept=mean(assists_per_GW$sum_assists),colour="blue") + labs(x='jornada',y="total asistencias",title = "Total de asistencias por jornada en PL (2016-2022)")
+```
+
+```{r show_plt_assists}
+plt_assists
+```
+
+Al obetner la gráfica final podemos observar un comportamiento bastante peculiar al final de la temporada, en primer lugar, podemos observar que desde la jornada 1 (GW=1) hasta aproximadamente la jornada 38 (GW=38) el número total de asistencias eran mayores a 100 y la gran mayoría por encima de la media (línea horizontal azul), sin embargo, podemos observar a su vez que, a partir de aproximadamente la jornada 39, todos los equipos presentan una reducción muy considerable en su número de asistencias, éste cae incluso por debajo de 50 (muy cercano a 25) y parece mantenerse bajo hasta fin de temporada. Este comportamiento que podemos deducir general en todas las temporadas es bastante interesante y vale la pena analizarlo con detalle.
+
+**Número de asistencias al principio vs fin de temporada**
+
+Como pudimos observar en la gráfica anterior, parece ser que el número total de asistencias reduce considerablemente al final de cada temporada (aprox después de la jornada 38). Esto nos induce a analizar con mayor cuidado este comportamiento. 
+
+En primer lugar, analizaremos este comportamiento jornada tras jornada pero en esta ocasión separando cada temporada para poder analizarlos por separado.
+
+```{r assists_per_season,include=FALSE}
+
 ```
