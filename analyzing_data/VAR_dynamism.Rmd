@@ -145,6 +145,8 @@ La dinámica de los **pases hacia enfrente** los analizaremos con la ayuda de la
 
 **Comportamiento esperado según hipótesis:** Una disminución de pases hacia enfrente con la llegada del VAR
 
+###### **Asistencias**
+
 La primera variable que tomamos en cuenta dentro de este rubro es el número de asistencias que realizan los diferentes equipos de la PL. En primera instancia, revisaremos el total de asistencias hechas por los jugadores jornada a jornada desde la temporada 16/17 hasta la temporads 21/22, esto con el motivo de analizar el comportamiento general de las asistencias en los partidos y poder observar, con algo de suerte, un comportamiento "extraño" del total de asistencias por jornada y así poder enfocar nuestro análisis en ciertas jornadas.
 
 ```{r load_dfs, include=FALSE}
@@ -152,25 +154,75 @@ La primera variable que tomamos en cuenta dentro de este rubro es el número de 
 fpl_gw <- get_df(df_number = 8)
 #Damos formato de fecha al campo kickoff_time
 fpl_gw$kickoff_time <- fpl_gw$kickoff_time %>% gsub("T"," ",.) %>% gsub("Z","",.) %>% as.POSIXct(.,"Europe/London")
+#Existen GW > 38, acomodaremos esos GW a que sean <=38
+fpl_gw$GW <- ifelse(fpl_gw$GW >= 39,fpl_gw$GW - 9, fpl_gw$GW)
+#Creamos la variable que nos ayudará a identificar si el partido contaba con VAR o no
+fpl_gw['with_VAR'] <- if_else(fpl_gw$season %in% c('16/17','17/18','18/19'),0,1)
+fpl_gw$with_VAR <- as.factor(fpl_gw$with_VAR)
 ```
 
+La primera gráfica que analizaremos será la suma de asistencias por jornada durante todas las temporadas por analizar, es decir, desde la temporada 16/17 hasta la temporada 21/22.
+
 ```{r plt_assists,include=FALSE}
+#Obtenemos el df del total de asistencias por jornada (GW)
 assists_per_GW <- fpl_gw %>% group_by(GW) %>% summarise(sum_assists = sum(assists))
-plt_assists <- ggplot(assists_per_GW,aes(GW,sum_assists)) + geom_line(color="brown") + geom_point(color="orange") + geom_hline(yintercept=mean(assists_per_GW$sum_assists),colour="blue") + labs(x='jornada',y="total asistencias",title = "Total de asistencias por jornada en PL (2016-2022)")
+#Obtenemos la media de asistencias en general
+media_asistencias <- mean(assists_per_GW$sum_assists)
+#Creamos el plot de la series de tiempo del total de asistencias 
+plt_assists <- ggplot(assists_per_GW,aes(GW,sum_assists)) + geom_line(color="brown") + geom_point(color="orange") + geom_hline(yintercept=media_asistencias,colour="blue") + labs(x='Jornada',y="Numero total de asistencias",title = "Total de asistencias por jornada en PL",subtitle = "Todas las temporadas (2016-2022)",tag="1")
 ```
 
 ```{r show_plt_assists}
 plt_assists
 ```
 
-Al obetner la gráfica final podemos observar un comportamiento bastante peculiar al final de la temporada, en primer lugar, podemos observar que desde la jornada 1 (GW=1) hasta aproximadamente la jornada 38 (GW=38) el número total de asistencias eran mayores a 100 y la gran mayoría por encima de la media (línea horizontal azul), sin embargo, podemos observar a su vez que, a partir de aproximadamente la jornada 39, todos los equipos presentan una reducción muy considerable en su número de asistencias, éste cae incluso por debajo de 50 (muy cercano a 25) y parece mantenerse bajo hasta fin de temporada. Este comportamiento que podemos deducir general en todas las temporadas es bastante interesante y vale la pena analizarlo con detalle.
+Esta pequeña gráfica de series de tiempo sobre el total de asistencias hechas por jornada dentro de la PL muestra algunos resultados interesante, por ejemplo, podemos observar que de manera general, el comportamiento del total de las asistencias dentro de las primeras 10 o 13 jornadas se mantiene muy cerca de la media (`r media_asistencias` asistencias) y a partir de esa jornada, el comportamiento general de las asistencias tiene variaciones más _aleatorias_ entre cada jornada, es decir, el comportamiento ya no es tan predecible y existen tanto picos muy bajos, como algunos muy altos. Esto último podría explicarse de manera lógica ya que por lo general, al inicio de cada temporada, todos los equipos tienden a atreverse menos al ataque debido a que son jornadas en que los jugadores tratan de empezar a tener esa cohesión de equipo y, a la vez, son jornadas en que la presión por posiciones en las tablas (y por otras competencias europeas) es más pequeña en comparación de la mitad de la temporada en adelante.
 
-**Número de asistencias al principio vs fin de temporada**
+Ahora, veremos si es que este comportamiento se sigue mostrando tomando en cuenta la variable de interés en esta investigación: el VAR, esta medición se hará con base a la temporada por analizar, ya que sabemos que el VAR fue introducido a la PL a partir de la temporada 19/20.
 
-Como pudimos observar en la gráfica anterior, parece ser que el número total de asistencias reduce considerablemente al final de cada temporada (aprox después de la jornada 38). Esto nos induce a analizar con mayor cuidado este comportamiento. 
+**Número de asistencias en temporadas pre-VAR vs temporadas post-VAR**
 
-En primer lugar, analizaremos este comportamiento jornada tras jornada pero en esta ocasión separando cada temporada para poder analizarlos por separado.
+Como primer acercamiento, graficaremos el total de asistencias por jornada (al igual que en el gráfico anterior) pero ahora dividiéndolo por temporada, esto simplemente para poder tener mejor visibilidad del comportamiento de las asistencias hechas en cada temporada pre-VAR y post-VAR. 
 
 ```{r assists_per_season,include=FALSE}
-
+#Obtenemos el df con el total de asistencias por temporaday jornada
+assists_season_GW <- fpl_gw %>% group_by(season,GW) %>% summarise(total_asistencias = sum(assists))
+#Obtenemos la media de asistencias por temporada
+season_mean <- assists_season_GW %>% group_by(season) %>% summarise(mean_assists = mean(total_asistencias))
+#Creamos el plot con el total de asistencias por jornada y temporada
+plt_assists_seasons <- ggplot(assists_season_GW,aes(GW,total_asistencias)) + geom_line(color='dark orange') + geom_point(color='dark orange') + geom_hline(data=season_mean,aes(yintercept = mean_assists),color="blue") + facet_wrap(~ season, ncol=3, scales = "free") + labs(x="Jornada",y="Numero total de asistencias",title="Número de asistencias en cada jornada por temporada en la PL",tag="2")
 ```
+
+```{r plot_assists_by_season}
+plt_assists_seasons
+```
+
+Lo que tratamos de observar con esta gráfica por temporada es algún tipo de comportamiento drástico o "extraño" en contra de las asistencias en temporadas donde ya el VAR estaba implementado en la PL. Al final, lo que pudimos constatar en las gráficas de las temporadas con VAR (19/20, 20/21, 21/22) es que el comportamiento de las asistencias es un poco más aleatoria en el sentido de que existen saltos grandes hacia arriba y hacia abajo jornada tras jornada, mientras que en las gráficas de las temporadas sin VAR (16/17, 17/18 y 18/19) la tendencia es más homogénea en el sentido de que la gráfica parece mantenerse siempre dentro de cierto rango, muy cerca de su media (línea azul), salvo por casos muy contados en donde se presentan picos ya sea a la alza o a la baja en el número de asistencias. Por lo tanto, hasta este punto, podríamos sospechar de que el VAR le mete cierta "aleatoriedad" al comportamiento de las asistencias dentro de la PL, pero aún no logramos ver una baja o alza significativa.
+
+Ahora, con la intención de poder observar precisamente un cambio, ya sea a la alza o a la baja, en el número de asistencias en temporadas pre-VAR vs post-VAR, se elaborará un gráfico en donde se comparen estos dos tipos de temporadas con base en su total de asistencias jornada tras jornada.
+
+```{r assists_with_var,include=FALSE}
+#Obtenemos el df con el total de asistencias por jornada y clasificando con base en la existencia del VAR
+assists_GW_var <- fpl_gw %>% group_by(GW,with_VAR) %>% summarise(total_asistencias = sum(assists))
+#Obtenemos el valor de la media de asistencias en temporadas con y sin VAR
+mean_assists_df <- assists_GW_var %>% group_by(with_VAR) %>% summarise(mean_assists = mean(total_asistencias))
+#Realizamos la gráfica mostrando el total de asistencias por jornada en temporadas con y sin VAR
+plt_assists_var <- ggplot(assists_GW_var,aes(x=GW,y=total_asistencias,group=with_VAR)) + geom_line(aes(color=with_VAR)) + geom_point(aes(color=with_VAR)) + geom_hline(data = mean_assists_df,aes(yintercept = mean_assists,color=with_VAR)) + 
+labs(x="Jornada",y="Numero total de asistencias",title="Número de asistencias en cada jornada de la PL",colour='Con VAR',subtitle = "Temporadas pre-VAR vs post-VAR",tag="3") + scale_color_manual(values = c("#D16103", "#4E84C4"),labels = c("No", "Si"))
+```
+
+```{r plot_assists_with_var}
+plt_assists_var
+```
+
+Una vez obtenida la gráfica de la comparación de estos dos tipos de temporadas (post-VAR y pre-VAR) podemos observar lo que ya se sospechaba en la gráfica nñumero 2: el comportamiento de las asistencias dentro de temporadas con VAR es más "aleatoria", presenta picos más grandes y no se mantiene dentro de un cierto rango, mientras que el comportamiento de las asistencias en temporadas sin VAR el comportamiento es más homogeneo, se mantiene dentro de un límite muy cerca de su media (línea naranja) y no es tan cambiante. Por último, de manera general podemos observar que la línea de la media para las temporadas con VAR (azul) se mantiene por debajo de la línea de la media para las temporadas sin VAR (naranja), por lo que, con esta "prueba" gráfica podríamos empezar a sospechar un poco más a favor de nuestra hipótesis inicial: el VAR provoca una reducción en el número de asistencias hechas en cada partido de la PL.
+
+Hasta este momento, con estas gráficas que pudimos analizar brevemente sobre nuestra primera variable, podemos fallar a favor de nuestra hipótesis inicial. Nuestra siguiente variable es el número de pases intentados que se realizan dentro de cada partido.
+
+###### **Pases intentados**
+
+El
+
+
+
+
