@@ -26,7 +26,7 @@ Tabla que registra los partidos jugados en la PL desde la temporada 16/17 hasta 
   
   l. proj_score1: Marcador (en goles) proyectado para el equipo local basado en sus goles esperados (xG)
   
-  m. proj_score1: Marcador (en goles) proyectado para el equipo visitante basado en sus goles esperados (xG)
+  m. proj_score2: Marcador (en goles) proyectado para el equipo visitante basado en sus goles esperados (xG)
   
   n. importance1: Mide qué tanto impacta el resultado del partido en la imagen estadística del equipo local en toda la temporada
   

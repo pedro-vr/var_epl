@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r libraries,include=FALSE}
 #librerias a utilizar
 
-#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt","urltools","fmsb","devtools","vcd","aplpack","GGally","wesanderson","e1071"))
+#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt","urltools","fmsb","devtools","vcd","aplpack","GGally","wesanderson","e1071","viridis","hrbrthemes"))
 #devtools::install_github("ricardo-bion/ggradar", dependencies=TRUE)
 library(dplyr)
 library(ggplot2)
@@ -36,6 +36,8 @@ library(aplpack)
 library(e1071)
 library(wesanderson)
 library(gridExtra)
+library(viridis)
+library(hrbrthemes)
 ```
 
 ```{r functions, include=FALSE}
@@ -159,6 +161,8 @@ fpl_gw$GW <- ifelse(fpl_gw$GW >= 39,fpl_gw$GW - 9, fpl_gw$GW)
 #Creamos la variable que nos ayudará a identificar si el partido contaba con VAR o no
 fpl_gw['with_VAR'] <- if_else(fpl_gw$season %in% c('16/17','17/18','18/19'),0,1)
 fpl_gw$with_VAR <- as.factor(fpl_gw$with_VAR)
+fpl_gw$attempted_passes[is.na(fpl_gw$attempted_passes)] <- 0
+fpl_gw$xP[is.na(fpl_gw$xP)] <- 0
 ```
 
 La primera gráfica que analizaremos será la suma de asistencias por jornada durante todas las temporadas por analizar, es decir, desde la temporada 16/17 hasta la temporada 21/22.
@@ -219,10 +223,46 @@ Una vez obtenida la gráfica de la comparación de estos dos tipos de temporadas
 
 Hasta este momento, con estas gráficas que pudimos analizar brevemente sobre nuestra primera variable, podemos fallar a favor de nuestra hipótesis inicial. Nuestra siguiente variable es el número de pases intentados que se realizan dentro de cada partido.
 
-###### **Pases intentados**
+###### **Pases intentados (attempted_passes)**
 
-El
+La siguiente variable que analizaremos será el número de pases que se intentaron dar durante cada partido, esto con el fin de analizar la dinámica de los mismos partidos. El número de pases intentados durante el partido nos pueden dar una percepción de como es que los equipos, en primer lugar, tuvieron el control del partido en cuanto a posición del balón se refiere y, en segundo lugar, si un equipo realiza muchos intentos de pase podríamos llegar a pensar que tiene la disposición de crear juego durante el partido y, por lo tanto, llegar a tener una mejor dinámica de juego. Por lo tanto, tomando en cuenta nuestra hipótesis central, lo que podemos llegar a pensar es que, con la implementación del VAR, el número de pases intentados durante los partidos redujo.
 
+La primer gráfica que elaboraremos será, al igual que con la primera variable analizada, una serie de tiempo del número de pases intentados jornada tras jornada dividiendo las temporadas pre-VAR y post-VAR para así analizar el comportamiento de esta variable con el paso del tiempo con y sin presencia del VAR. Por la manera en que tenemos la data disponible, haremos uso de dos variables al mismo tiempo, por un lado, en temporadas donde el VAR aún no estaba implementado dentro de la EPL, se utilizaba la medición _attempted_passes_ y, por el otro, en temporadas donde el VAR ya estaba implementado, se utiliza la medición _xP_ el cual denota el número de pases esperados que realice el jugador de acuerdo a su desempeño dentro de cada partido y de algunas otras variables. Estas dos variables las podemos pensar como similares pero no iguales, debido a que expresan la misma esencia: el pase de balón dentro de cada partido, pero la manera en que se miden no es exactamente la misma, con esto, podemos decir que los resultados que obtengamos a partir de este momento sobre esta variable: _numero de pases intentados_ no serán al cien porciento confiables y demostrativas pero nos pueden generar una muy buena percepción de la misma.
 
+```{r attempted_passes_gw,include=FALSE}
+#Creamos una nueva variable para quedarnos con attempted_passes en casos donde no haya VAR y con xP en caso contrario
+fpl_gw$apass_xp <- if_else(fpl_gw$with_VAR == 0,fpl_gw$attempted_passes,fpl_gw$xP)
+
+#Generamos el df con el numero de pases intentados por jornada y divido por VAR y no VAR
+apass_gw_var <- fpl_gw %>% group_by(GW,with_VAR) %>% summarise(suma_pases = sum(apass_xp))
+media_pases_gw <- apass_gw_var %>% group_by(with_VAR) %>% summarise(media_apass = mean(suma_pases))
+
+#Generamos la gráfica correspondiente
+plt_passes_gw <- ggplot(apass_gw_var,aes(GW,suma_pases)) + geom_line(color="#00AFBB") + geom_point(color="#00AFBB") + geom_hline(data=media_pases_gw,aes(yintercept=media_apass),color="#E7B800") + facet_wrap(~ with_VAR, ncol = 2, scales = "free",labeller = labeller(with_VAR = c("0" = "Sin VAR", "1" = "Con VAR"))) + labs(x="Jornada",y="Numero total de pases",title="Número de pases intentados en cada jornada de la PL",subtitle = "Temporadas pre-VAR vs post-VAR",tag="4") + theme(legend.position = "none", strip.background = element_rect(fill = "light green"))
+```
+
+```{r plot_attempted_passes_gw}
+plt_passes_gw
+```
+
+Al obtener la gráfica podemos observar en primera instancia que la media de pases intentados (línea amarilla en ambas gráficas) para las temporadas sin VAR es en general más alta que la de las temporadas con VAR, esto en primera instancia nos dice que los equipos intentaban generar, en promedio, más pases (y por ende mayor dinamismo de juego) y procuraban quedarse menos con el balón para jugadas individuales antes del VAR. Otro aspecto importante a observar dentro de esta gráfica es que los registros del número de pases para temporadas sin VAR parecen quedarse muy pegados a la línea que representa la media al menos en las primeras 25 jornadas aprox., después de ahí el comportamiento parece dispararse un poco hacia abajo y después repunta hacia el final de la temporada; por otro lado, para las temporadas en donde ya existe el VAR, el número de pases intentados parece mantenerse siempre debajo de la media hasta aprox. la jornada 20 que es donde éste toma un comportamiento muy aleatorio al presentar picos muy altos y muy bajos en periodos cortos de tiempo.
+
+Con todo lo anterior podríamos designarle de manera general un comportamiento más aleatorio al número de pases intentados para aquellas temporadas con VAR y por debajo del número de pases en temporadas sin VAR (al menos en cuanto al promedio de pases), es decir, una **disminución del intento de pases con la llegada del VAR**.
+
+A manera de reforzar la sospecha de que el número de pases intentados redujo en temporadas donde el VAR ya estaba incluido en la PL, graficaremos el área representativa al % del numero de pases intentados por jornada en temporadas sin VAR y con VAR, esto con el fin de ver qué tanto aporta el número de pases intentados en temporadas con VAR con respecto al total.
+
+```{r stacked_area_apass,include=FALSE}
+#Creamos el df con el % de la proporción de pases intentados con y sin VAR
+perc_apass_var <- fpl_gw %>% group_by(GW,with_VAR) %>% summarise(n = sum(apass_xp)) %>% mutate(percentage = n/sum(n))
+
+#Creamos el gráfico correspondiente
+plt_area_apass <- ggplot(perc_apass_var, aes(x=GW, y=percentage, fill=with_VAR)) + geom_area(alpha=0.8 , size=.5, colour="white") + labs(x="Jornada",y="Porcentaje del total de pases",title="Área del total de número de pases intentados en cada jornada de la PL",subtitle = "Temporadas pre-VAR vs post-VAR",fill='Con VAR',tag="4") + scale_fill_manual(values = c("#FFDB6D", "#FC4E07"),labels = c("No", "Si"))
+```
+
+```{r plot_stacked_area_apass}
+plt_area_apass
+```
+
+Al obtener la gráfica podemos observar que en realidad el % de participación de las temporadas con VAR en el total de pases intentados es prácticamente nula en contraste conn el número de pases intentados en temporadas donde el VAR no existía, por lo tanto, podemos asegurar una reducción considerable en el número de pases intentados. Con esto, podemos lanzar la siguiente hipótesis de una manera más convincente: **El número de pases intentados redujo con la llegada del VAR**.
 
 
