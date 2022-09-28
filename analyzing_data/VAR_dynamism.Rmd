@@ -56,7 +56,8 @@ get_df <- function(df_number,is_work_computer=F){
     '5' = '/stats_epl.csv', 
     '6' = '/fpl_merged_seasons.csv',
     '7' = '/fpl_merged_players.csv',
-    '8' = '/fpl_merged_gw.csv' 
+    '8' = '/fpl_merged_gw.csv',
+    '9' = '/epl_poss_stats.csv'
     )
   
   if(is_work_computer)
@@ -140,7 +141,7 @@ La dinámica de pases en el fútbol se entiende aquí como la manera o el compor
 La dinámica de los **pases hacia enfrente** los analizaremos con la ayuda de las siguientes variables:
 
 * Número de asistencias (8,7,6)
-* Número de pases intentados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales. Se considera que un jugador de fútbol siempre tiene la opción de dar cualquiera de los tres pases antes mencionados. (8)
+* Número de pases intentados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales. Se hace aquí la suposición de que un jugador de fútbol siempre tiene la opción de dar cualquiera de los tres pases antes mencionados en cuanto tiene posición del mismo. (8)
 * Número de grandes oportunidades de gol creados (8)
 * Número de pases completados: aquí se considerará una ponderación de $\frac{1}{3}$ sobre el total de pases debido a que estos pases pudieron ser dados hacia enfrente, hacia atrás o laterales. Se considera que un jugador de fútbol siempre tiene la opción de dar cualquiera de los tres pases antes mencionados. (8)
 * Número de pases clave: aquí se hace la suposición de que los jugadores realizan pases clave hacia la portería contraria (intentos claves de gol) (8)
@@ -163,6 +164,8 @@ fpl_gw['with_VAR'] <- if_else(fpl_gw$season %in% c('16/17','17/18','18/19'),0,1)
 fpl_gw$with_VAR <- as.factor(fpl_gw$with_VAR)
 fpl_gw$attempted_passes[is.na(fpl_gw$attempted_passes)] <- 0
 fpl_gw$xP[is.na(fpl_gw$xP)] <- 0
+#leemos el df con la info de la posesión de balón por equipo
+poss_stats <- get_df(9)
 ```
 
 La primera gráfica que analizaremos será la suma de asistencias por jornada durante todas las temporadas por analizar, es decir, desde la temporada 16/17 hasta la temporada 21/22.
@@ -226,6 +229,21 @@ Hasta este momento, con estas gráficas que pudimos analizar brevemente sobre nu
 ###### **Pases intentados (attempted_passes)**
 
 La siguiente variable que analizaremos será el número de pases que se intentaron dar durante cada partido, esto con el fin de analizar la dinámica de los mismos partidos. El número de pases intentados durante el partido nos pueden dar una percepción de como es que los equipos, en primer lugar, tuvieron el control del partido en cuanto a posición del balón se refiere y, en segundo lugar, si un equipo realiza muchos intentos de pase podríamos llegar a pensar que tiene la disposición de crear juego durante el partido y, por lo tanto, llegar a tener una mejor dinámica de juego. Por lo tanto, tomando en cuenta nuestra hipótesis central, lo que podemos llegar a pensar es que, con la implementación del VAR, el número de pases intentados durante los partidos redujo.
+
+Es importante recordar aquí la consideración que hicimos al principio de la explicación de esta variable: **un jugador de fútbol siempre tiene la opción de dar un pase hacia enfrente, hacia los lados o hacia atrás, en cualquier momento del partido siempre y cuando tenga posición del balón**. Tomando en cuenta esta consideración, se toman en cuenta dos aspectos importantes del partido: la primera, la posición del balón, y la segunda, la ponderación de $\frac{1}{5}$ sobre el total de pases hechos durante el partido, esto porque en total son 5 métricas relacionados con pases y se busca hacer un promedio de ellos. Si ponemos en términos matemáticos estas consideraciones, la ecuación resultante sería la siguiente:
+
+$$NP = \left[\frac{AS + AP + CP + KP + OPC}{5}\right]POS$$
+Donde:
+
+ - NP = Número de pases, representa el total de pases hechos durante la temporada, jornada, etc.
+ - AS = Número de asistencias, representa el total de asistencias hechas durante la temporada, jornada, etc.
+ - AP = Número de pases intentados, representa el total de pases intentados durante la temporada, jornada, etc.
+ - CP = Número de pases completados, representa el total de pases completados durante la temporada, jornada, etc.
+ - KP = Número de pases clave, representa el total de pases claves hechos durante la jornada, temporada, etc.
+ - OPC = Número de jugadas cruzadas, representa el total de cruces de juego hechos durante la jornada, temporada, etc.
+ - POS = Tiempo de posesión del balón durante cada partido, representa el total de tiempo que el equipo tuvo posesión del balón durante cada partido.
+ 
+Debido a que el interés de este análisis es la comparación de la temporada pre-VAR vs post-VAR a nivel jornada (GW) y temporada, las métricas antes mencionadas se medirán/agruparán a nivel equipo (en caso de contar con info de equipo local y visitante, se tomará en cuenta siempre el equipo local). Si no se tiene información del nombre del equipo local entonces se le asignará el valor del porcentaje de posesión igual al promedio obtenido en la jornada, temporada, o cual sea la variable de agrupación en el análisis.
 
 La primer gráfica que elaboraremos será, al igual que con la primera variable analizada, una serie de tiempo del número de pases intentados jornada tras jornada dividiendo las temporadas pre-VAR y post-VAR para así analizar el comportamiento de esta variable con el paso del tiempo con y sin presencia del VAR. Por la manera en que tenemos la data disponible, haremos uso de dos variables al mismo tiempo, por un lado, en temporadas donde el VAR aún no estaba implementado dentro de la EPL, se utilizaba la medición _attempted_passes_ y, por el otro, en temporadas donde el VAR ya estaba implementado, se utiliza la medición _xP_ el cual denota el número de pases esperados que realice el jugador de acuerdo a su desempeño dentro de cada partido y de algunas otras variables. Estas dos variables las podemos pensar como similares pero no iguales, debido a que expresan la misma esencia: el pase de balón dentro de cada partido, pero la manera en que se miden no es exactamente la misma, con esto, podemos decir que los resultados que obtengamos a partir de este momento sobre esta variable: _numero de pases intentados_ no serán al cien porciento confiables y demostrativas pero nos pueden generar una muy buena percepción de la misma.
 
