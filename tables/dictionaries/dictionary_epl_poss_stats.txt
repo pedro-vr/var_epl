@@ -1,0 +1,36 @@
+Diccionario tabla: epl_poss_stats
+
+Tabla que contiene estadísticas de los equipos de la EPL por temporada
+
+1. team:
+
+2. pl_ig:
+
+3. poss:
+
+4. mp:
+
+5. min_played:
+
+6. goals_scored:
+
+7. assists:
+
+8. non_pen_goals:
+
+9. pen_kicks:
+
+10. pen_kicks_att:
+
+11. goals_scored_90:
+
+12. assists_90:
+
+13. goals_no_penalties_90:
+
+14. goals_assists_no_penalties_90:
+
+15. season:
+
+Obtenido de: https://fbref.com/en/comps/9/2021-2022/2021-2022-Premier-League-Stats
+

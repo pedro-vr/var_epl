@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r librerias, include = FALSE}
+```{r libreries, include = FALSE}
 #librerias a utilizar 
 #install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt",
             #       "urltools"))
@@ -27,7 +27,7 @@ library(XML)
 library(methods)
 ```
 
-```{r Funciones}
+```{r functions, include=FALSE}
 #Funciones a utilizar
 
 is_big_six <- function(team_name){
@@ -452,6 +452,7 @@ var_desc_1 <- function(data_frame){
   return(lista_equipos)
 }
 
+#funcion para sustituir el valor de un registro de una columna por otro
 sub_value_df <- function(df_column,old_value,new_value){
   for(x in 1:length(df_column)){
     if(df_column[x] == old_value)
@@ -459,6 +460,22 @@ sub_value_df <- function(df_column,old_value,new_value){
   }
   
   return(df_column)
+}
+
+#funcion sub_value_df adaptada para aceptar un array de entrada para cambios simultaneos
+sub_array_value_df <- function(df_column,old_value_array,new_value_array){
+  #obtenemos la longitud de los valores a cambiar
+  num_viejos_values <- length(old_value_array)
+  num_nuevos_values <- length(new_value_array)
+  #si son del mismo tamaño procedemos
+  if(num_nuevos_values == num_viejos_values){
+    for(t in 1:length(old_value_array)){
+      df_column <- sub_value_df(df_column,old_value_array[t],new_value_array[t])
+    }
+  } else { #si no son del mismo tamaño no hacemos nada
+    print('arrays de diferente tamaño')
+  }
+  
 }
 ```
 
@@ -488,7 +505,7 @@ VAR definición: https://www.marca.com/claro-mx/futbol/liga-mx/2018/10/18/5bc8a1
 
 Si obtenemos el documento directamente de la página de GitHub de FiveThirtyEight se tienen los partidos actualizados al día.
 
-```{r read fivethirtyeight data}
+```{r read fivethirtyeight data,include=FALSE}
 #al parecer aquí ya se encuentran desde 2016 hasta hoy, se actualiza cada semana
 url <- "https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv"
 football_matches <- read.csv(url,fileEncoding = 'UTF-8',skipNul = T)
@@ -969,7 +986,7 @@ stats_epl['big_six_a'] <- sapply(stats_epl$AwayTeam,is_big_six)
 stats_epl['big_six'] <- if_else(stats_epl$big_six_a == 1 | stats_epl$big_six_h == 1,1,0)
 ```
 
-```{r cleaned merged seasons, include=FALSE}
+```{r cleaned_merged_seasons, include=FALSE}
 #leemos la data
 cleaned_merged_seasons <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_merged_seasons.csv')
 
@@ -1015,7 +1032,7 @@ cleaned_merged_seasons['big_six'] <- if_else(cleaned_merged_seasons$big_six_h ==
 cleaned_merged_seasons <- cleaned_merged_seasons[-c(34,35)]
 ```
 
-```{r fpl_merged_players}
+```{r fpl_merged_players,include=FALSE}
 #leemos la data
 cleaned_players_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1617.csv')
 cleaned_players_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_players_1718.csv')
@@ -1077,7 +1094,7 @@ merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gs
 merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e4>",replacement="a")
 ```
 
-```{r merged_gw_formatted}
+```{r merged_gw_formatted,include=FALSE}
 #leemos la data
 merged_gw_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1617.csv')
 merged_gw_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/merged_gw_1718.csv')
@@ -1176,7 +1193,28 @@ merged_gw_formatted['big_six'] <- if_else(merged_gw_formatted$big_six_h == 1 | m
 merged_gw_formatted <- merged_gw_formatted[-c(53,54)]
 ```
 
-```{r,include=FALSE}
+Leemos la data con los stats relacinados a la posesión
+
+```{r poss_stats,include=FALSE}
+#leemos la data
+poss_stats <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/epl_stats_poss.csv')
+#cambiamos nombre de columna
+poss_stats <- poss_stats %>% rename(min_played = miin_played)
+#hacemos cambio de nombre de los equipos para homologar con demas dfs
+poss_stats$team <- sub_value_df(poss_stats$team,'Bournemouth','AFC Bournemouth')
+poss_stats$team <- sub_value_df(poss_stats$team,'Brighton','Brighton & Hove Albion')
+poss_stats$team <- sub_value_df(poss_stats$team,'Cardiff City','Cardiff')
+poss_stats$team <- sub_value_df(poss_stats$team,'Hull City','Hull')
+poss_stats$team <- sub_value_df(poss_stats$team,'Leeds United','Leeds')
+poss_stats$team <- sub_value_df(poss_stats$team,'Manchester Utd','Manchester United')
+poss_stats$team <- sub_value_df(poss_stats$team,'Newcastle Utd','Newcastle')
+poss_stats$team <- sub_value_df(poss_stats$team,'Sheffield Utd','Sheffield United')
+poss_stats$team <- sub_value_df(poss_stats$team,'Stoke City','Stoke')
+poss_stats$team <- sub_value_df(poss_stats$team,'Swansea City','Swansea')
+poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
+```
+
+```{r load_to_local_csv,include=FALSE}
 #Escribimos las tablas en archivos csv para no perderlos
 #write_csv(premier_league,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/premier_league.csv")
 #write_csv(ovrt_df,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/pl_overturns.csv")
@@ -1187,6 +1225,7 @@ merged_gw_formatted <- merged_gw_formatted[-c(53,54)]
 #write_csv(cleaned_merged_seasons,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_seasons.csv")
 #write_csv(merged_cleaned_players,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_players.csv")
 #write_csv(merged_gw_formatted,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_gw.csv")
+#write_csv(poss_stats,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/epl_poss_stats.csv")
 ```
 
 De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016, de aquí podemos empezar a hacer análisis exploratorio.
