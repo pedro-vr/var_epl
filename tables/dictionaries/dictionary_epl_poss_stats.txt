@@ -2,35 +2,35 @@ Diccionario tabla: epl_poss_stats
 
 Tabla que contiene estadísticas de los equipos de la EPL por temporada
 
-1. team:
+1. team: Nombre del equipo
 
-2. pl_ig:
+2. pl_ig: Número de jugadores utilizados en los 38 partidos de la temporada
 
-3. poss:
+3. poss: Porcentaje de posesión total del balón en la temporada
+ 
+4. mp: Número de partidos jugados por el equipo en la temporada
 
-4. mp:
+5. min_played: Número de minutos jugados por el equipo en la temporada
+ 
+6. goals_scored: Número total de goles anotados por el equipo en la temporada
 
-5. min_played:
+7. assists: Número total de asistencias hechas por el equipo en la temporada
 
-6. goals_scored:
+8. non_pen_goals: Número total de goles hechos por el equipo en la temporada sin contar los hechos por la vía penal
 
-7. assists:
+9. pen_kicks: Número de penalties pateados por el equipo en la temporada
 
-8. non_pen_goals:
+10. pen_kicks_att: Número de penalties intentados por el equipo en la temporada
 
-9. pen_kicks:
+11. goals_scored_90: Número de goles anotados por cada 90 mins en la temporada
 
-10. pen_kicks_att:
+12. assists_90: Número de asistencias hechas por cada 90 mins en la temporada
 
-11. goals_scored_90:
+13. goals_no_penalties_90: Número de goles hechpos por cada 90 mins sin contar los hechos por la vía penal
 
-12. assists_90:
+14. goals_assists_no_penalties_90: Número de goles más asistencias hechas por cada 90 minutos sin contar los hechos por la vía penal
 
-13. goals_no_penalties_90:
-
-14. goals_assists_no_penalties_90:
-
-15. season:
+15. season: Identificador de la temporada correspondiente de la EPL
 
 Obtenido de: https://fbref.com/en/comps/9/2021-2022/2021-2022-Premier-League-Stats
 
