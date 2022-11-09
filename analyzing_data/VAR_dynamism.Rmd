@@ -157,15 +157,25 @@ La primera variable que tomamos en cuenta dentro de este rubro es el número de 
 fpl_gw <- get_df(df_number = 8)
 #Damos formato de fecha al campo kickoff_time
 fpl_gw$kickoff_time <- fpl_gw$kickoff_time %>% gsub("T"," ",.) %>% gsub("Z","",.) %>% as.POSIXct(.,"Europe/London")
+#removemos NAs en los nombres por strings vacíos
+fpl_gw$name[is.na(fpl_gw$name)] <- ''
 #Existen GW > 38, acomodaremos esos GW a que sean <=38
 fpl_gw$GW <- ifelse(fpl_gw$GW >= 39,fpl_gw$GW - 9, fpl_gw$GW)
 #Creamos la variable que nos ayudará a identificar si el partido contaba con VAR o no
 fpl_gw['with_VAR'] <- if_else(fpl_gw$season %in% c('16/17','17/18','18/19'),0,1)
 fpl_gw$with_VAR <- as.factor(fpl_gw$with_VAR)
 fpl_gw$attempted_passes[is.na(fpl_gw$attempted_passes)] <- 0
-fpl_gw$xP[is.na(fpl_gw$xP)] <- 0
+fpl_gw$xP[is.na(fpl_gw$xP)] <- 0  
+fpl_gw$completed_passes[is.na(fpl_gw$completed_passes)] <- 0
+fpl_gw$key_passes[is.na(fpl_gw$key_passes)] <- 0
+fpl_gw$open_play_crosses[is.na(fpl_gw$open_play_crosses)] <- 0
 #leemos el df con la info de la posesión de balón por equipo
 poss_stats <- get_df(9)
+#leemos el df con la info de las estadísticas por temporada
+fpl_seasons <- get_df(6)
+#modificamos los valores de "season" para homologar con las demás tablas
+fpl_seasons$season <- fpl_seasons$season %>% sapply(.,gsub,pattern="-",replacement="/") %>% sapply(.,substr,3,7)
+fpl_seasons$name[is.na(fpl_seasons$name)] <- ''
 ```
 
 La primera gráfica que analizaremos será la suma de asistencias por jornada durante todas las temporadas por analizar, es decir, desde la temporada 16/17 hasta la temporada 21/22.
@@ -232,7 +242,7 @@ La siguiente variable que analizaremos será el número de pases que se intentar
 
 Es importante recordar aquí la consideración que hicimos al principio de la explicación de esta variable: **un jugador de fútbol siempre tiene la opción de dar un pase hacia enfrente, hacia los lados o hacia atrás, en cualquier momento del partido siempre y cuando tenga posición del balón**. Tomando en cuenta esta consideración, se toman en cuenta dos aspectos importantes del partido: la primera, la posición del balón, y la segunda, la ponderación de $\frac{1}{5}$ sobre el total de pases hechos durante el partido, esto porque en total son 5 métricas relacionados con pases y se busca hacer un promedio de ellos. Si ponemos en términos matemáticos estas consideraciones, la ecuación resultante sería la siguiente:
 
-$$NP = \left[\frac{AS + AP + CP + KP + OPC}{5}\right]POS$$
+$$NP = \left[\frac{AS + AP + CP + KP + OPC}{5}\right]\left[\frac{(POS)(MIN)}{100}\right]$$
 Donde:
 
  - NP = Número de pases, representa el total de pases hechos durante la temporada, jornada, etc.
@@ -241,9 +251,51 @@ Donde:
  - CP = Número de pases completados, representa el total de pases completados durante la temporada, jornada, etc.
  - KP = Número de pases clave, representa el total de pases claves hechos durante la jornada, temporada, etc.
  - OPC = Número de jugadas cruzadas, representa el total de cruces de juego hechos durante la jornada, temporada, etc.
- - POS = Tiempo de posesión del balón durante cada partido, representa el total de tiempo que el equipo tuvo posesión del balón durante cada partido.
+ - POS = Tiempo de posesión del balón durante cada partido, representa el total de tiempo que el equipo tuvo posesión del balón durante cada partido. Se divide entre 100 para tener un numero entre cero y uno.
+ - MIN = Número de minutos que disputó el jugador dentro del partido (si aplica). Se toma en cuenta para tener una proporción más confiable de la aportación del jugador/equipo al partido.
  
-Debido a que el interés de este análisis es la comparación de la temporada pre-VAR vs post-VAR a nivel jornada (GW) y temporada, las métricas antes mencionadas se medirán/agruparán a nivel equipo (en caso de contar con info de equipo local y visitante, se tomará en cuenta siempre el equipo local). Si no se tiene información del nombre del equipo local entonces se le asignará el valor del porcentaje de posesión igual al promedio obtenido en la jornada, temporada, o cual sea la variable de agrupación en el análisis.
+Debido a que el interés de este análisis es la comparación de la temporada pre-VAR vs post-VAR a nivel jornada (GW) y temporada, las métricas antes mencionadas se medirán/agruparán a nivel equipo (en caso de no contar con info del equipo visitante, se tomará en cuenta siempre el equipo local). Si no se tiene información del nombre del equipo local entonces se le asignará el valor del porcentaje de posesión igual al promedio obtenido en la jornada, temporada, o cual sea la variable de agrupación en el análisis. Antes de la agrupación a nivel equipo o jornada, los cálculos se harán a nivel jugador para después hacer la variable agregada.
+
+```{r np_new_variable,include=FALSE}
+#empezamos el proceso para traernos las variables faltantes para el cálculo de NP
+
+#hacemos el join para traernos el tiempo de posesión de cada equipo
+fpl_gw <- fpl_gw %>% left_join(poss_stats[c("season","team","poss")],by = c("season","team"))
+#corregimos los NAs de la variable de posesión (proximo a asignar el promedio)
+fpl_gw$poss[is.na(fpl_gw$poss)] <- 0
+#hacemos el cruce de tablas para llenar valores faltantes de team
+fpl_seasons_short <- fpl_seasons[c('season','name','team1')]
+nombres_seasons <- unique(fpl_seasons_short$name)
+df_names_group <- data.frame()
+for(x in 1:length(nombres_seasons)){
+  df_aux <- fpl_seasons_short %>% filter(name == nombres_seasons[x])
+  df_group_aux <- unique(df_aux[c('season','name','team1')])
+  df_names_group <- df_names_group %>% bind_rows(df_group_aux)
+}
+rm(df_aux,df_group_aux)
+fpl_gw <- fpl_gw %>% left_join(df_names_group,by = c('season','name'))
+#removemos NAs por strings vacíos
+fpl_gw$team1[is.na(fpl_gw$team1)] <- ''
+#llenamos los valores de team si es que con el nuevo valor no es vacío
+fpl_gw['team_name'] <- if_else(fpl_gw$team == '' & fpl_gw$team1 != '',fpl_gw$team1,fpl_gw$team)
+```
+
+```{r np_new_variable_gw,include=FALSE}
+#iniciamos el proceso del cálculo de NP por GW
+
+#creamos el df con el tiempo promedio de posesión por temporada y GW
+poss_season_gw <- fpl_gw %>% group_by(season,GW) %>% summarise(avg_poss = mean(poss))
+```
+
+```{r}
+poss_season_gw
+```
+
+```{r}
+#creamos el df con los valores promedio de posesión por jornada 
+fpl_gw <- fpl_gw %>% mutate(np = (assists+attempted_passes+completed_passes+key_passes+open_play_crosses)*minutes*(poss/100)/5)
+```
+
 
 La primer gráfica que elaboraremos será, al igual que con la primera variable analizada, una serie de tiempo del número de pases intentados jornada tras jornada dividiendo las temporadas pre-VAR y post-VAR para así analizar el comportamiento de esta variable con el paso del tiempo con y sin presencia del VAR. Por la manera en que tenemos la data disponible, haremos uso de dos variables al mismo tiempo, por un lado, en temporadas donde el VAR aún no estaba implementado dentro de la EPL, se utilizaba la medición _attempted_passes_ y, por el otro, en temporadas donde el VAR ya estaba implementado, se utiliza la medición _xP_ el cual denota el número de pases esperados que realice el jugador de acuerdo a su desempeño dentro de cada partido y de algunas otras variables. Estas dos variables las podemos pensar como similares pero no iguales, debido a que expresan la misma esencia: el pase de balón dentro de cada partido, pero la manera en que se miden no es exactamente la misma, con esto, podemos decir que los resultados que obtengamos a partir de este momento sobre esta variable: _numero de pases intentados_ no serán al cien porciento confiables y demostrativas pero nos pueden generar una muy buena percepción de la misma.
 
@@ -268,6 +320,8 @@ Al obtener la gráfica podemos observar en primera instancia que la media de pas
 Con todo lo anterior podríamos designarle de manera general un comportamiento más aleatorio al número de pases intentados para aquellas temporadas con VAR y por debajo del número de pases en temporadas sin VAR (al menos en cuanto al promedio de pases), es decir, una **disminución del intento de pases con la llegada del VAR**.
 
 A manera de reforzar la sospecha de que el número de pases intentados redujo en temporadas donde el VAR ya estaba incluido en la PL, graficaremos el área representativa al % del numero de pases intentados por jornada en temporadas sin VAR y con VAR, esto con el fin de ver qué tanto aporta el número de pases intentados en temporadas con VAR con respecto al total.
+
+PODEMOS CONSEGUIR EL NOMBRE DEL EQUIPO EN EL FILE PLAYERS_RAW
 
 ```{r stacked_area_apass,include=FALSE}
 #Creamos el df con el % de la proporción de pases intentados con y sin VAR

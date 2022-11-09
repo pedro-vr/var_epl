@@ -477,6 +477,25 @@ sub_array_value_df <- function(df_column,old_value_array,new_value_array){
   }
   
 }
+
+#funcion para remover los numeros en un string
+remove_numbers <- function(name_string){
+  #verificamos si dentro del nombre se tiene un numero
+  has_numbers <- grepl("[[:digit:]]", name_string)
+  #si tiene numero, entonces lo removemos
+  if(has_numbers){
+    #obtenemos las posiciones del char '_'
+    pos_underscore <- unlist(gregexpr('_',name_string))
+    #sabemos que el numero viene despues del ultimo '_'
+    #obtenemos la posicion del ultimo '_'
+    last_underscore <- pos_underscore[length(pos_underscore)]
+    #sacamos el substr del nombre ya sin numero
+    nombre_final <- substr(name_string,1,last_underscore-1)
+  } else 
+    nombre_final <- name_string
+  
+  return(nombre_final)
+}
 ```
 
 Esta es la primera versión del documento en donde se harán los cálculos para el análisis del VAR en el fútbol. A partir de aquí se va a empezar con un análisis descriptivo de los datos, además de reconocer los datos verdaderamente valiosos con los que se trabajará.
@@ -986,27 +1005,60 @@ stats_epl['big_six_a'] <- sapply(stats_epl$AwayTeam,is_big_six)
 stats_epl['big_six'] <- if_else(stats_epl$big_six_a == 1 | stats_epl$big_six_h == 1,1,0)
 ```
 
+```{r teams_names_catalog,include=FALSE}
+#leemos el catálogo con el nombre de los equipos y los ids de equipos y jugadores
+teams_catalog <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/master_team_list.csv')
+#leemos el archivo "players_raw" de cada temporada de donde obtendremos el id del jugador y del equipo
+pl_raw_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/players_raw_1617.csv')
+pl_raw_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/players_raw_1718.csv')
+pl_raw_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/players_raw_1819.csv')
+pl_raw_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/players_raw_1920.csv')
+pl_raw_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/players_raw_2021.csv')
+pl_raw_2122 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/players_raw_2122.csv')
+#de cada df solo nos quedamos con el id del jugador y del equipo
+pl_raw_1617 <- pl_raw_1617 %>% select(.,c('id','team'))
+pl_raw_1718 <- pl_raw_1718 %>% select(.,c('id','team'))
+pl_raw_1819 <- pl_raw_1819 %>% select(.,c('id','team'))
+pl_raw_1920 <- pl_raw_1920 %>% select(.,c('id','team'))
+pl_raw_2021 <- pl_raw_2021 %>% select(.,c('id','team'))
+pl_raw_2122 <- pl_raw_2122 %>% select(.,c('id','team'))
+#agregamos el num de temporada a cada df
+pl_raw_1617['season'] <- '2016-17'
+pl_raw_1718['season'] <- '2017-18'
+pl_raw_1819['season'] <- '2018-19'
+pl_raw_1920['season'] <- '2019-20'
+pl_raw_2021['season'] <- '2020-21'
+pl_raw_2122['season'] <- '2021-22'
+#unimos los dfs en uno solo
+pl_raw <- pl_raw_1617 %>% bind_rows(pl_raw_1718) %>% bind_rows(pl_raw_1819) %>% bind_rows(pl_raw_1920) %>% bind_rows(pl_raw_2021) %>% bind_rows(pl_raw_2122)
+#hacemos el cruce del catálogo con el df para obtener el nombre del equipo
+players_teams_catalog <- pl_raw %>% left_join(teams_catalog, by = c('season','team'))
+```
+
 ```{r cleaned_merged_seasons, include=FALSE}
 #leemos la data
 cleaned_merged_seasons <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/cleaned_merged_seasons.csv')
 
 #eliminamos las columnas que no nos muestran dinamismo de equipo o jugador
-cleaned_merged_seasons <- cleaned_merged_seasons[-c(1,19,11,12,27)]
+cleaned_merged_seasons <- cleaned_merged_seasons %>% select(.,-c('X','opponent_team','fixture','selected'))
 
 #reenombramos algunas columnas
-cleaned_merged_seasons <-  cleaned_merged_seasons %>% rename(season = season_x, team1 = team_x)
+cleaned_merged_seasons <-  cleaned_merged_seasons %>% rename(season = season_x, team1 = team_x, id_player = element)
+
+#agregamos el nombre del equipo basado en el catálogo
+cleaned_merged_seasons <- cleaned_merged_seasons %>% left_join(players_teams_catalog[c('id','season','team_name')], by = c('season','id_player' = 'id'))
 
 #Homologamos el nombre de los equipos con los demas dfs
-cleaned_merged_seasons$team1 <- as.character(cleaned_merged_seasons$team1)
+cleaned_merged_seasons$team_name <- as.character(cleaned_merged_seasons$team_name)
 cleaned_merged_seasons$opp_team_name <- as.character(cleaned_merged_seasons$opp_team_name)
 
-cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Brighton','Brighton & Hove Albion')
-cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Leicester','Leicester City')
-cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Man City','Manchester City')
-cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Man Utd','Manchester United')
-cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Norwich','Norwich City')
-cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Sheffield Utd','Sheffield United')
-cleaned_merged_seasons$team1 <- sub_value_df(cleaned_merged_seasons$team1,'Spurs','Tottenham Hotspur')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Brighton','Brighton & Hove Albion')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Leicester','Leicester City')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Man City','Manchester City')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Man Utd','Manchester United')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Norwich','Norwich City')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Sheffield Utd','Sheffield United')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Spurs','Tottenham Hotspur')
 
 cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Bournemouth','AFC Bournemouth')
 cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Brighton','Brighton & Hove Albion')
@@ -1029,7 +1081,7 @@ cleaned_merged_seasons['big_six_a'] <- if_else((cleaned_merged_seasons$bs_t == 1
 cleaned_merged_seasons['big_six'] <- if_else(cleaned_merged_seasons$big_six_h == 1 | cleaned_merged_seasons$big_six_a == 1,1,0)
 
 #eliminamos las columnas auxiliares
-cleaned_merged_seasons <- cleaned_merged_seasons[-c(34,35)]
+cleaned_merged_seasons <- cleaned_merged_seasons %>% select(.,-c('bs_t','bs_ot'))
 ```
 
 ```{r fpl_merged_players,include=FALSE}
@@ -1121,7 +1173,6 @@ merged_gw <- merged_gw %>% select(.,-c('ea_index','element','fixture','id','kick
 
 #corregimos nombres: quitarle guión bajo y acentos 
 merged_gw$name <- as.character(merged_gw$name)
-merged_gw$name <- sapply(merged_gw$name,gsub,pattern="_",replacement=" ")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e9>",replacement="é")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e1>",replacement="á")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e8>",replacement="e")
@@ -1144,14 +1195,15 @@ merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e3>",replacement="a")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<df>",replacement="ss")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<e7>",replacement="c")
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<c7>",replacement="c")
+merged_gw$name <- sapply(merged_gw$name,remove_numbers)
+merged_gw$name <- sapply(merged_gw$name,gsub,pattern="_",replacement=" ")
 
-#leemos el archivo con los códigos para los equips en cada temporada
-teams_list <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/master_team_list.csv')
-teams_list$season <- sapply(teams_list$season,as.character) %>% sapply(.,substr,3,length(.)) %>% sapply(.,gsub,pattern="-",replacement="/")
-teams_list$team_name <- sapply(teams_list$team_name,as.character) 
+#del catálogo de los equipos de cada temporada nos quedamos con el nombre
+teams_catalog$season <- sapply(teams_catalog$season,as.character) %>% sapply(.,substr,3,length(.)) %>% sapply(.,gsub,pattern="-",replacement="/")
+teams_catalog$team_name <- sapply(teams_catalog$team_name,as.character) 
 
 #juntamos ambas tablas para definir el nombre del equipo contrario
-merged_gw_formatted <- merged_gw %>% left_join(teams_list,by=c('season','opponent_team' = 'team'))
+merged_gw_formatted <- merged_gw %>% left_join(teams_catalog,by=c('season','opponent_team' = 'team'))
 #eliminamos la columna donde viene el código del equipo y reenombramos la nueva columna con el nombre completo
 merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('opponent_team')) %>% rename(opponent_team = team_name)
 
