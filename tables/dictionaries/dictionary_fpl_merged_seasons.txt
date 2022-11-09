@@ -20,59 +20,63 @@ Tabla que contiene algunas estadísticas usuales medidas en partidos de fútbol 
 
 	9. creativity: Mide el desempeño del jugador en términos de oportunidades creadas de gol (mayormente derivadas en asistencias). Toma en cuenta frecuencia de pases, cruces, locación en la cancha y calidad de pase final
 
-	10. goals_conceded: Número de goles concebidos por parte del jugador
+	10. id_player: Identificador único del jugador en la temporada correspondiente de la EPL
 
-	11. goals_scored: Número de goles anotados por el jugador
+	11. goals_conceded: Número de goles concebidos por parte del jugador
 
-	12. ict_index: Combinación de influencia, amenaza y creatividad del jugador durante el partido
+	12. goals_scored: Número de goles anotados por el jugador
 
-	13. influence: Evalúa el grado de impacto que ha tenido el jugador durante el partido, tomando en cuenta acciones que intervienen directa o indirectamente en el resultado final del partido, ya sea en acciones para un atacante, medio, defensa o portero.
+	13. ict_index: Combinación de influencia, amenaza y creatividad del jugador durante el partido
 
-	14. kickoff_time: Fecha y hora en que se llevó a cabo el partido
+	14. influence: Evalúa el grado de impacto que ha tenido el jugador durante el partido, tomando en cuenta acciones que intervienen directa o indirectamente en el resultado final del partido, ya sea en acciones para un atacante, medio, defensa o portero.
 
-	15. minutes: Número de minutos que jugó el futbolista
+	15. kickoff_time: Fecha y hora en que se llevó a cabo el partido
 
-	16. opp_team_name: Nombre del equipo contrario
+	16. minutes: Número de minutos que jugó el futbolista
 
-	17. own_goals: Número de goles anotados en propia puerta
+	17. opp_team_name: Nombre del equipo contrario
 
-	18. penalties_missed: Número de penales fallados
+	18. own_goals: Número de goles anotados en propia puerta
 
-	19. penalties_saved: Número de penales atajados
+	19. penalties_missed: Número de penales fallados
 
-	20. red_cards: Número de tarjetas rojas obtenidas por el jugador
+	20. penalties_saved: Número de penales atajados
 
-	21. round: Número de jornada
+	21. red_cards: Número de tarjetas rojas obtenidas por el jugador
 
-	22. saves: Número de atajadas
+	22. round: Número de jornada
 
-	23. team_a_score: Marcador del equipo visitante
+	23. saves: Número de atajadas
 
-	24. team_h_score: Marcador del equipo local
+	24. team_a_score: Marcador del equipo visitante
 
-	25. threat: Examina la amenaza del jugador en cuanto a goles, tomando en cuenta a acciones individuales. Este índice toma en cuenta la locación del campo, por lo que le da mayor peso a acciones que tienen mayor probabilidad de anotación
+	25. team_h_score: Marcador del equipo local
 
-	26. total_points: Total de puntos obtenidos por el jugador en FPL
+	26. threat: Examina la amenaza del jugador en cuanto a goles, tomando en cuenta a acciones individuales. Este índice toma en cuenta la locación del campo, por lo que le da mayor peso a acciones que tienen mayor probabilidad de anotación
 
-	27. transfers_balance: Balance de las transferencias del jugador (transfers_in - transfers_out)
+	27. total_points: Total de puntos obtenidos por el jugador en FPL
 
-	28. transfers_in: Número de veces que el jugador ha sido elegido por algún equipo de la FPL
+	28. transfers_balance: Balance de las transferencias del jugador (transfers_in - transfers_out)
 
-	29. transfers_out: Número de veces que el jugador ha sido vendido o sacado de algún equipo de la FPL
+	29. transfers_in: Número de veces que el jugador ha sido elegido por algún equipo de la FPL
 
-	30. value: Monto en que está valuado el jugador
+	30. transfers_out: Número de veces que el jugador ha sido vendido o sacado de algún equipo de la FPL
 
-	31. was_home: Flag que indica si el jugador estaba en condición de local
+	31. value: Monto en que está valuado el jugador
 
-	32. yellow_cards: Número de tarjetas amarillas mostradas al jugador
+	32. was_home: Flag que indica si el jugador estaba en condición de local
 
-	33. GW: Número de jornada correspondiente de la EPL
+	33. yellow_cards: Número de tarjetas amarillas mostradas al jugador
 
-	34. big_six_h: Flag que indica si el equipo local pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+	34. GW: Número de jornada correspondiente de la EPL
+
+	35. team_name: Nombre del equipo en el que juega el futbolista a analizar (columna completa, sin NAs)
+
+	36. big_six_h: Flag que indica si el equipo local pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
   
-  	35. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
+  	37. big_six_a: Flag que indica si el equipo visitante pertenece al Big Six (1 si sí pertenece, 0 en otro caso)
   
-  	36. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso)  
+  	38. big_six: Flag que indica si alguno de los dos equipos involucrados en el partido pertenece al Big Six (1 si sí pertenece, 0 en otro caso)  
 
 
 Referencias:
