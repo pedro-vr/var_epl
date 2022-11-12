@@ -1,3 +1,4 @@
+
 Diccionario Tabla: fpl_merged_players
 
 Tabla que contiene métricas asociadas a jugadores y su desempeño en cada temporada de la EPL, algunos ejemplos de estas métricas son las siguientes: #goles anotados, #minutos jugados, #asistencias, etc. Es importante recalcar que cada métrica asociada a cada jugador muestra el total generado de cada una en toda la temporada correspondiente de la EPL.
@@ -36,8 +37,16 @@ Tabla que contiene métricas asociadas a jugadores y su desempeño en cada tempo
 
 	17. selected_by_percent: Porcentaje total de ocasiones en que el jugador ha sido seleccionado para algún equipo de FPL en cada temporada correspondiente de la EPL
 
-	18. season: Indicador de temporada de la EPL (2016/2017 - 2020/2021)
+	18. season: Indicador de temporada de la EPL (16/17 - 20/21)
 
 	19. now_cost: Monto total del costo de cada jugador
 
-	20. element_type: Posición que ocupa el jugador en el terreno de juego (abreviaturas en inglés)
+	20. name: Nombre completo del jugador (combinación de first_name y second_name)
+
+	21. id_player: Identificador único del jugador dentro de la DB
+
+	22. position_name: Posición del jugador dentro del campo de juego
+
+	23. team_name: Nombre completo del equipo al que pertenece el jugador en la temporada indicada
+
+Data obtenida de https://www.football-data.co.uk/englandm.php

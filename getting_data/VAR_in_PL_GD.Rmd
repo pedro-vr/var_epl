@@ -1144,6 +1144,32 @@ merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gs
 merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e5>",replacement="a")
 merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<c1>",replacement="Á")
 merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e4>",replacement="a")
+
+#juntamos nombre y apellido del jugador y creamos nueva variable
+merged_cleaned_players <- merged_cleaned_players %>% mutate(name = paste(first_name,second_name))
+
+#del df de seasons (arriba) nos quedamos solo con el nombre, temporada y id_jugador
+seasons_short <- cleaned_merged_seasons %>% select(.,c('name','season','id_player','position'))
+#modificamos la columna "season" para que coincida en el cruce
+seasons_short$season <- seasons_short$season %>% sapply(.,gsub,pattern='-',replacement='/') %>% sapply(.,substr,start=3,stop=7)
+
+#hacemos el cruce para obtener el id del jugador y su posición (en caso de que no se tenga)
+merged_cleaned_players <- merged_cleaned_players %>% left_join(seasons_short, by = c('season','name'))
+rm(seasons_short)
+
+#nos quedamos solo con una columna de posición
+merged_cleaned_players['position_name'] <- if_else(is.na(merged_cleaned_players$element_type),merged_cleaned_players$position,merged_cleaned_players$element_type)
+#borramos las anteriores dos columnas de posicion
+merged_cleaned_players <- merged_cleaned_players %>% select(.,-c('element_type','position'))
+
+#nos traemos las columnas de id_player, season y team_name del catálogo de equipos
+teams_catalog_short <- players_teams_catalog %>% select(.,-c('team'))
+#modificamos la columna "season" para que coincida en el cruce
+teams_catalog_short$season <- teams_catalog_short$season %>% sapply(.,gsub,pattern='-',replacement='/') %>% sapply(.,substr,start=3,stop=7)
+
+#hacemos el cruce para traernos el nombre del equipo
+merged_cleaned_players <- merged_cleaned_players %>% left_join(teams_catalog_short,by = c('season','id_player' = 'id'))
+rm(teams_catalog_short)
 ```
 
 ```{r merged_gw_formatted,include=FALSE}
