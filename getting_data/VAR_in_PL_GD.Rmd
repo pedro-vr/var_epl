@@ -1193,7 +1193,7 @@ merged_gw_2022['season'] <- '21/22'
 merged_gw <- merged_gw_1617 %>% bind_rows(merged_gw_1718) %>% bind_rows(merged_gw_1819) %>% bind_rows(merged_gw_1920) %>% bind_rows(merged_gw_2021) %>% bind_rows(merged_gw_2022)
 
 #eliminamos columnas
-merged_gw <- merged_gw %>% select(.,-c('ea_index','element','fixture','id','kickoff_time_formatted','round','selected','value'))
+merged_gw <- merged_gw %>% select(.,-c('ea_index','fixture','id','kickoff_time_formatted','round','selected','value'))
 
 #empezamos proceso de la limpieza de la data
 
@@ -1224,28 +1224,40 @@ merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<c7>",replacement="c")
 merged_gw$name <- sapply(merged_gw$name,remove_numbers)
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="_",replacement=" ")
 
-#del catálogo de los equipos de cada temporada nos quedamos con el nombre
-teams_catalog$season <- sapply(teams_catalog$season,as.character) %>% sapply(.,substr,3,length(.)) %>% sapply(.,gsub,pattern="-",replacement="/")
-teams_catalog$team_name <- sapply(teams_catalog$team_name,as.character) 
+#empezamos el proceso para completar la columna de nombre de equipo
+#del catalogo de equioos nos quedamos con solo las columnas necesarias 
+players_teams_catalog_short <- players_teams_catalog %>% select(.,c('id','season','team_name'))
+#modificamos la columna "season" para que se pueda hacer el cruce
+players_teams_catalog_short$season <- sapply(players_teams_catalog_short$season,as.character) %>% sapply(.,substr,3,length(.)) %>% sapply(.,gsub,pattern="-",replacement="/")
+#cruzamos las tablas para traernos el nombre del equipo local
+merged_gw <- merged_gw %>% left_join(players_teams_catalog_short,by = c('season','element'='id'))
+#eliminamos la columna anterior "team"
+merged_gw <- merged_gw %>% select(.,-c('team'))
+
+#modificamos la columna "season" para que se pueda hacer el cruce
+players_teams_catalog$season <- sapply(players_teams_catalog$season,as.character) %>% sapply(.,substr,3,length(.)) %>% sapply(.,gsub,pattern="-",replacement="/")
+
+#removemos duplicados del catalogo sin el id del jugador
+teams_catalog_name <- players_teams_catalog %>% select(.,-c('id')) %>% distinct()
 
 #juntamos ambas tablas para definir el nombre del equipo contrario
-merged_gw_formatted <- merged_gw %>% left_join(teams_catalog,by=c('season','opponent_team' = 'team'))
+merged_gw_formatted <- merged_gw %>% left_join(teams_catalog_name,by=c('season','opponent_team' = 'team'))
 #eliminamos la columna donde viene el código del equipo y reenombramos la nueva columna con el nombre completo
-merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('opponent_team')) %>% rename(opponent_team = team_name)
+merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('opponent_team')) %>% rename(opponent_team = team_name.y, team_name = team_name.x)
 
 #Homologamos el nombre de los equipos con los demas dfs
-merged_gw_formatted$team <- as.character(merged_gw_formatted$team)
+merged_gw_formatted$team_name <- as.character(merged_gw_formatted$team_name)
 merged_gw_formatted$opponent_team <- as.character(merged_gw_formatted$opponent_team)
-merged_gw_formatted$team[is.na(merged_gw_formatted$team)] <- ""
+merged_gw_formatted$team_name[is.na(merged_gw_formatted$team_name)] <- ""
 merged_gw_formatted$opponent_team[is.na(merged_gw_formatted$opponent_team)] <- ""
 
-merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Brighton','Brighton & Hove Albion')
-merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Leicester','Leicester City')
-merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Man City','Manchester City')
-merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Man Utd','Manchester United')
-merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Norwich','Norwich City')
-merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Sheffield Utd','Sheffield United')
-merged_gw_formatted$team <- sub_value_df(merged_gw_formatted$team,'Spurs','Tottenham Hotspur')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Brighton','Brighton & Hove Albion')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Leicester','Leicester City')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Man City','Manchester City')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Man Utd','Manchester United')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Norwich','Norwich City')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Sheffield Utd','Sheffield United')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Spurs','Tottenham Hotspur')
 
 merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Bournemouth','AFC Bournemouth')
 merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Brighton','Brighton & Hove Albion')
@@ -1259,7 +1271,7 @@ merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_t
 #Agregamos el flag de big six
 
 #Creamos columnas auxiliares nuevas para hacer más fácil la comparación
-merged_gw_formatted['bs_t'] <- sapply(merged_gw_formatted$team, is_big_six)
+merged_gw_formatted['bs_t'] <- sapply(merged_gw_formatted$team_name, is_big_six)
 merged_gw_formatted['bs_ot'] <- sapply(merged_gw_formatted$opponent_team, is_big_six)
 
 #aplicamos las reglas para big_six
@@ -1268,7 +1280,7 @@ merged_gw_formatted['big_six_a'] <- if_else((merged_gw_formatted$bs_t == 1 & mer
 merged_gw_formatted['big_six'] <- if_else(merged_gw_formatted$big_six_h == 1 | merged_gw_formatted$big_six_a == 1,1,0)
 
 #eliminamos las columnas auxiliares
-merged_gw_formatted <- merged_gw_formatted[-c(53,54)]
+merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('bs_t','bs_ot'))
 ```
 
 Leemos la data con los stats relacinados a la posesión
