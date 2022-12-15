@@ -17,14 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
-library(httr)
-library(XML)
 library(rvest)
-library(xml2)
 library(tidyverse)
 library(robotstxt)
 library(urltools)
-library(XML)
 library(methods)
 library(ggradar)
 library(scales)
@@ -260,24 +256,11 @@ Debido a que el interés de este análisis es la comparación de la temporada pr
 #empezamos el proceso para traernos las variables faltantes para el cálculo de NP
 
 #hacemos el join para traernos el tiempo de posesión de cada equipo
-fpl_gw <- fpl_gw %>% left_join(poss_stats[c("season","team","poss")],by = c("season","team"))
+fpl_gw <- fpl_gw %>% left_join(poss_stats[c("season","team","poss")],by = c("season","team_name"="team"))
 #corregimos los NAs de la variable de posesión (proximo a asignar el promedio)
 fpl_gw$poss[is.na(fpl_gw$poss)] <- 0
-#hacemos el cruce de tablas para llenar valores faltantes de team
-fpl_seasons_short <- fpl_seasons[c('season','name','team1')]
-nombres_seasons <- unique(fpl_seasons_short$name)
-df_names_group <- data.frame()
-for(x in 1:length(nombres_seasons)){
-  df_aux <- fpl_seasons_short %>% filter(name == nombres_seasons[x])
-  df_group_aux <- unique(df_aux[c('season','name','team1')])
-  df_names_group <- df_names_group %>% bind_rows(df_group_aux)
-}
-rm(df_aux,df_group_aux)
-fpl_gw <- fpl_gw %>% left_join(df_names_group,by = c('season','name'))
-#removemos NAs por strings vacíos
-fpl_gw$team1[is.na(fpl_gw$team1)] <- ''
-#llenamos los valores de team si es que con el nuevo valor no es vacío
-fpl_gw['team_name'] <- if_else(fpl_gw$team == '' & fpl_gw$team1 != '',fpl_gw$team1,fpl_gw$team)
+
+
 ```
 
 ```{r np_new_variable_gw,include=FALSE}
