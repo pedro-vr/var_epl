@@ -36,3 +36,13 @@ get_raw_directory <- function(){
   
   return(ruta_raw)
 }
+
+#Función para sustituir el valor de un registro de una columna por otro
+sub_value_df <- function(df_column,old_value,new_value){
+  for(x in 1:length(df_column)){
+    if(df_column[x] == old_value)
+      df_column[x] = new_value
+  }
+  
+  return(df_column)
+}

@@ -45,390 +45,6 @@ ruta_raw <- get_raw_directory()
 ```
 
 ```{r functions, include=FALSE}
-#Funciones a utilizar
-
-format_ovrt_details <- function(array_data){
-  details_ovrt <- NULL
-  
-  for(i in 1:length(array_data))
-    details_ovrt <- c(details_ovrt,str_split(array_data[i],"\n",simplify = T))
-  
-  details_ovrt_data <- NULL
-  
-  for(j in 1:length(details_ovrt)){
-    data_trim <- str_trim(details_ovrt[j])
-    if(str_length(data_trim) > 0)
-      details_ovrt_data <- c(details_ovrt_data,data_trim)
-  }
-  
-  return(details_ovrt_data)
-}
-
-teams_ovrt_details <- function(array_data){
-  #Creamos los vectores en donde vamos a guardar todos los valores numéricos de los overturns 
-  #para todos los equipos en las dos temporadas
-  des_ovrt <- NULL
-  indices_overturns <- which(array_data == "Overturns:")
-  num_indices <- length(indices_overturns)
-  
-  #Iniciamos los loops en donde vamos a recorrer todos los datos de la página web y solo nos quedamos
-  #con los valores numéricos, todo esto para las dos temporadas. Se hacen en dos loops diferentes 
-  #porque el tamaño del vector es diferente entre ambas temporadas
-  
-  for(m in 1:num_indices){
-    if(m == num_indices){
-      #a partir del overturn buscamos el indice del siguiente "Game:"
-      inicio_seq <- indices_overturns[m]
-      fin_seq <- length(array_data)
-      indices_games <- which(array_data[inicio_seq:fin_seq] == 'Game:')
-      lim_seq <- indices_games[1] - 1
-      aux_cont <- 0
-      for(n in seq(inicio_seq+1,inicio_seq+lim_seq,by=2)){
-        metrica_ovrt <- array_data[n]
-        if(grepl("/",metrica_ovrt)){
-          indice_caracter <- unlist(gregexpr("/",metrica_ovrt))
-          metrica1 <- as.integer(substr(metrica_ovrt,1,indice_caracter-1))
-          metrica2 <- as.integer(substr(metrica_ovrt,indice_caracter+1,nchar(metrica_ovrt)))
-          net_metrica <- metrica1 - metrica2
-          des_ovrt <- c(des_ovrt,net_metrica)
-          aux_cont <- aux_cont + 1
-        } else {
-          des_ovrt <- c(des_ovrt,as.integer(metrica_ovrt))
-          aux_cont <- aux_cont + 1
-        }
-      }
-      if(aux_cont < 11){
-        des_ovrt <- c(des_ovrt,rep(2019,11-aux_cont))
-      }
-    } else {
-      #a partir del overturn buscamos el indice del siguiente "Game:"
-      inicio_seq <- indices_overturns[m]
-      fin_seq <- indices_overturns[m+1]
-      indices_games <- which(array_data[inicio_seq:fin_seq] == 'Game:')
-      lim_seq <- indices_games[1] - 1
-      aux_cont <- 0
-      for(n in seq(inicio_seq+1,inicio_seq+lim_seq,by=2)){
-        metrica_ovrt <- array_data[n]
-        if(grepl("/",metrica_ovrt)){
-          indice_caracter <- unlist(gregexpr("/",metrica_ovrt))
-          metrica1 <- as.integer(substr(metrica_ovrt,1,indice_caracter-1))
-          metrica2 <- as.integer(substr(metrica_ovrt,indice_caracter+1,nchar(metrica_ovrt)))
-          net_metrica <- metrica1 - metrica2
-          des_ovrt <- c(des_ovrt,net_metrica)
-          aux_cont <- aux_cont + 1
-        } else {
-          des_ovrt <- c(des_ovrt,as.integer(metrica_ovrt))
-          aux_cont <- aux_cont + 1
-        }
-      }
-      if(aux_cont < 11){
-        des_ovrt <- c(des_ovrt,rep(2019,11-aux_cont))
-      }
-    }
-  }
-  #20_21 : net_penalties (for - against)
-  #21_22 : net_penalties (for - against) , net_red_cards (for - against)
-  return(des_ovrt)
-}
-
-#función para meter los valores de la función anterior en un dataframe 
-teams_ovrt_details_df <- function(data_array,teams_names,season){
-  #Overturns totales del equipo
-  overturns_array <- NULL
-  #leading goals for
-  lgf_array <- NULL
-  #disallowed goals for  
-  dgf_array <- NULL
-  #leading goals against
-  lga_array <- NULL
-  #disallowed goals against
-  dga_array <- NULL
-  #net goal score
-  ngs_array <- NULL
-  #subjective decisions for
-  sdf_array <- NULL
-  #subjective decisions against
-  sda_array <- NULL
-  #net subjective score
-  nsc_array <- NULL
-  #penalties net score (for - against)
-  pns_array <- NULL
-  #red cards net score (for - against)
-  rcns_array <- NULL
-
-  #ya que tenemos los vectores creados entonces recorremos el vector con todos los valores numéricos
-  #y vamos guardando cada dato en su respectivo vector. Esto aplica para ambas temporadas
-  
-  tamano_array <- length(data_array)
-  num_metricas <- 11
-  
-  for (x in seq(1,tamano_array,by = num_metricas)) {
-    overturns_array <- c(overturns_array,as.integer(data_array[x]))
-    lgf_array <- c(lgf_array,as.integer(data_array[x+1]))
-    dgf_array <- c(dgf_array,as.integer(data_array[x+2]))
-    lga_array <- c(lga_array,as.integer(data_array[x+3]))
-    dga_array <- c(dga_array,as.integer(data_array[x+4]))
-    ngs_array <- c(ngs_array,as.integer(data_array[x+5]))
-    sdf_array <- c(sdf_array,as.integer(data_array[x+6]))
-    sda_array <- c(sda_array,as.integer(data_array[x+7]))
-    nsc_array <- c(nsc_array,as.integer(data_array[x+8]))
-    pns_array <- c(pns_array,as.integer(data_array[x+9]))
-    rcns_array <- c(rcns_array,as.integer(data_array[x+10]))
-  }
-
-  num_equipos <- tamano_array / num_metricas
-  season_array <- c(rep(season,num_equipos))
-  #Ya que tenemos los vectores individuales de cada métrica entonces creamos la tabla de los 
-  #equipos con estas nuevas métricas 
-  des_df <- data.frame("season" = season_array,
-                     "team" = teams_names,
-                     "ovrt" = overturns_array,"lgf" = lgf_array,"dgf" = dgf_array,
-                     "lga" = lga_array,"dga" = dga_array,"ngs" = ngs_array,
-                     "sdf" = sdf_array,"sda" = sda_array,"nsc" = nsc_array,
-                     'pns' = pns_array,"rcns" = rcns_array)
-  
-  return(des_df)
-}
-
-#funcion para dividir los detalles de incidentes del VAR por cada equipo
-var_desc_arrays <- function(data_array,data_teams_names){
-  #Vector en donde guardaremos el detalle del equipo al que se enfrentó, localia y fecha del incidente
-  game_detail <- NULL
-  #Vector en donde guardaremos la descripción del incidente y el tipo de este (a favor o en contra)
-  incident_detail <- NULL
-  #Vector auxiliar que nos va a ayudar a delimitar los incidentes de cada equipo
-  aux_index <- NULL
-
-  #Loop que nos sirve para guardar el índice de comienzo de cada equipo, 
-  #la descripción de la localía y fecha y la descripción de los incidentes 
-  #por equipo de la temporada correspondiente
-  for(s in 1:length(data_array)){
-    if(data_array[s] == "Overturns:")
-      #Guardamos el índice en donde inicia las descripciones de cada equipo
-      aux_index <- c(aux_index,s)
-    else if(data_array[s] == "Game:")
-      #Guardamos el detalle del equipo contrario, fecha y localía
-      game_detail <- c(game_detail,data_array[s+1])
-    else if(data_array[s] == "Incident:")
-      #Guardamos la descripción del incidente y el tipo de éste
-      incident_detail <- c(incident_detail,data_array[s+1])
-  }
-  
-  #agregamos el tamaño del vector de la data al vector auxiliar para referencia
-  aux_index <- c(aux_index,length(data_array))
-  
-  #Vector en donde guardaremos la cuenta del total de incidentes por equipo
-  cuenta_equipo <- NULL
-  
-  #Loop en donde guardamos el número total de incidentes por equipo para la temporada correspondiente
-  for(t in 1:(length(aux_index)-1)){
-    #Contador auxiliar que contará el número de incidentes por equipo
-    cont <- 0
-    for(u in seq(aux_index[t],aux_index[t+1])){
-      #verificamos si el dato que nos encontramos es un incidente
-      if(data_array[u] == "Incident:")
-        #Si si es un incidente entonces aumentamos la cuenta en el auxiliar
-        cont <- cont + 1
-    }
-    #Al final guardamos la cuenta total de incidentes por equipo en el vector nulo 
-    cuenta_equipo <- c(cuenta_equipo,cont)
-  }
-  
-  #Vectores que guardaran los nombres de los equipos repetidos
-  teams_names_rep <- NULL
-
-  #Iniciamos el loop en donde ya repetimos el nombre de los equipos
-  for(v in 1:length(cuenta_equipo)){
-    teams_names_rep <- c(teams_names_rep,rep(data_teams_names[v],cuenta_equipo[v]))
-  }
-  
-  lista_vectores <- list("aux_index" = aux_index,"game_detail" = game_detail,
-                         "incident_detail" = incident_detail,"teams_names_rep" = teams_names_rep)
-  
-  return(lista_vectores)
-}
-
-var_desc <- function(data_array){
-  #Vector en donde guardaremos la descripción como tal del incidente
-  desc_incident <- NULL
-  #Vector en donde guardaremos el minuto en que ocurrió el incidente
-  min_incident <- NULL
-  #Vector en donde guardaremos el tipo de incidente
-  type_incident <- NULL
-  
-  for(y in 1:length(data_array)){
-    #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
-    #se encuentra alguna comna, esto porque lo que separa la descripción del incidente y el 
-    #minuto en donde ocurrio es una coma
-    coma_1 <- str_locate_all(data_array[y],",")
-    #Por cada descripción de incidente, obtenemos el o los números de índice en donde 
-    #se encuentra algún guión, esto porque lo que separa el minuto del incidente y el 
-    #tipo del mismo es un guión
-    guion_1 <- str_locate_all(data_array[y],"-")
-    
-    #en caso de que si haya comas, nos traemos la posición de la última coma
-    coma_2 <- coma_1[[1]][dim(coma_1[[1]])[1]]
-    #en caso de que si haya guion, nos traemos la posición del último guión
-    guion_2 <- guion_1[[1]][dim(guion_1[[1]])[1]]
-    
-    #numero de comas que tiene la descripcion
-    num_comas <- dim(coma_1[[1]])
-    #numero de guiones que tiene la descripcion
-    num_guiones <- dim(guion_1[[1]])
-    
-    #nos fijamos si la descripcion no tiene comas
-    if(num_comas[1] == 0){
-      #si no tiene comas quiere decir que viene solamente la pura descripción en texto
-      desc_incident <- c(desc_incident,data_array[y])
-      #no contiene el minuto
-      min_incident <- c(min_incident,0)
-      #no contiene el tipo de incidente
-      type_incident <- c(type_incident,"None")
-    #ahora nos fijamos si contiene el minuto
-    } else if (!grepl("minute",data_array[y])){
-      #Traemos la pura descripción del incidente
-      desc_incident <- c(desc_incident,substr(data_array[y],1,guion_2-2))
-      #Traemos el puro tipo de incidente
-      type_incident <- c(type_incident,substr(data_array[y],guion_2+2,str_length(data_array[y])))
-      #En este caso no hay minuto de incidente entonces le asignamos un cero
-      min_incident <- c(min_incident,0)
-    #en este caso es donde si tiene descripción, minuto y tipo
-    } else {
-      #Traemos la pura descripción del incidente
-      desc_incident <- c(desc_incident,substr(data_array[y],1,coma_2-1))
-      #Traemos el puro tipo de incidente
-      type_incident <- c(type_incident,substr(data_array[y],guion_2+2,str_length(data_array[y])))
-      #Traemos el puro minuto del incidente
-      min_texto <- substr(data_array[y],coma_2+2,guion_2-2)
-      #obtenemos la posición del espacio
-      espacio <- str_locate(min_texto, " ")[1]
-      #nos quedamos con el puro número
-      min_entero <- as.integer(substr(min_texto,1,espacio-3))
-      #guardamos el minuto en el array
-      min_incident <- c(min_incident,min_entero)
-    }
-  }
-  
-  lista_descripciones <- list("description" = desc_incident, "minute" = min_incident, 
-                              "type" = type_incident)
-  
-  return(lista_descripciones)
-}
-
-var_desc_teams <- function(data_array,aux,data_game_detail){
-  #Vector en donde guardaremos los nombres de los equipos contrincantes
-  juegos <- NULL
-  #Vector en donde guardaremos si es que el equipo es local o visitante
-  localia <- NULL
-  #Vector en donde guardaremos la fecha del partido en donde suscitó el incidente
-  fecha <- NULL
-  #Variable que nos ayudará a controlar el número de incidentes que se suscitaron en un 
-  #mismo partido
-  suma <- 0
-  
-  #Loop en donde separaremos el nombre del equipo contrincante, el tipo de localia y la fecha del incidente
-  for(z in 1:(length(aux)-1)){
-    #Vector que nos va a ayudar a concatenar los índices en donde se encuentra un partido para cada equipo
-    vector1 <- NULL
-    #Loop en donde obtenemos el índice donde se encuentra cada partido para cada equipo
-    for(w in seq(aux[z],aux[z+1])){
-      #verificamos que sea un partido
-      if(data_array[w] == 'Game:'){
-        #Si sí es un partido entonces guardamos el número de índice
-        vector1 <- c(vector1,w)
-      }
-    }
-    #Al final, cuando ya tengamos todos los índices, concatenamos el último para abarcar todos los juegos
-    vector1 <- c(vector1,aux[z+1])
-    #Vector nulo que nos ayudará a saber cuántos incidentes hubo dentro de cada juego para cada equipo
-    cont_total <- NULL
-    #Loop para guardar el número de incidentes para cada partido de cada equipo
-    for(t in 1:(length(vector1)-1)){
-      #Variable que va a acumular el número de incidentes por partido
-      cont_inc <- 0
-      #Loop que nos va a ayudar a identificar los incidentes por partido y sumarlos
-      for(u in seq(vector1[t],vector1[t+1])){
-        #Verificamos que sea un incidente
-        if(data_array[u] == 'Incident:'){
-          #Si sí es un incidente entonces incrementamos la cuenta
-          cont_inc <- cont_inc + 1
-        }
-      }
-      #Al final concatenamos el total de incidentes por cada partido
-      cont_total <- c(cont_total,cont_inc)
-    }
-    #Ya que tenemos el conteo de incidentes por cada partido de cada equipo, hacemos el loop para 
-    #entonces si separar todos los datos del partido (equipo contrincante, localia y fecha)
-    for(v in 1:length(cont_total)){
-      #Encontramos el índice en donde se encuentra el primer paréntesis
-      parentesis_1 <- str_locate(data_game_detail[suma+v],"\\(")[1]
-      #Encontramos el índice en donde se encuentra el segundo paréntesis
-      parentesis_2 <- str_locate(data_game_detail[suma+v],"\\)")[1]
-      #Encontramos el índice en donde se encuentra el punto y coma
-      punto_coma <- str_locate(data_game_detail[suma+v],";")[1]
-      #Nos traemos el nombre del equipo contrincante y lo repetimos por el número de 
-      #incidentes que tuvo en un mismo partido
-      juegos <- c(juegos,rep(substr(data_game_detail[suma+v],1,parentesis_1-2),cont_total[v]))
-      #Nos traemos la localia y lo repetimos por el número de incidentes que tuvo en un mismo partido
-      localia <- c(localia,rep(substr(data_game_detail[suma+v],parentesis_1+1,punto_coma-1),
-                               cont_total[v]))
-      #Nos traemos la fecha del partido y lo repetimos por el número de incidentes que tuvo en un 
-      #mismo partido
-      fecha <- c(fecha,rep(substr(data_game_detail[suma+v],punto_coma+2,parentesis_2-1),
-                           cont_total[v]))
-    }
-    #Aumentamos la variable para controlar los datos a repetir
-    suma <- suma + length(cont_total)
-  }
-  
-  lista_equipos <- list("teams" = juegos,"venue_type" = localia, "date" = fecha)
-  
-  return(lista_equipos)
-}
-
-#funcion para que, a partir del df de las descripciones de var, desglozar los campos team1 y team2 
-#en donde ya se considera al team1 como el local y al team2 como el visitante
-var_desc_1 <- function(data_frame){
-  #Vectores que nos ayudarán a guardar los equipos locales y visitantes
-  team1 <- NULL
-  team2 <- NULL
-  
-  for(a in 1:dim(data_frame)[1]){
-    #Transformamos el primer equipo en character
-    equipo1 <- as.character(data_frame$team1[a])
-    #Transformamos el segundo equipo en character
-    equipo2 <- as.character(data_frame$team2[a])
-    #Transformamos el indicador de localia en character
-    local_eq <- as.character(data_frame$home.away[a])
-    #Verificamos si el indicador de localia dice que el primer equipo es local
-    if(local_eq == 'H'){
-      #Si sí es local entonces agregamos el primer equipo al vector de los locales
-      team1 <- c(team1,equipo1)
-      #Si sí es local entonces agregamos el segundo equipo al vector de los visitantes
-      team2 <- c(team2,equipo2)
-    } else {
-      #Si no es local entonces agregamos el segundo equipo al vector de los locales
-      team1 <- c(team1,equipo2)
-      #Si no es local entonces agregamos el primer equipo al vector de los visitantes
-      team2 <- c(team2,equipo1)
-    }
-  }
-  
-  lista_equipos <- list("local_team" = team1, "away_team" = team2)
-  
-  return(lista_equipos)
-}
-
-#funcion para sustituir el valor de un registro de una columna por otro
-sub_value_df <- function(df_column,old_value,new_value){
-  for(x in 1:length(df_column)){
-    if(df_column[x] == old_value)
-      df_column[x] = new_value
-  }
-  
-  return(df_column)
-}
-
 #funcion sub_value_df adaptada para aceptar un array de entrada para cambios simultaneos
 sub_array_value_df <- function(df_column,old_value_array,new_value_array){
   #obtenemos la longitud de los valores a cambiar
@@ -511,6 +127,21 @@ premier_league <- premier_league %>% mutate(big_six = if_else(big_six_h == 1 | b
 #Modificamos la variable season para tener un estándar de esa variable en todas las tablas
 premier_league$season <- sapply(premier_league$season,as.character)
 premier_league$season <- sapply(premier_league$season,season_format)
+#Modificamos las columnas "team1" y "team2" para homologar el nombre de los equipos
+#Convertimos las columnas a tipo character
+premier_league$team1 <- as.character(premier_league$team1)
+premier_league$team2 <- as.character(premier_league$team2)
+#Aplicamos la función de sustitución de nombres a valores específicos 
+premier_league$team1 <- sub_value_df(premier_league$team1,'Leeds United','Leeds')
+premier_league$team1 <- sub_value_df(premier_league$team1,'Newcastle', 'Newcastle United')
+premier_league$team1 <- sub_value_df(premier_league$team1,'West Bromwich Albion', 'West Brom')
+premier_league$team1 <- sub_value_df(premier_league$team1,'West Ham United', 'West Ham')
+premier_league$team1 <- sub_value_df(premier_league$team1,'Wolverhampton', 'Wolves')
+premier_league$team2 <- sub_value_df(premier_league$team2,'Leeds United','Leeds')
+premier_league$team2 <- sub_value_df(premier_league$team2,'Newcastle', 'Newcastle United')
+premier_league$team2 <- sub_value_df(premier_league$team2,'West Bromwich Albion', 'West Brom')
+premier_league$team2 <- sub_value_df(premier_league$team2,'West Ham United', 'West Ham')
+premier_league$team2 <- sub_value_df(premier_league$team2,'Wolverhampton', 'Wolves')
 
 #Ya que tenemos todas las variables necesarias y los datos transformados, guardamos la tabla en 
 #el directorio local
@@ -560,26 +191,15 @@ ovrt_df_21_22 <- get_pl_overturns(ruta_raw,'21/22',T)
 #Unimos las tablas de cada temporada
 ovrt_df <- ovrt_df_19_20 %>% bind_rows(ovrt_df_20_21) %>% bind_rows(ovrt_df_21_22)
 
+#Agregamos la variable big_six a la tabla final
+ovrt_df['big_six'] <- sapply(ovrt_df$team,is_big_six)
+
 #Escribimos la tabla final a la carpeta local
 
 #declaramos la ruta final de la tabla
 ruta_final_pl_ovrt <- paste(ruta_guardado,'pl_overturns.csv',sep = "")
 #lo escribimos
 write_csv(ovrt_df,ruta_final_pl_ovrt)
-
-#Nos traemos los nombres de los equipos de la PL de la 19/20 con sus puntos a favor o en contra a raíz de decisiones del VAR (netscore), los cuales sabemos que están en nodos de la forma <h2>
-teams_19_20 <- getNodeSet(VAR_19_20, "//h2") %>% sapply(., xmlValue)
-#Nos traemos los nombres de los equipos de la PL de la 20/21 con sus puntos a favor o en contra a raíz de decisiones del VAR (netscore), los cuales sabemos que están en nodos de la forma <h2>
-teams_20_21 <- getNodeSet(VAR_20_21, "//h2") %>% sapply(., xmlValue)
-#Nos traemos los nombres de los equipos de la PL de la 21/22 con sus puntos a favor o en contra a raíz de decisiones del VAR (netscore), los cuales sabemos que están en nodos de la forma <h2>
-teams_21_22 <- getNodeSet(VAR_21_22, "//h2") %>% sapply(., xmlValue)
-
-#Nos traemos el detalle de las decisiones del VAR por cada equipo de la 19/20, los cuales sabemos que están en nodos del tipo <p>
-details_var_19_20 <- getNodeSet(VAR_19_20, "//p") %>% sapply(., xmlValue)
-#Nos traemos el detalle de las decisiones del VAR por cada equipo de la 20/21, los cuales sabemos que están en nodos del tipo <p>
-details_var_20_21 <- getNodeSet(VAR_20_21, "//p") %>% sapply(., xmlValue)
-#Nos traemos el detalle de las decisiones del VAR por cada equipo de la 21/22, los cuales sabemos que están en nodos del tipo <p>
-details_var_21_22 <- getNodeSet(VAR_21_22, "//p") %>% sapply(., xmlValue)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
@@ -591,41 +211,10 @@ head(ovrt_df)
 ## Tabla 3: "pl_overturns_var". Fuente: ESPN
 
 ```{r ovrt_var,include=FALSE}
-#Empezamos a tratar con los datos obtenidos sobre los detalles del VAR en cada partido de la PL y entonces
-#solo quedarnos con la info importante
-
-details_data_19_20 <- format_ovrt_details(details_var_19_20)
-details_data_20_21 <- format_ovrt_details(details_var_20_21)
-details_data_21_22 <- format_ovrt_details(details_var_21_22)
-
-#Ahora que ya tenemos los datos "útiles" entonces empezamos a guardar los datos en vectores 
-
-#Empezamos el proceso para traernos la descripciones de decisiones del VAR, primero vamos a obtener
-#más métricas relacionadas a los overturns de los equipos 
-
-des_19_20 <- teams_ovrt_details(details_data_19_20)
-des_20_21 <- teams_ovrt_details(details_data_20_21)
-#en la data de la temporada 20/21 hay un dato de mas en un equipo, se elminará
-des_20_21 <- des_20_21[-133]
-#en los datos de la temporada 21/22 hay un error en un dato que hace tener varios NA
-#separaremos los datos para corregir el error
-details_data_21_22_p1 <- details_data_21_22[1:614]
-aux_nombre1 <- substr(details_data_21_22[615],1,unlist(gregexpr(":",details_data_21_22[615])))
-aux_num1 <- substr(details_data_21_22[615],unlist(gregexpr(":",details_data_21_22[615]))+2,nchar(details_data_21_22[615]))
-details_data_21_22_p2 <- details_data_21_22[616:777]
-aux_nombre2 <- substr(details_data_21_22[778],1,unlist(gregexpr(":",details_data_21_22[778])))
-aux_num2 <- substr(details_data_21_22[778],unlist(gregexpr(":",details_data_21_22[778]))+2,nchar(details_data_21_22[778]))
-details_data_21_22_p3 <- details_data_21_22[779:length(details_data_21_22)]
-details_data_21_22 <- c(details_data_21_22_p1,aux_nombre1,aux_num1,details_data_21_22_p2,aux_nombre2,aux_num2,details_data_21_22_p3)
-des_21_22 <- teams_ovrt_details(details_data_21_22)
-
-#Ahora, tenemos el vector con los valores numéricos de todas las métricas en conjunto
-#sin separación, entonces creamos los vectores individuales de cada métrica para separar
-#los valores de cada uno. Esto aplica para todas las temporadas
-
-des_df_19_20 <- teams_ovrt_details_df(des_19_20,teams_ovrt_19_20[1:20],"19/20")
-des_df_20_21 <- teams_ovrt_details_df(des_20_21,teams_ovrt_20_21[1:20],"20/21")
-des_df_21_22 <- teams_ovrt_details_df(des_21_22,teams_ovrt_21_22[1:20],"21/22")
+#Obtenemos la tabla con las métricas de los overturns para la temporada indicada
+des_df_19_20 <- get_pl_overturns_desc(ruta_raw,'19/20')
+des_df_20_21 <- get_pl_overturns_desc(ruta_raw,'20/21')
+des_df_21_22 <- get_pl_overturns_desc(ruta_raw,'21/22',T)
 
 #Unificamos los dfs de cada temporada
 des_df <- des_df_19_20 %>% bind_rows(des_df_20_21) %>% bind_rows(des_df_21_22)
@@ -633,118 +222,96 @@ des_df <- des_df_19_20 %>% bind_rows(des_df_20_21) %>% bind_rows(des_df_21_22)
 #ya que tenemos la tabla creada la unimos con la primera que obtuvimos atrás para ampliar las métricas
 #Tabla que contiene las métricas en cuanto overturns por equipo 
 ovrt_var <- inner_join(ovrt_df,des_df,by=c("season","team"))
+
+#Modificamos la columna "team" para homologar el nombre de los equipos en todas las tablas
+#Convetimos la columna a tipo character
+ovrt_var$team <- as.character(ovrt_var$team)
+#Hacemos la sustitución de los nombres
+ovrt_var$team <- sub_value_df(ovrt_var$team,'Newcastle', 'Newcastle United')
+ovrt_var$team <- sub_value_df(ovrt_var$team,'Norwich', 'Norwich City')
+#Agregamos la columna big_six
+ovrt_var['big_six'] <- sapply(ovrt_var$team,is_big_six)
+
+#Escribimos la tabla final a la carpeta local
+
+#declaramos la ruta final de la tabla
+ruta_final_pl_ovrt_desc <- paste(ruta_guardado,'pl_overturns_var.csv',sep = "")
+#lo escribimos
+write_csv(ovrt_var,ruta_final_pl_ovrt_desc)
 ```
 
-Ya que tenemos la tabla con los overturns de cada equipo entonces obtenemos la descripción de cada intervención del VAR para cada equipo
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r ovrt_var_view}
+head(ovrt_var)
+```
+
+## Tabla 4: "var_details". Fuente: ESPN
 
 ```{r var_details,include=FALSE}
 #Empezamos con el proceso para obtener los detalles del VAR en ciertos partidos para cada equipo
 #de la PL durante las dos temporadas
 
-#Primero vamos a obtener el detalle de los juegos e incidentes por cada equipo de las dos temporadas
+#Obtenemos la tabla para cada temporada
+var_details_19_20 <- get_pl_var_details(ruta_raw,"19/20")
+var_details_20_21 <- get_pl_var_details(ruta_raw,"20/21")
+var_details_21_22 <- get_pl_var_details(ruta_raw,"21/22",T)
 
-#Vectores auxiliares que nos van a ayudar a delimitar los incidentes de cada equipo
-aux_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$aux_index
-aux_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$aux_index
-aux_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$aux_index
+#Unimos las tablas para tener una sola consolidada
+var_details <- var_details_19_20 %>% bind_rows(var_details_20_21) %>% bind_rows(var_details_21_22)
 
-#Vectores en donde guardaremos la descripción del incidente y el tipo de este (a favor o en contra)
-incident_detail_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$incident_detail
-incident_detail_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$incident_detail
-incident_detail_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$incident_detail
+#Modificamos las columnas "team1" y "team2" para homologar el nombre de los equipos en todas las tablas
+#Convertimos las columnas a tipo character
+var_details$team1 <- as.character(var_details$team1)
+var_details$team2 <- as.character(var_details$team2)
+#Hacemos la sustitución en valores puntuales de las columnas
+var_details$team1 <- sub_value_df(var_details$team1,'Norwich','Norwich City')
+var_details$team2 <- sub_value_df(var_details$team2,'Leicester','Leicester City')
+var_details$team2 <- sub_value_df(var_details$team2,'Man City', 'Manchester City')
+var_details$team2 <- sub_value_df(var_details$team2,'Man United', 'Manchester United')
+var_details$team2 <- sub_value_df(var_details$team2,'Newcastle', 'Newcastle United')
+var_details$team2 <- sub_value_df(var_details$team2,'Norwich', 'Norwich City')
+var_details$team2 <- sub_value_df(var_details$team2,'Tottenham', 'Tottenham Hotspur')
+var_details$team2 <- sub_value_df(var_details$team2,'WBA', 'West Brom')
+#Agregamos las variables correspondientes a los equipos big_six
+var_details['big_six_h'] <- sapply(var_details$team1, is_big_six)
+var_details['big_six_a'] <- sapply(var_details$team2, is_big_six)
+var_details['big_six'] <- if_else(var_details$big_six_h == 1 | var_details$big_six_a == 1,1,0)
 
-#Vectores en donde guardaremos el detalle del equipo al que se enfrentó, localia y fecha del incidente
-game_detail_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$game_detail
-game_detail_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$game_detail
-game_detail_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$game_detail
+#Escribimos la tabla final a la carpeta local
 
-#Vectores que guardaran los nombres de los equipos repetidos por cada incidente que haya tenido
-#en cada temporada
-teams_names_rep_19_20 <- var_desc_arrays(details_data_19_20,teams_ovrt_19_20)$teams_names_rep
-teams_names_rep_20_21 <- var_desc_arrays(details_data_20_21,teams_ovrt_20_21)$teams_names_rep
-teams_names_rep_21_22 <- var_desc_arrays(details_data_21_22,teams_ovrt_21_22)$teams_names_rep
-
-#Ya que tenemos el nombre de los equipos repetidos entonces empezamos por desglozar la descripción
-#de los incidentes que tuvo cada equipo, se dividen en la descripción como tal, el minuto en que
-#ocurrió el incidente y el tipo de incidente (a favor o en contra)
-
-#Vectores en donde guardaremos la descripción como tal del incidente
-desc_incident_19_20 <- var_desc(incident_detail_19_20)$description
-desc_incident_20_21 <- var_desc(incident_detail_20_21)$description
-desc_incident_21_22 <- var_desc(incident_detail_21_22)$description
-#Vectores en donde guardaremos el minuto en que ocurrió el incidente
-min_incident_19_20 <- var_desc(incident_detail_19_20)$minute
-min_incident_20_21 <- var_desc(incident_detail_20_21)$minute
-min_incident_21_22 <- var_desc(incident_detail_21_22)$minute
-#Vectores en donde guardaremos el tipo de incidente
-type_incident_19_20 <- var_desc(incident_detail_19_20)$type
-type_incident_20_21 <- var_desc(incident_detail_20_21)$type
-type_incident_21_22 <- var_desc(incident_detail_21_22)$type
-
-#ya que tenemos los minutos en número entonces iniciamos el proceso para desglozar los datos 
-#de cada partido en donde ocurrió un incidente por equipo
-
-#Vectores en donde guardaremos los nombres de los equipos contrincantes
-juegos_19_20 <- var_desc_teams(details_data_19_20,aux_19_20,game_detail_19_20)$teams
-juegos_20_21 <- var_desc_teams(details_data_20_21,aux_20_21,game_detail_20_21)$teams
-juegos_21_22 <- var_desc_teams(details_data_21_22,aux_21_22,game_detail_21_22)$teams
-#Vectores en donde guardaremos si es que el equipo es local o visitante
-localia_19_20 <- var_desc_teams(details_data_19_20,aux_19_20,game_detail_19_20)$venue_type
-localia_20_21 <- var_desc_teams(details_data_20_21,aux_20_21,game_detail_20_21)$venue_type
-localia_21_22 <- var_desc_teams(details_data_21_22,aux_21_22,game_detail_21_22)$venue_type
-#Vectores en donde guardaremos la fecha del partido en donde suscitó el incidente
-fechas_19_20 <- var_desc_teams(details_data_19_20,aux_19_20,game_detail_19_20)$date
-fechas_20_21 <- var_desc_teams(details_data_20_21,aux_20_21,game_detail_20_21)$date
-fechas_21_22 <- var_desc_teams(details_data_21_22,aux_21_22,game_detail_21_22)$date
-
-#Ya que tenemos todos los datos entonces armamos la tabla con todas estas descripciones
-var_details <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20)),
-                                       rep("20/21",length(incident_detail_20_21)),
-                                       rep("21/22",length(incident_detail_21_22))),
-                          "team1" = c(teams_names_rep_19_20,teams_names_rep_20_21,
-                                      teams_names_rep_21_22),
-                          "team2" = c(juegos_19_20,juegos_20_21,juegos_21_22), 
-                          "home/away" = c(localia_19_20,localia_20_21,localia_21_22), 
-                          "date" = c(fechas_19_20,fechas_20_21,fechas_21_22),
-                          "incident" = c(desc_incident_19_20,desc_incident_20_21,desc_incident_21_22),
-                          "type" = c(type_incident_19_20,type_incident_20_21,type_incident_21_22),
-                          "min" = c(min_incident_19_20,min_incident_20_21,min_incident_21_22))
+#declaramos la ruta final de la tabla
+ruta_final_pl_var_details <- paste(ruta_guardado,'var_details.csv',sep = "")
+#lo escribimos
+write_csv(var_details,ruta_final_pl_var_details)
 ```
 
-Iniciamos el proceso para hacer una modificación en cuanto a la localía del equipo, se pretende eliminar el indicador de si es local o visitante y manejar solo las variables "team1" y "team2" para denotar localia (team1) o visita (team2)
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r var_details_view}
+head(var_details)
+```
+
+## Tabla 5: "var_details1". Fuente: ESPN
 
 ```{r var_details1,include=FALSE}
+#Empezamos el proceso para obtener la tabla con las descripciones de los incidentes analizados por el VAR
 
-#Vector que contiene a equipos locales
-team1 <- var_desc_1(var_details)$local_team
-#Vector que contiene a equipos visitantes
-team2 <- var_desc_1(var_details)$away_team
+#Obtenemos las tablas finales con las descripciones de incidentes para cada temporada
+var_details1_19_20 <- get_pl_var_details_2(ruta_raw,"19/20")
+var_details1_20_21 <- get_pl_var_details_2(ruta_raw,"20/21")
+var_details1_21_22 <- get_pl_var_details_2(ruta_raw,"21/22",T)
 
-#Ya que tenemos el cambio de estos equipos según su localia, creamos la nueva tabla ya sin el 
-#indicador de localía y con las variables team1 y team2 ya indicando la localia y visitante
-var_details1 <- data.frame("season" = c(rep("19/20",length(incident_detail_19_20)),
-                                       rep("20/21",length(incident_detail_20_21)),
-                                       rep("21/22",length(incident_detail_21_22))),
-                          "team1" = team1,
-                          "team2" = team2, 
-                          "date" = c(fechas_19_20,fechas_20_21,fechas_21_22),
-                          "incident" = c(desc_incident_19_20,desc_incident_20_21,desc_incident_21_22),
-                          "type" = c(type_incident_19_20,type_incident_20_21,type_incident_21_22),
-                          "min" = c(min_incident_19_20,min_incident_20_21,min_incident_21_22))
-```
+#Unimos todas las tablas en una sola consolidada
+var_details1 <- var_details1_19_20 %>% bind_rows(var_details1_20_21) %>% bind_rows(var_details1_21_22)
 
-Incluimos nuevas variables en los dataframes
+#Empezamos con el proceso de modificar algunas columnas y agregar otras nuevas a la tabla final
 
-```{r edit previous dfs,include=FALSE}
-#Vamos a arreglar algunas variables de los dfs
-
-#homologamos el nombre de los equipos en todos los dfs
-
-#iniciamos con los nombres de los equipos locales
-var_details$team1 <- as.character(var_details$team1)
+#Modificamos la columna "team1" para homologar el nombre de los equipos entre tablas
+#Convertimos las columnas a character
 var_details1$team1 <- as.character(var_details1$team1)
-
-var_details$team1 <- sub_value_df(var_details$team1,'Norwich','Norwich City')
+var_details1$team2 <- as.character(var_details1$team2)
+#Hacemos las modificaciones de los valores para la columna "team1" y "team2"
 var_details1$team1 <- sub_value_df(var_details1$team1,'Bournemouth', 'AFC Bournemouth')
 var_details1$team1 <- sub_value_df(var_details1$team1,'Brighton', 'Brighton & Hove Albion')
 var_details1$team1 <- sub_value_df(var_details1$team1,'Leicester', 'Leicester City')
@@ -753,58 +320,32 @@ var_details1$team1 <- sub_value_df(var_details1$team1,'Man United', 'Manchester 
 var_details1$team1 <- sub_value_df(var_details1$team1,'Norwich', 'Norwich City')
 var_details1$team1 <- sub_value_df(var_details1$team1,'Tottenham', 'Tottenham Hotspur')
 var_details1$team1 <- sub_value_df(var_details1$team1,'WBA', 'West Brom')
-
-#seguimos con los nombres de los equipos visitantes
-var_details$team2 <- as.character(var_details$team2)
-var_details1$team2 <- as.character(var_details1$team2)
-
-var_details$team2 <- sub_value_df(var_details$team2,'Leicester','Leicester City')
-var_details$team2 <- sub_value_df(var_details$team2,'Man City', 'Manchester City')
-var_details$team2 <- sub_value_df(var_details$team2,'Man United', 'Manchester United')
-var_details$team2 <- sub_value_df(var_details$team2,'Newcastle', 'Newcastle United')
-var_details$team2 <- sub_value_df(var_details$team2,'Norwich', 'Norwich City')
-var_details$team2 <- sub_value_df(var_details$team2,'Tottenham', 'Tottenham Hotspur')
-var_details$team2 <- sub_value_df(var_details$team2,'WBA', 'West Brom')
 var_details1$team2 <- sub_value_df(var_details1$team2,'Leicester','Leicester City')
 var_details1$team2 <- sub_value_df(var_details1$team2,'Man City', 'Manchester City')
 var_details1$team2 <- sub_value_df(var_details1$team2,'Man United', 'Manchester United')
 var_details1$team2 <- sub_value_df(var_details1$team2,'Newcastle', 'Newcastle United')
 var_details1$team2 <- sub_value_df(var_details1$team2,'Norwich', 'Norwich City')
 var_details1$team2 <- sub_value_df(var_details1$team2,'Tottenham', 'Tottenham Hotspur')
-
-#vamos con el df de overturns
-ovrt_var$team <- as.character(ovrt_var$team)
-
-ovrt_var$team <- sub_value_df(ovrt_var$team,'Newcastle', 'Newcastle United')
-ovrt_var$team <- sub_value_df(ovrt_var$team,'Norwich', 'Norwich City')
-
-#vamos con el df de premier league
-premier_league$team1 <- as.character(premier_league$team1)
-premier_league$team2 <- as.character(premier_league$team2)
-
-premier_league$team1 <- sub_value_df(premier_league$team1,'Leeds United','Leeds')
-premier_league$team1 <- sub_value_df(premier_league$team1,'Newcastle', 'Newcastle United')
-premier_league$team1 <- sub_value_df(premier_league$team1,'West Bromwich Albion', 'West Brom')
-premier_league$team1 <- sub_value_df(premier_league$team1,'West Ham United', 'West Ham')
-premier_league$team1 <- sub_value_df(premier_league$team1,'Wolverhampton', 'Wolves')
-premier_league$team2 <- sub_value_df(premier_league$team2,'Leeds United','Leeds')
-premier_league$team2 <- sub_value_df(premier_league$team2,'Newcastle', 'Newcastle United')
-premier_league$team2 <- sub_value_df(premier_league$team2,'West Bromwich Albion', 'West Brom')
-premier_league$team2 <- sub_value_df(premier_league$team2,'West Ham United', 'West Ham')
-premier_league$team2 <- sub_value_df(premier_league$team2,'Wolverhampton', 'Wolves')
-
-#les agregamos las variables de big_six
-ovrt_df['big_six'] <- sapply(ovrt_df$team,is_big_six)
-ovrt_var['big_six'] <- sapply(ovrt_var$team,is_big_six)
-var_details['big_six_h'] <- sapply(var_details$team1, is_big_six)
-var_details['big_six_a'] <- sapply(var_details$team2, is_big_six)
-var_details['big_six'] <- if_else(var_details$big_six_h == 1 | var_details$big_six_a == 1,1,0)
+#Agregamos las variables relacionadas a los equipos big_six
 var_details1['big_six_h'] <- sapply(var_details1$team1, is_big_six)
 var_details1['big_six_a'] <- sapply(var_details1$team2, is_big_six)
 var_details1['big_six'] <- if_else(var_details1$big_six_h == 1 | var_details1$big_six_a == 1,1,0)
+
+#Escribimos la tabla final a la carpeta local
+
+#declaramos la ruta final de la tabla
+ruta_final_pl_var_details1 <- paste(ruta_guardado,'var_details1.csv',sep = "")
+#lo escribimos
+write_csv(var_details1,ruta_final_pl_var_details1)
 ```
 
-Datos obtenidos de https://www.football-data.co.uk/englandm.php
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r var_details1_view}
+head(var_details1)
+```
+
+## Tabla 6: "stats_epl". Fuente: Football-Data
 
 ```{r epl stats, include= FALSE}
 #leemos la data
@@ -1169,9 +710,6 @@ poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
 ```{r load_to_local_csv,include=FALSE}
 #Escribimos las tablas en archivos csv para no perderlos
 
-#write_csv(ovrt_var,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/pl_overturns_var.csv")
-#write_csv(var_details,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/var_details.csv")
-#write_csv(var_details1,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/var_details1.csv")
 #write_csv(stats_epl,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/stats_epl.csv")
 #write_csv(cleaned_merged_seasons,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_seasons.csv")
 #write_csv(merged_cleaned_players,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_players.csv")
