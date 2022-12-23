@@ -394,50 +394,158 @@ siguiente:</p>
 <pre class="r"><code>head(premier_league)</code></pre>
 <pre><code>##   season       date league_id                  league          team1
 ## 1  16/17 2016-08-13      2411 Barclays Premier League      Hull City
-## 2  16/17 2016-08-13      2411 Barclays Premier League        Burnley
+## 2  16/17 2016-08-13      2411 Barclays Premier League  Middlesbrough
 ## 3  16/17 2016-08-13      2411 Barclays Premier League    Southampton
-## 4  16/17 2016-08-13      2411 Barclays Premier League  Middlesbrough
+## 4  16/17 2016-08-13      2411 Barclays Premier League        Burnley
 ## 5  16/17 2016-08-13      2411 Barclays Premier League Crystal Palace
 ## 6  16/17 2016-08-13      2411 Barclays Premier League        Everton
-##                  team2  spi1  spi2  prob1  prob2 probtie proj_score1
-## 1       Leicester City 53.57 66.81 0.3459 0.3621  0.2921        1.16
-## 2         Swansea City 58.98 59.74 0.4482 0.2663  0.2854        1.37
-## 3              Watford 69.49 59.33 0.5759 0.1874  0.2367        1.91
-## 4           Stoke City 56.32 60.35 0.4380 0.2692  0.2927        1.30
-## 5 West Bromwich Albion 55.19 58.66 0.4214 0.2939  0.2847        1.35
-## 6    Tottenham Hotspur 68.02 73.25 0.3910 0.3401  0.2689        1.47
-##   proj_score2 importance1 importance2 score1 score2  xg1  xg2 nsxg1 nsxg2
-## 1        1.24        38.1        22.2      2      1 0.85 2.77  0.17  1.25
-## 2        1.05        36.5        29.1      0      1 1.24 1.84  1.71  1.56
-## 3        1.05        34.1        30.7      1      1 1.05 0.22  1.52  0.41
-## 4        1.01        33.9        32.5      1      1 1.40 0.55  1.13  1.06
-## 5        1.14        43.6        34.6      0      1 1.11 0.68  0.84  1.60
-## 6        1.38        31.9        48.0      1      1 0.73 1.11  0.88  1.81
-##   adj_score1 adj_score2 after_covid is_VAR big_six_h big_six_a big_six
-## 1       2.10       1.05           0      0         0         0       0
-## 2       0.00       1.05           0      0         0         0       0
-## 3       1.05       1.05           0      0         0         0       0
-## 4       1.05       1.05           0      0         0         0       0
-## 5       0.00       1.05           0      0         0         0       0
-## 6       1.05       1.05           0      0         0         1       1</code></pre>
+##               team2  spi1  spi2  prob1  prob2 probtie proj_score1 proj_score2
+## 1    Leicester City 53.57 66.81 0.3459 0.3621  0.2921        1.16        1.24
+## 2        Stoke City 56.32 60.35 0.4380 0.2692  0.2927        1.30        1.01
+## 3           Watford 69.49 59.33 0.5759 0.1874  0.2367        1.91        1.05
+## 4      Swansea City 58.98 59.74 0.4482 0.2663  0.2854        1.37        1.05
+## 5         West Brom 55.19 58.66 0.4214 0.2939  0.2847        1.35        1.14
+## 6 Tottenham Hotspur 68.02 73.25 0.3910 0.3401  0.2689        1.47        1.38
+##   importance1 importance2 score1 score2  xg1  xg2 nsxg1 nsxg2 adj_score1
+## 1        38.1        22.2      2      1 0.85 2.77  0.17  1.25       2.10
+## 2        33.9        32.5      1      1 1.40 0.55  1.13  1.06       1.05
+## 3        34.1        30.7      1      1 1.05 0.22  1.52  0.41       1.05
+## 4        36.5        29.1      0      1 1.24 1.84  1.71  1.56       0.00
+## 5        43.6        34.6      0      1 1.11 0.68  0.84  1.60       0.00
+## 6        31.9        48.0      1      1 0.73 1.11  0.88  1.81       1.05
+##   adj_score2 after_covid is_VAR big_six_h big_six_a big_six
+## 1       1.05           0      0         0         0       0
+## 2       1.05           0      0         0         0       0
+## 3       1.05           0      0         0         0       0
+## 4       1.05           0      0         0         0       0
+## 5       1.05           0      0         0         0       0
+## 6       1.05           0      0         0         1       1</code></pre>
 </div>
 <div id="tabla-2-pl_overturns.-fuente-espn" class="section level2">
 <h2>Tabla 2: “pl_overturns”. Fuente: ESPN</h2>
-<p>Se cuenta con un archivo en donde se denotan las intervenciones del
-VAR en la PL de la temporada 19/20 (la primera temporada en que se
-implementó) y se va a hacer un data set de esos records a
-continuación.</p>
-<p>Iniciamos el proceso para obtener la descripción de las decisiones
-del VAR en los partidos de la Premier League en las temporadas 19/20 y
-20/21</p>
-<p>Ya que tenemos la tabla con los overturns de cada equipo entonces
-obtenemos la descripción de cada intervención del VAR para cada
-equipo</p>
-<p>Iniciamos el proceso para hacer una modificación en cuanto a la
-localía del equipo, se pretende eliminar el indicador de si es local o
-visitante y manejar solo las variables “team1” y “team2” para denotar
-localia (team1) o visita (team2)</p>
-<p>Incluimos nuevas variables en los dataframes</p>
+<p>La segunda tabla de información se obtiene de la página web de ESPN
+en donde se detallan con métricas las decisiones que ha tenido el VAR
+para con cada equipo de la PL durante todas las temporadas que ha estado
+en activo el VAR en dicha liga de fútbol. Las ligas de estas páginas web
+por año son las siguientes:</p>
+<ul>
+<li><p><a href="https://www.espn.com/soccer/english-premier-league/story/3929823/how-var-decisions-have-affected-every-premier-league-club">2019/20</a></p></li>
+<li><p><a href="https://www.espn.com/soccer/english-premier-league/story/4182135/how-var-decisions-affected-every-premier-league-club-in-2020-21">2020/21</a></p></li>
+<li><p><a href="https://www.espn.com/soccer/english-premier-league/story/4452736/how-var-decisions-have-affected-every-premier-league-club-in-2021-22">2021/22</a></p></li>
+</ul>
+<p>Dentro de cada página web se detalla brevemente el balance que tuvo
+cada equipo de la PL en cuanto a decisiones a favor y en contra que tomó
+el VAR para con ellos dentro de cada temporada, algunos de ellos salen
+con saldos negativos y otros con saldos positivos. Las métricas que se
+detallan dentro de esta tabla son las siguientes:</p>
+<ol style="list-style-type: decimal">
+<li><p>Net Score (ns): Saldo total del número de decisiones a favor
+menos el número de decisiones en contra que tuvo el VAR para con cada
+equipo en una temporada determinda (df - da)</p></li>
+<li><p>Decisions For (df): Número total de decisiones a favor que tuvo
+el VAR para con cada equipo en una temporada determinada</p></li>
+<li><p>Decisions Against (da): Número total de decisiones en contra que
+tuvo el VAR para con cada equipo en una temporada determinada</p></li>
+</ol>
+<p>Los datos aquí recolectados datan desde la temporada 2019/2020 hasta
+el día de hoy, esto debido a que el VAR se implementó por primera vez en
+el fútbol profesional de Inglaterra en el año 2019. Para información más
+detallada de las variables que se presentan en esta tabla se puede
+consultar el repositorio de <a href="https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries">GitHub</a>.</p>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(ovrt_df)</code></pre>
+<pre><code>##   season                   team ns df da big_six
+## 1  19/20 Brighton &amp; Hove Albion  8 10  2       0
+## 2  19/20      Manchester United  7 10  3       1
+## 3  19/20         Crystal Palace  4  8  4       0
+## 4  19/20                Burnley  3  7  4       0
+## 5  19/20              Newcastle  3  3  0       0
+## 6  19/20            Southampton  3  8  5       0</code></pre>
+</div>
+<div id="tabla-3-pl_overturns_var.-fuente-espn" class="section level2">
+<h2>Tabla 3: “pl_overturns_var”. Fuente: ESPN</h2>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(ovrt_var)</code></pre>
+<pre><code>##   season                   team ns df da big_six ovrt lgf dgf lga dga ngs sdf
+## 1  19/20 Brighton &amp; Hove Albion  8 10  2       0   12   2   2   0   7   7   2
+## 2  19/20      Manchester United  7 10  3       1   13   1   0   2   7   6   6
+## 3  19/20         Crystal Palace  4  8  4       0   12   3   4   0   1   2   6
+## 4  19/20                Burnley  3  7  4       0   11   2   3   1   4   2   4
+## 5  19/20       Newcastle United  3  3  0       0    3   1   0   0   0   1   2
+## 6  19/20            Southampton  3  8  5       0   13   0   0   1   7   6   1
+##   sda nsc  pns rcns
+## 1   0   2 2019 2019
+## 2   2   4 2019 2019
+## 3   2   4 2019 2019
+## 4   2   2 2019 2019
+## 5   0   2 2019 2019
+## 6   4  -3 2019 2019</code></pre>
+</div>
+<div id="tabla-4-var_details.-fuente-espn" class="section level2">
+<h2>Tabla 4: “var_details”. Fuente: ESPN</h2>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(var_details)</code></pre>
+<pre><code>##   season                  team1            team2 home.away    date
+## 1  19/20 Brighton &amp; Hove Albion         West Ham         H Aug. 17
+## 2  19/20 Brighton &amp; Hove Albion      Aston Villa         A Oct. 19
+## 3  19/20 Brighton &amp; Hove Albion          Everton         H Oct. 26
+## 4  19/20 Brighton &amp; Hove Albion   Leicester City         H Nov. 23
+## 5  19/20 Brighton &amp; Hove Albion          Arsenal         A  Dec. 5
+## 6  19/20 Brighton &amp; Hove Albion Sheffield United         H Dec. 21
+##                                                                                     incident
+## 1 Brighton goal for Leandro Trossard ruled out for offside by Dan Burn, who created the goal
+## 2                            Conor Hourihane goal ruled out for a foul by Wesley on Mat Ryan
+## 3        Penalty awarded (scored by Neil Maupay) for foul on Aaron Connolly by Michael Keane
+## 4      Jamie Vardy penalty retaken after James Maddison scored the rebound with encroachment
+## 5                                                     David Luiz goal disallowed for offside
+## 6                                                      John Egan goal ruled out for handball
+##      type min big_six_h big_six_a big_six
+## 1 AGAINST  27         0         0       0
+## 2     FOR  42         0         0       0
+## 3     FOR  78         0         0       0
+## 4     FOR  80         0         0       0
+## 5     FOR  63         0         1       1
+## 6     FOR   8         0         0       0</code></pre>
+</div>
+<div id="tabla-5-var_details1.-fuente-espn" class="section level2">
+<h2>Tabla 5: “var_details1”. Fuente: ESPN</h2>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(var_details1)</code></pre>
+<pre><code>##   season    date
+## 1  19/20 Aug. 17
+## 2  19/20 Oct. 19
+## 3  19/20 Oct. 26
+## 4  19/20 Nov. 23
+## 5  19/20  Dec. 5
+## 6  19/20 Dec. 21
+##                                                                                     incident
+## 1 Brighton goal for Leandro Trossard ruled out for offside by Dan Burn, who created the goal
+## 2                            Conor Hourihane goal ruled out for a foul by Wesley on Mat Ryan
+## 3        Penalty awarded (scored by Neil Maupay) for foul on Aaron Connolly by Michael Keane
+## 4      Jamie Vardy penalty retaken after James Maddison scored the rebound with encroachment
+## 5                                                     David Luiz goal disallowed for offside
+## 6                                                      John Egan goal ruled out for handball
+##      type min                  team1                  team2 big_six_h big_six_a
+## 1 AGAINST  27 Brighton &amp; Hove Albion               West Ham         0         0
+## 2     FOR  42            Aston Villa Brighton &amp; Hove Albion         0         0
+## 3     FOR  78 Brighton &amp; Hove Albion                Everton         0         0
+## 4     FOR  80 Brighton &amp; Hove Albion         Leicester City         0         0
+## 5     FOR  63                Arsenal Brighton &amp; Hove Albion         1         0
+## 6     FOR   8 Brighton &amp; Hove Albion       Sheffield United         0         0
+##   big_six
+## 1       0
+## 2       0
+## 3       0
+## 4       0
+## 5       1
+## 6       0</code></pre>
+</div>
+<div id="tabla-6-stats_epl.-fuente-football-data" class="section level2">
+<h2>Tabla 6: “stats_epl”. Fuente: Football-Data</h2>
 <p>Datos obtenidos de <a href="https://www.football-data.co.uk/englandm.php" class="uri">https://www.football-data.co.uk/englandm.php</a></p>
 <p>Leemos la data con los stats relacinados a la posesión</p>
 <p>De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016,
