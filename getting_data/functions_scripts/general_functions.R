@@ -46,3 +46,30 @@ sub_value_df <- function(df_column,old_value,new_value){
   
   return(df_column)
 }
+
+#Función para obtener el catálogo de jugadores con su id y equipo para cada temporada
+get_players_catalog <- function(ruta_file,season){
+  #Creamos la ruta final para leer el catálogo de equipos
+  ruta_catalogo_equipos <- paste0(ruta_file,'master_team_list.csv')
+  #Obtenemos el catálogo de los equipos de la PL
+  teams_catalog <- read.csv(ruta_catalogo_equipos)
+  #Aplicamos formato a la temporada
+  season_format <- gsub('/','',season)
+  #Creamos la ruta final para leer el catálogo de jugadores
+  ruta_catalogo_jugadores <- paste0(ruta_file,'players_raw_',season_format,'.csv')
+  #Obtenemos el catálogo de los jugadores de la PL
+  players_catalog <- read.csv(ruta_catalogo_jugadores)
+  
+  #Del catálogo de jugadores, nos quedamos solamente con las columnas 'id' y 'team'
+  players_catalog <- players_catalog %>% select(.,c('id','team'))
+  #A la temporada le aplicamos formato para la columna "season"
+  long_season <- gsub('/','-',season)
+  long_season <- paste0('20',long_season)
+  #Al catálogo de jugadores le agregamos la columna de temporada
+  players_catalog['season'] <- long_season
+  
+  #Unimos ambas tablas de catálogos
+  ply_tms_catalog <- players_catalog %>% left_join(teams_catalog, by = c('season','team'))
+  
+  return(ply_tms_catalog)
+}
