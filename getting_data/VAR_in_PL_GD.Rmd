@@ -33,6 +33,10 @@ source("functions_scripts/df_premier_league.R", local = knitr::knit_global())
 source("functions_scripts/general_functions.R", local = knitr::knit_global())
 #script en donde incluimos las funciones referentes a la tabla pl_overturns
 source("functions_scripts/df_pl_overturns.R", local = knitr::knit_global())
+#script en donde incluimos las funciones referentes a la tabla pl_stats
+source("functions_scripts/df_pl_stats.R", local = knitr::knit_global())
+#script en donde incluimos las funciones referentes a la tabla cleaned_merged_seasons
+source("functions_scripts/df_cleaned_merged_seasons.R", local = knitr::knit_global())
 ```
 
 ```{r local_vars,include=FALSE}
@@ -42,6 +46,15 @@ source("functions_scripts/df_pl_overturns.R", local = knitr::knit_global())
 ruta_guardado <- get_tables_directory()
 #ruta para leer data raw
 ruta_raw <- get_raw_directory()
+#catalogo de jugadores y equipos por temporada
+players_teams_catalog_1617 <- get_players_catalog(ruta_raw,'16/17')
+players_teams_catalog_1718 <- get_players_catalog(ruta_raw,'17/18')
+players_teams_catalog_1819 <- get_players_catalog(ruta_raw,'18/19')
+players_teams_catalog_1920 <- get_players_catalog(ruta_raw,'19/20')
+players_teams_catalog_2021 <- get_players_catalog(ruta_raw,'20/21')
+players_teams_catalog_2122 <- get_players_catalog(ruta_raw,'21/22')
+#Unimos los catálogos de cada temporada en uno solo
+players_teams_catalog <- players_teams_catalog_1617 %>% bind_rows(players_teams_catalog_1718) %>% bind_rows(players_teams_catalog_1819) %>% bind_rows(players_teams_catalog_1920) %>% bind_rows(players_teams_catalog_2021) %>% bind_rows(players_teams_catalog_2122)
 ```
 
 ```{r functions, include=FALSE}
@@ -347,42 +360,28 @@ head(var_details1)
 
 ## Tabla 6: "stats_epl". Fuente: Football-Data
 
-```{r epl stats, include= FALSE}
-#leemos la data
-stats_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/stats_epl_1617.csv') 
-stats_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/stats_epl_1718.csv') 
-stats_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/stats_epl_1819.csv') 
-stats_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/stats_epl_1920.csv') 
-stats_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/stats_epl_2021.csv')
-stats_2022 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/stats_epl_2022.csv')
+```{r epl_stats, include= FALSE}
+#Empezamos con el proceso para obtener la tabla con estadísticas generales de los partidos de la PL
 
-#quitamos la columna DIV
-stats_1617 <- stats_1617[-c(1)]
-stats_1718 <- stats_1718[-c(1)]
-stats_1819 <- stats_1819[-c(1)]
-stats_1920 <- stats_1920[-c(1)]
-stats_2021 <- stats_2021[-c(1)]
-stats_2022 <- stats_2022[-c(1)]
+#Leemos la tabla de estadísticas de cada partido de la PL en la temporada correspondiente
+stats_1617 <- read_stats_data(ruta_raw,'16/17')
+stats_1718 <- read_stats_data(ruta_raw,'17/18')
+stats_1819 <- read_stats_data(ruta_raw,'18/19')
+stats_1920 <- read_stats_data(ruta_raw,'19/20')
+stats_2021 <- read_stats_data(ruta_raw,'20/21')
+stats_2122 <- read_stats_data(ruta_raw,'21/22')
 
-#agregamos la columna de season
-stats_1617['season'] <- '16/17'
-stats_1718['season'] <- '17/18'
-stats_1819['season'] <- '18/19'
-stats_1920['season'] <- '19/20'
-stats_2021['season'] <- '20/21'
-stats_2022['season'] <- '21/22'
-
-#empezamos a unir las tablas
-stats_epl <- merge(stats_1617,stats_1718,all = T) %>% merge(.,stats_1819,all = T) %>% merge(.,stats_1920,all = T) %>% merge(.,stats_2021,all=T) %>% merge(.,stats_2022,all=T)
+#Empezamos a unir las tablas en una sola consolidada
+stats_epl <- merge(stats_1617,stats_1718,all = T) %>% merge(.,stats_1819,all = T) %>% merge(.,stats_1920,all = T) %>% merge(.,stats_2021,all=T) %>% merge(.,stats_2122,all=T)
 
 #Nos quedamos solo con las columnas que nos interesan
 stats_epl <- stats_epl[c('Date','Time','HomeTeam','AwayTeam','FTHG','FTAG','FTR','HTHG','HTAG','HTR','Referee','HS','AS','HST','AST','HC','AC','HF','AF','HY','AY','HR','AR','season')]
 
-#Homologamos el nombre de los equipos con los demas dfs
+#Homologamos el nombre de los equipos con las demas tablas
 stats_epl$HomeTeam <- as.character(stats_epl$HomeTeam)
 stats_epl$AwayTeam <- as.character(stats_epl$AwayTeam)
 
-#Reemplazamos los valores NA
+#Reemplazamos los valores NA por valores vacíos
 stats_epl$HomeTeam[is.na(stats_epl$HomeTeam)] <- ""
 stats_epl$AwayTeam[is.na(stats_epl$AwayTeam)] <- ""
 
@@ -406,55 +405,38 @@ stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Tottenham', 'Tottenham Ho
 stats_epl['big_six_h'] <- sapply(stats_epl$HomeTeam,is_big_six)
 stats_epl['big_six_a'] <- sapply(stats_epl$AwayTeam,is_big_six)
 stats_epl['big_six'] <- if_else(stats_epl$big_six_a == 1 | stats_epl$big_six_h == 1,1,0)
+
+#Escribimos la tabla final a la carpeta local
+
+#declaramos la ruta final de la tabla
+ruta_final_pl_stats <- paste(ruta_guardado,'stats_epl.csv',sep = "")
+#lo escribimos
+write_csv(stats_epl,ruta_final_pl_stats)
 ```
 
-```{r teams_names_catalog,include=FALSE}
-#leemos el catálogo con el nombre de los equipos y los ids de equipos y jugadores
-teams_catalog <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/master_team_list.csv')
-#leemos el archivo "players_raw" de cada temporada de donde obtendremos el id del jugador y del equipo
-pl_raw_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/players_raw_1617.csv')
-pl_raw_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/players_raw_1718.csv')
-pl_raw_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/players_raw_1819.csv')
-pl_raw_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/players_raw_1920.csv')
-pl_raw_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/players_raw_2021.csv')
-pl_raw_2122 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/players_raw_2122.csv')
-#de cada df solo nos quedamos con el id del jugador y del equipo
-pl_raw_1617 <- pl_raw_1617 %>% select(.,c('id','team'))
-pl_raw_1718 <- pl_raw_1718 %>% select(.,c('id','team'))
-pl_raw_1819 <- pl_raw_1819 %>% select(.,c('id','team'))
-pl_raw_1920 <- pl_raw_1920 %>% select(.,c('id','team'))
-pl_raw_2021 <- pl_raw_2021 %>% select(.,c('id','team'))
-pl_raw_2122 <- pl_raw_2122 %>% select(.,c('id','team'))
-#agregamos el num de temporada a cada df
-pl_raw_1617['season'] <- '2016-17'
-pl_raw_1718['season'] <- '2017-18'
-pl_raw_1819['season'] <- '2018-19'
-pl_raw_1920['season'] <- '2019-20'
-pl_raw_2021['season'] <- '2020-21'
-pl_raw_2122['season'] <- '2021-22'
-#unimos los dfs en uno solo
-pl_raw <- pl_raw_1617 %>% bind_rows(pl_raw_1718) %>% bind_rows(pl_raw_1819) %>% bind_rows(pl_raw_1920) %>% bind_rows(pl_raw_2021) %>% bind_rows(pl_raw_2122)
-#hacemos el cruce del catálogo con el df para obtener el nombre del equipo
-players_teams_catalog <- pl_raw %>% left_join(teams_catalog, by = c('season','team'))
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r epl_stats_view}
+head(stats_epl)
 ```
+
+## Tabla 7: "fpl_merged_seasons". Fuente: GitHub - Fantasy-Premier-League
 
 ```{r cleaned_merged_seasons, include=FALSE}
-#leemos la data
-cleaned_merged_seasons <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/cleaned_merged_seasons.csv')
+#Empezamos con el proceso de creación de la tabla acerca de la información detallada de los partidos y jugadores de la PL por cada temporada
 
-#eliminamos las columnas que no nos muestran dinamismo de equipo o jugador
-cleaned_merged_seasons <- cleaned_merged_seasons %>% select(.,-c('X','opponent_team','fixture','selected'))
+#Leemos la data de todas las temporadas
+cleaned_merged_seasons <- get_pl_merged_seasons(ruta_raw)
 
-#reenombramos algunas columnas
-cleaned_merged_seasons <-  cleaned_merged_seasons %>% rename(season = season_x, team1 = team_x, id_player = element)
-
-#agregamos el nombre del equipo basado en el catálogo
+#Agregamos el nombre del equipo basado en el catálogo de equipos
 cleaned_merged_seasons <- cleaned_merged_seasons %>% left_join(players_teams_catalog[c('id','season','team_name')], by = c('season','id_player' = 'id'))
 
-#Homologamos el nombre de los equipos con los demas dfs
+#Homologamos el nombre de los equipos con las demás tablas
+
+#Convertimos las columnas de equipos en character
 cleaned_merged_seasons$team_name <- as.character(cleaned_merged_seasons$team_name)
 cleaned_merged_seasons$opp_team_name <- as.character(cleaned_merged_seasons$opp_team_name)
-
+#Sustituimos los nombres para homologar
 cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Brighton','Brighton & Hove Albion')
 cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Leicester','Leicester City')
 cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Man City','Manchester City')
@@ -474,18 +456,33 @@ cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_
 
 #Agregamos las columnas de big_six
 
-#creamos columnas auxiliares nuevas para facilitar la lógica
+#Creamos columnas auxiliares nuevas para facilitar la lógica
 cleaned_merged_seasons['bs_t'] <- sapply(cleaned_merged_seasons$team1, is_big_six)
 cleaned_merged_seasons['bs_ot'] <- sapply(cleaned_merged_seasons$opp_team_name, is_big_six)
 
-#aplicamos las reglas para big_six
+#Aplicamos las reglas para big_six
 cleaned_merged_seasons['big_six_h'] <- if_else((cleaned_merged_seasons$bs_t == 1 & cleaned_merged_seasons$was_home == 'True') | (cleaned_merged_seasons$bs_ot == 1 & cleaned_merged_seasons$was_home == 'False'),1,0)
 cleaned_merged_seasons['big_six_a'] <- if_else((cleaned_merged_seasons$bs_t == 1 & cleaned_merged_seasons$was_home == 'False') | (cleaned_merged_seasons$bs_ot == 1 & cleaned_merged_seasons$was_home == 'True'),1,0)
 cleaned_merged_seasons['big_six'] <- if_else(cleaned_merged_seasons$big_six_h == 1 | cleaned_merged_seasons$big_six_a == 1,1,0)
 
-#eliminamos las columnas auxiliares
+#Eliminamos las columnas auxiliares
 cleaned_merged_seasons <- cleaned_merged_seasons %>% select(.,-c('bs_t','bs_ot'))
+
+#Escribimos la tabla final a la carpeta local
+
+#declaramos la ruta final de la tabla
+ruta_final_pl_merged_seasons <- paste(ruta_guardado,'fpl_merged_seasons.csv',sep = "")
+#Lo escribimos
+write_csv(cleaned_merged_seasons,ruta_final_pl_merged_seasons)
 ```
+
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r cleaned_merged_seasons_view}
+head(cleaned_merged_seasons)
+```
+
+## Tabla 8: "fpl_merged_players". Fuente: GitHub - Fantasy-Premier-League
 
 ```{r fpl_merged_players,include=FALSE}
 #leemos la data
@@ -710,8 +707,6 @@ poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
 ```{r load_to_local_csv,include=FALSE}
 #Escribimos las tablas en archivos csv para no perderlos
 
-#write_csv(stats_epl,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/stats_epl.csv")
-#write_csv(cleaned_merged_seasons,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_seasons.csv")
 #write_csv(merged_cleaned_players,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_players.csv")
 #write_csv(merged_gw_formatted,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_gw.csv")
 #write_csv(poss_stats,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/epl_poss_stats.csv")
