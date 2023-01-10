@@ -37,6 +37,8 @@ source("functions_scripts/df_pl_overturns.R", local = knitr::knit_global())
 source("functions_scripts/df_pl_stats.R", local = knitr::knit_global())
 #script en donde incluimos las funciones referentes a la tabla cleaned_merged_seasons
 source("functions_scripts/df_cleaned_merged_seasons.R", local = knitr::knit_global())
+#script en donde incluimos las funciones referentes a la tabla cleaned_merged_players
+source("functions_scripts/df_merged_players.R", local = knitr::knit_global())
 ```
 
 ```{r local_vars,include=FALSE}
@@ -486,91 +488,61 @@ head(cleaned_merged_seasons)
 
 ```{r fpl_merged_players,include=FALSE}
 #leemos la data
-cleaned_players_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/cleaned_players_1617.csv')
-cleaned_players_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/cleaned_players_1718.csv')
-cleaned_players_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/cleaned_players_1819.csv')
-cleaned_players_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/cleaned_players_1920.csv')
-cleaned_players_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/cleaned_players_2021.csv')
-cleaned_players_2022 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/cleaned_players_2022.csv')
-
-#le agregamos la columna de season
-cleaned_players_1617['season'] <- '16/17'
-cleaned_players_1718['season'] <- '17/18'
-cleaned_players_1819['season'] <- '18/19'
-cleaned_players_1920['season'] <- '19/20'
-cleaned_players_2021['season'] <- '20/21'
-cleaned_players_2022['season'] <- '21/22'
+cleaned_players_1617 <- get_pl_merged_players(ruta_raw,'16/17')
+cleaned_players_1718 <- get_pl_merged_players(ruta_raw,'17/18')
+cleaned_players_1819 <- get_pl_merged_players(ruta_raw,'18/19')
+cleaned_players_1920 <- get_pl_merged_players(ruta_raw,'19/20')
+cleaned_players_2021 <- get_pl_merged_players(ruta_raw,'20/21')
+cleaned_players_2122 <- get_pl_merged_players(ruta_raw,'21/22')
 
 #unimos todos en uno solo
-merged_cleaned_players <- cleaned_players_1617 %>% bind_rows(cleaned_players_1718) %>% bind_rows(cleaned_players_1819) %>% bind_rows(cleaned_players_1920) %>% bind_rows(cleaned_players_2021) %>% bind_rows(cleaned_players_2022)
-
-merged_cleaned_players$second_name <- as.character(merged_cleaned_players$second_name)
-merged_cleaned_players$first_name <- as.character(merged_cleaned_players$first_name)
-
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e9>",replacement="é")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e1>",replacement="á")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e8>",replacement="e")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<fa>",replacement="ú")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f1>",replacement="n")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f3>",replacement="ó")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e0>",replacement="á")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<ed>",replacement="í")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<eb>",replacement="e")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f6>",replacement="o")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<fc>",replacement="u")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<ef>",replacement="i")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<d6>",replacement="O")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f8>",replacement="o")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<f5>",replacement="o")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e5>",replacement="a")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<c1>",replacement="Á")
-merged_cleaned_players$second_name <- sapply(merged_cleaned_players$second_name,gsub,pattern="<e4>",replacement="a")
-
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e9>",replacement="é")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e1>",replacement="á")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e8>",replacement="e")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<fa>",replacement="ú")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f1>",replacement="n")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f3>",replacement="ó")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e0>",replacement="á")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<ed>",replacement="í")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<eb>",replacement="e")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f6>",replacement="o")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<fc>",replacement="u")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<ef>",replacement="i")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<d6>",replacement="O")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f8>",replacement="o")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<f5>",replacement="o")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e5>",replacement="a")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<c1>",replacement="Á")
-merged_cleaned_players$first_name <- sapply(merged_cleaned_players$first_name,gsub,pattern="<e4>",replacement="a")
+merged_cleaned_players <- cleaned_players_1617 %>% bind_rows(cleaned_players_1718) %>% bind_rows(cleaned_players_1819) %>% bind_rows(cleaned_players_1920) %>% bind_rows(cleaned_players_2021) %>% bind_rows(cleaned_players_2122)
 
 #juntamos nombre y apellido del jugador y creamos nueva variable
 merged_cleaned_players <- merged_cleaned_players %>% mutate(name = paste(first_name,second_name))
 
-#del df de seasons (arriba) nos quedamos solo con el nombre, temporada y id_jugador
-seasons_short <- cleaned_merged_seasons %>% select(.,c('name','season','id_player','position'))
-#modificamos la columna "season" para que coincida en el cruce
-seasons_short$season <- seasons_short$season %>% sapply(.,gsub,pattern='-',replacement='/') %>% sapply(.,substr,start=3,stop=7)
+#Convertimos la variable de nombre al tipo character
+merged_cleaned_players$name <- as.character(merged_cleaned_players$name)
 
-#hacemos el cruce para obtener el id del jugador y su posición (en caso de que no se tenga)
-merged_cleaned_players <- merged_cleaned_players %>% left_join(seasons_short, by = c('season','name'))
-rm(seasons_short)
+#Transformamos los carácteres especiales dentro de los nombres
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<e9>",replacement="é")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<e1>",replacement="á")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<e8>",replacement="e")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<fa>",replacement="ú")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<f1>",replacement="n")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<f3>",replacement="ó")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<e0>",replacement="á")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<ed>",replacement="í")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<eb>",replacement="e")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<f6>",replacement="o")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<fc>",replacement="u")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<ef>",replacement="i")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<d6>",replacement="O")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<f8>",replacement="o")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<f5>",replacement="o")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<e5>",replacement="a")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<c1>",replacement="Á")
+merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="<e4>",replacement="a")
 
-#nos quedamos solo con una columna de posición
-merged_cleaned_players['position_name'] <- if_else(is.na(merged_cleaned_players$element_type),merged_cleaned_players$position,merged_cleaned_players$element_type)
-#borramos las anteriores dos columnas de posicion
-merged_cleaned_players <- merged_cleaned_players %>% select(.,-c('element_type','position'))
+#Completamos la columna de la posición del jugador
+merged_cleaned_players <- set_player_position(merged_cleaned_players,cleaned_merged_seasons)
+#Completamos la columna del nombre del equipo
+merged_cleaned_players <- set_team_name(merged_cleaned_players,players_teams_catalog)
 
-#nos traemos las columnas de id_player, season y team_name del catálogo de equipos
-teams_catalog_short <- players_teams_catalog %>% select(.,-c('team'))
-#modificamos la columna "season" para que coincida en el cruce
-teams_catalog_short$season <- teams_catalog_short$season %>% sapply(.,gsub,pattern='-',replacement='/') %>% sapply(.,substr,start=3,stop=7)
+#Escribimos la tabla final a la carpeta local
 
-#hacemos el cruce para traernos el nombre del equipo
-merged_cleaned_players <- merged_cleaned_players %>% left_join(teams_catalog_short,by = c('season','id_player' = 'id'))
-rm(teams_catalog_short)
+#declaramos la ruta final de la tabla
+ruta_final_pl_merged_players <- paste(ruta_guardado,'fpl_merged_players.csv',sep = "")
+#Lo escribimos
+write_csv(merged_cleaned_players,ruta_final_pl_merged_players)
 ```
+
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r fpl_merged_players_view}
+head(merged_cleaned_players)
+```
+## Tabla 9: "fpl_merged_gw". Fuente: GitHub - Fantasy-Premier-League
 
 ```{r merged_gw_formatted,include=FALSE}
 #leemos la data
@@ -707,7 +679,6 @@ poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
 ```{r load_to_local_csv,include=FALSE}
 #Escribimos las tablas en archivos csv para no perderlos
 
-#write_csv(merged_cleaned_players,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_players.csv")
 #write_csv(merged_gw_formatted,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_gw.csv")
 #write_csv(poss_stats,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/epl_poss_stats.csv")
 ```
