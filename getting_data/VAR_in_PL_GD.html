@@ -394,32 +394,32 @@ siguiente:</p>
 <pre class="r"><code>head(premier_league)</code></pre>
 <pre><code>##   season       date league_id                  league          team1
 ## 1  16/17 2016-08-13      2411 Barclays Premier League      Hull City
-## 2  16/17 2016-08-13      2411 Barclays Premier League  Middlesbrough
-## 3  16/17 2016-08-13      2411 Barclays Premier League    Southampton
-## 4  16/17 2016-08-13      2411 Barclays Premier League        Burnley
-## 5  16/17 2016-08-13      2411 Barclays Premier League Crystal Palace
-## 6  16/17 2016-08-13      2411 Barclays Premier League        Everton
+## 2  16/17 2016-08-13      2411 Barclays Premier League Crystal Palace
+## 3  16/17 2016-08-13      2411 Barclays Premier League        Everton
+## 4  16/17 2016-08-13      2411 Barclays Premier League    Southampton
+## 5  16/17 2016-08-13      2411 Barclays Premier League  Middlesbrough
+## 6  16/17 2016-08-13      2411 Barclays Premier League        Burnley
 ##               team2  spi1  spi2  prob1  prob2 probtie proj_score1 proj_score2
 ## 1    Leicester City 53.57 66.81 0.3459 0.3621  0.2921        1.16        1.24
-## 2        Stoke City 56.32 60.35 0.4380 0.2692  0.2927        1.30        1.01
-## 3           Watford 69.49 59.33 0.5759 0.1874  0.2367        1.91        1.05
-## 4      Swansea City 58.98 59.74 0.4482 0.2663  0.2854        1.37        1.05
-## 5         West Brom 55.19 58.66 0.4214 0.2939  0.2847        1.35        1.14
-## 6 Tottenham Hotspur 68.02 73.25 0.3910 0.3401  0.2689        1.47        1.38
+## 2         West Brom 55.19 58.66 0.4214 0.2939  0.2847        1.35        1.14
+## 3 Tottenham Hotspur 68.02 73.25 0.3910 0.3401  0.2689        1.47        1.38
+## 4           Watford 69.49 59.33 0.5759 0.1874  0.2367        1.91        1.05
+## 5        Stoke City 56.32 60.35 0.4380 0.2692  0.2927        1.30        1.01
+## 6      Swansea City 58.98 59.74 0.4482 0.2663  0.2854        1.37        1.05
 ##   importance1 importance2 score1 score2  xg1  xg2 nsxg1 nsxg2 adj_score1
 ## 1        38.1        22.2      2      1 0.85 2.77  0.17  1.25       2.10
-## 2        33.9        32.5      1      1 1.40 0.55  1.13  1.06       1.05
-## 3        34.1        30.7      1      1 1.05 0.22  1.52  0.41       1.05
-## 4        36.5        29.1      0      1 1.24 1.84  1.71  1.56       0.00
-## 5        43.6        34.6      0      1 1.11 0.68  0.84  1.60       0.00
-## 6        31.9        48.0      1      1 0.73 1.11  0.88  1.81       1.05
+## 2        43.6        34.6      0      1 1.11 0.68  0.84  1.60       0.00
+## 3        31.9        48.0      1      1 0.73 1.11  0.88  1.81       1.05
+## 4        34.1        30.7      1      1 1.05 0.22  1.52  0.41       1.05
+## 5        33.9        32.5      1      1 1.40 0.55  1.13  1.06       1.05
+## 6        36.5        29.1      0      1 1.24 1.84  1.71  1.56       0.00
 ##   adj_score2 after_covid is_VAR big_six_h big_six_a big_six
 ## 1       1.05           0      0         0         0       0
 ## 2       1.05           0      0         0         0       0
-## 3       1.05           0      0         0         0       0
+## 3       1.05           0      0         0         1       1
 ## 4       1.05           0      0         0         0       0
 ## 5       1.05           0      0         0         0       0
-## 6       1.05           0      0         0         1       1</code></pre>
+## 6       1.05           0      0         0         0       0</code></pre>
 </div>
 <div id="tabla-2-pl_overturns.-fuente-espn" class="section level2">
 <h2>Tabla 2: “pl_overturns”. Fuente: ESPN</h2>
@@ -546,7 +546,118 @@ siguiente:</p>
 </div>
 <div id="tabla-6-stats_epl.-fuente-football-data" class="section level2">
 <h2>Tabla 6: “stats_epl”. Fuente: Football-Data</h2>
-<p>Datos obtenidos de <a href="https://www.football-data.co.uk/englandm.php" class="uri">https://www.football-data.co.uk/englandm.php</a></p>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(stats_epl)</code></pre>
+<pre><code>##         Date Time               HomeTeam          AwayTeam FTHG FTAG FTR HTHG
+## 1   01/01/17 &lt;NA&gt;                Arsenal    Crystal Palace    2    0   H    1
+## 2   01/01/17 &lt;NA&gt;                Watford Tottenham Hotspur    1    4   A    0
+## 3 01/01/2018 &lt;NA&gt; Brighton &amp; Hove Albion   AFC Bournemouth    2    2   D    1
+## 4 01/01/2018 &lt;NA&gt;                Burnley         Liverpool    1    2   A    0
+## 5 01/01/2018 &lt;NA&gt;                Everton Manchester United    0    2   A    0
+## 6 01/01/2018 &lt;NA&gt;         Leicester City      Huddersfield    3    0   H    0
+##   HTAG HTR    Referee HS AS HST AST HC AC HF AF HY AY HR AR season big_six_h
+## 1    0   H A Marriner 22  7   7   4  8  4  9  7  1  1  0  0  16/17         1
+## 2    3   A   M Oliver  6 19   2   6  0  3 11  6  3  0  0  0  16/17         0
+## 3    1   D   M Oliver 15 26   6   8  5 12 13  9  2  1  0  0  17/18         0
+## 4    0   D     R East 13 19   4   5  3  9  4 12  0  0  0  0  17/18         0
+## 5    0   D A Marriner 12 21   0   6  6  6 11 10  2  0  0  0  17/18         0
+## 6    0   D    G Scott 11  6   5   1  4  1  7  9  1  1  0  0  17/18         0
+##   big_six_a big_six
+## 1         0       1
+## 2         1       1
+## 3         0       0
+## 4         1       1
+## 5         1       1
+## 6         0       0</code></pre>
+</div>
+<div id="tabla-7-fpl_merged_seasons.-fuente-github---fantasy-premier-league" class="section level2">
+<h2>Tabla 7: “fpl_merged_seasons”. Fuente: GitHub -
+Fantasy-Premier-League</h2>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(cleaned_merged_seasons)</code></pre>
+<pre><code>##    season               name position team1 assists bonus bps clean_sheets
+## 1 2016-17    Aaron Cresswell      DEF             0     0   0            0
+## 2 2016-17       Aaron Lennon      MID             0     0   6            0
+## 3 2016-17       Aaron Ramsey      MID             0     0   5            0
+## 4 2016-17 Abdoulaye Doucouré      MID             0     0   0            0
+## 5 2016-17       Adam Forshaw      MID             0     0   3            0
+## 6 2016-17       Adam Lallana      MID             1     2  33            0
+##   creativity id_player goals_conceded goals_scored ict_index influence
+## 1        0.0       454              0            0       0.0       0.0
+## 2        0.3       142              0            0       0.9       8.2
+## 3        4.9        16              3            0       3.0       2.2
+## 4        0.0       482              0            0       0.0       0.0
+## 5        1.3       286              1            0       0.3       2.0
+## 6       33.7       205              3            1      14.2      51.2
+##           kickoff_time minutes     opp_team_name own_goals penalties_missed
+## 1 2016-08-15T19:00:00Z       0           Chelsea         0                0
+## 2 2016-08-13T14:00:00Z      15 Tottenham Hotspur         0                0
+## 3 2016-08-14T15:00:00Z      60         Liverpool         0                0
+## 4 2016-08-13T14:00:00Z       0       Southampton         0                0
+## 5 2016-08-13T14:00:00Z      69             Stoke         0                0
+## 6 2016-08-14T15:00:00Z      75           Arsenal         0                0
+##   penalties_saved red_cards round saves team_a_score team_h_score threat
+## 1               0         0     1     0            1            2      0
+## 2               0         0     1     0            1            1      0
+## 3               0         0     1     0            4            3     23
+## 4               0         0     1     0            1            1      0
+## 5               0         0     1     0            1            1      0
+## 6               0         0     1     0            4            3     57
+##   total_points transfers_balance transfers_in transfers_out value was_home
+## 1            0                 0            0             0    55    False
+## 2            1                 0            0             0    60     True
+## 3            2                 0            0             0    80     True
+## 4            0                 0            0             0    50    False
+## 5            1                 0            0             0    45     True
+## 6           11                 0            0             0    70    False
+##   yellow_cards GW     team_name big_six_h big_six_a big_six
+## 1            0  1      West Ham         1         0       1
+## 2            0  1       Everton         0         1       1
+## 3            0  1       Arsenal         0         1       1
+## 4            0  1       Watford         0         0       0
+## 5            1  1 Middlesbrough         0         0       0
+## 6            1  1     Liverpool         1         0       1</code></pre>
+</div>
+<div id="tabla-8-fpl_merged_players.-fuente-github---fantasy-premier-league" class="section level2">
+<h2>Tabla 8: “fpl_merged_players”. Fuente: GitHub -
+Fantasy-Premier-League</h2>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(merged_cleaned_players)</code></pre>
+<pre><code>##        first_name second_name goals_scored assists total_points minutes
+## 1           David      Ospina            0       0            2     143
+## 2            Petr        Cech            0       0          134    3097
+## 3         Laurent   Koscielny            2       1          121    2821
+## 4             Per Mertesacker            0       0            1      38
+## 5 Gabriel Armando    de Abreu            0       0           45    1517
+## 6       H\xe9ctor Beller\xedn            1       5          119    2503
+##   goals_conceded creativity influence threat bonus bps ict_index clean_sheets
+## 1              4        0.0      28.8      0     0  18       2.9            0
+## 2             37        0.1     819.8      0     2 660      82.0           12
+## 3             37       53.9     831.2    239    19 723     112.7           10
+## 4              1        0.1      17.8      0     0   5       1.8            0
+## 5             18       84.5     295.8    119     2 296      50.0            5
+## 6             34      508.3     437.6    395    12 569     133.8           10
+##   red_cards yellow_cards selected_by_percent season now_cost
+## 1         0            0                 0.2  16/17       NA
+## 2         0            2                13.7  16/17       NA
+## 3         1            4                11.2  16/17       NA
+## 4         0            0                 0.2  16/17       NA
+## 5         0            6                 0.8  16/17       NA
+## 6         0            4                13.9  16/17       NA
+##                       name id_player position_name team_name
+## 1             David Ospina        NA          &lt;NA&gt;      &lt;NA&gt;
+## 2                Petr Cech        NA          &lt;NA&gt;      &lt;NA&gt;
+## 3        Laurent Koscielny        NA          &lt;NA&gt;      &lt;NA&gt;
+## 4          Per Mertesacker        NA          &lt;NA&gt;      &lt;NA&gt;
+## 5 Gabriel Armando de Abreu        NA          &lt;NA&gt;      &lt;NA&gt;
+## 6          Héctor Bellerín         6           DEF   Arsenal</code></pre>
+</div>
+<div id="tabla-9-fpl_merged_gw.-fuente-github---fantasy-premier-league" class="section level2">
+<h2>Tabla 9: “fpl_merged_gw”. Fuente: GitHub -
+Fantasy-Premier-League</h2>
 <p>Leemos la data con los stats relacinados a la posesión</p>
 <p>De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016,
 de aquí podemos empezar a hacer análisis exploratorio.</p>
