@@ -39,6 +39,8 @@ source("functions_scripts/df_pl_stats.R", local = knitr::knit_global())
 source("functions_scripts/df_cleaned_merged_seasons.R", local = knitr::knit_global())
 #script en donde incluimos las funciones referentes a la tabla cleaned_merged_players
 source("functions_scripts/df_merged_players.R", local = knitr::knit_global())
+#script en donde incluimos las funciones referentes a la tabla cleaned_merged_gw
+source("functions_scripts/df_merged_gw.R", local = knitr::knit_global())
 ```
 
 ```{r local_vars,include=FALSE}
@@ -57,43 +59,6 @@ players_teams_catalog_2021 <- get_players_catalog(ruta_raw,'20/21')
 players_teams_catalog_2122 <- get_players_catalog(ruta_raw,'21/22')
 #Unimos los catálogos de cada temporada en uno solo
 players_teams_catalog <- players_teams_catalog_1617 %>% bind_rows(players_teams_catalog_1718) %>% bind_rows(players_teams_catalog_1819) %>% bind_rows(players_teams_catalog_1920) %>% bind_rows(players_teams_catalog_2021) %>% bind_rows(players_teams_catalog_2122)
-```
-
-```{r functions, include=FALSE}
-#funcion sub_value_df adaptada para aceptar un array de entrada para cambios simultaneos
-sub_array_value_df <- function(df_column,old_value_array,new_value_array){
-  #obtenemos la longitud de los valores a cambiar
-  num_viejos_values <- length(old_value_array)
-  num_nuevos_values <- length(new_value_array)
-  #si son del mismo tamaño procedemos
-  if(num_nuevos_values == num_viejos_values){
-    for(t in 1:length(old_value_array)){
-      df_column <- sub_value_df(df_column,old_value_array[t],new_value_array[t])
-    }
-  } else { #si no son del mismo tamaño no hacemos nada
-    print('arrays de diferente tamaño')
-  }
-  
-}
-
-#funcion para remover los numeros en un string
-remove_numbers <- function(name_string){
-  #verificamos si dentro del nombre se tiene un numero
-  has_numbers <- grepl("[[:digit:]]", name_string)
-  #si tiene numero, entonces lo removemos
-  if(has_numbers){
-    #obtenemos las posiciones del char '_'
-    pos_underscore <- unlist(gregexpr('_',name_string))
-    #sabemos que el numero viene despues del ultimo '_'
-    #obtenemos la posicion del ultimo '_'
-    last_underscore <- pos_underscore[length(pos_underscore)]
-    #sacamos el substr del nombre ya sin numero
-    nombre_final <- substr(name_string,1,last_underscore-1)
-  } else 
-    nombre_final <- name_string
-  
-  return(nombre_final)
-}
 ```
 
 # Tablas de información acerca de la PL
@@ -546,23 +511,15 @@ head(merged_cleaned_players)
 
 ```{r merged_gw_formatted,include=FALSE}
 #leemos la data
-merged_gw_1617 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/merged_gw_1617.csv')
-merged_gw_1718 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/merged_gw_1718.csv')
-merged_gw_1819 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/merged_gw_1819.csv')
-merged_gw_1920 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/merged_gw_1920.csv')
-merged_gw_2021 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/merged_gw_2021.csv')
-merged_gw_2022 <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/merged_gw_2022.csv')
-
-#le creamos la columna season
-merged_gw_1617['season'] <- '16/17'
-merged_gw_1718['season'] <- '17/18'
-merged_gw_1819['season'] <- '18/19'
-merged_gw_1920['season'] <- '19/20'
-merged_gw_2021['season'] <- '20/21'
-merged_gw_2022['season'] <- '21/22'
+merged_gw_1617 <- get_pl_merged_gw(ruta_raw,'16/17')
+merged_gw_1718 <- get_pl_merged_gw(ruta_raw,'17/18')
+merged_gw_1819 <- get_pl_merged_gw(ruta_raw,'18/19')
+merged_gw_1920 <- get_pl_merged_gw(ruta_raw,'19/20')
+merged_gw_2021 <- get_pl_merged_gw(ruta_raw,'20/21')
+merged_gw_2122 <- get_pl_merged_gw(ruta_raw,'21/22')
 
 #unimos la data
-merged_gw <- merged_gw_1617 %>% bind_rows(merged_gw_1718) %>% bind_rows(merged_gw_1819) %>% bind_rows(merged_gw_1920) %>% bind_rows(merged_gw_2021) %>% bind_rows(merged_gw_2022)
+merged_gw <- merged_gw_1617 %>% bind_rows(merged_gw_1718) %>% bind_rows(merged_gw_1819) %>% bind_rows(merged_gw_1920) %>% bind_rows(merged_gw_2021) %>% bind_rows(merged_gw_2122)
 
 #eliminamos columnas
 merged_gw <- merged_gw %>% select(.,-c('ea_index','fixture','id','kickoff_time_formatted','round','selected','value'))
@@ -596,26 +553,11 @@ merged_gw$name <- sapply(merged_gw$name,gsub,pattern="<c7>",replacement="c")
 merged_gw$name <- sapply(merged_gw$name,remove_numbers)
 merged_gw$name <- sapply(merged_gw$name,gsub,pattern="_",replacement=" ")
 
-#empezamos el proceso para completar la columna de nombre de equipo
-#del catalogo de equioos nos quedamos con solo las columnas necesarias 
-players_teams_catalog_short <- players_teams_catalog %>% select(.,c('id','season','team_name'))
-#modificamos la columna "season" para que se pueda hacer el cruce
-players_teams_catalog_short$season <- sapply(players_teams_catalog_short$season,as.character) %>% sapply(.,substr,3,length(.)) %>% sapply(.,gsub,pattern="-",replacement="/")
-#cruzamos las tablas para traernos el nombre del equipo local
-merged_gw <- merged_gw %>% left_join(players_teams_catalog_short,by = c('season','element'='id'))
-#eliminamos la columna anterior "team"
-merged_gw <- merged_gw %>% select(.,-c('team'))
+#Modificamos la columna del nombre del equipo local
+merged_gw <- set_local_team_name(merged_gw,players_teams_catalog)
 
-#modificamos la columna "season" para que se pueda hacer el cruce
-players_teams_catalog$season <- sapply(players_teams_catalog$season,as.character) %>% sapply(.,substr,3,length(.)) %>% sapply(.,gsub,pattern="-",replacement="/")
-
-#removemos duplicados del catalogo sin el id del jugador
-teams_catalog_name <- players_teams_catalog %>% select(.,-c('id')) %>% distinct()
-
-#juntamos ambas tablas para definir el nombre del equipo contrario
-merged_gw_formatted <- merged_gw %>% left_join(teams_catalog_name,by=c('season','opponent_team' = 'team'))
-#eliminamos la columna donde viene el código del equipo y reenombramos la nueva columna con el nombre completo
-merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('opponent_team')) %>% rename(opponent_team = team_name.y, team_name = team_name.x)
+#Modificamos la columna del nombre del equipo oponente
+merged_gw_formatted <- set_opponent_team_name(merged_gw,players_teams_catalog)
 
 #Homologamos el nombre de los equipos con los demas dfs
 merged_gw_formatted$team_name <- as.character(merged_gw_formatted$team_name)
@@ -653,9 +595,22 @@ merged_gw_formatted['big_six'] <- if_else(merged_gw_formatted$big_six_h == 1 | m
 
 #eliminamos las columnas auxiliares
 merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('bs_t','bs_ot'))
+
+#Escribimos la tabla final a la carpeta local
+
+#declaramos la ruta final de la tabla
+ruta_final_pl_merged_gw <- paste(ruta_guardado,'fpl_merged_gw.csv',sep = "")
+#Lo escribimos
+write_csv(merged_gw_formatted,ruta_final_pl_merged_gw)
 ```
 
-Leemos la data con los stats relacinados a la posesión
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r merged_gw_formatted_view}
+head(merged_gw_formatted)
+```
+
+## Tabla 10: "poss_stats". Fuente: FBREF
 
 ```{r poss_stats,include=FALSE}
 #leemos la data
@@ -679,7 +634,6 @@ poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
 ```{r load_to_local_csv,include=FALSE}
 #Escribimos las tablas en archivos csv para no perderlos
 
-#write_csv(merged_gw_formatted,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/fpl_merged_gw.csv")
 #write_csv(poss_stats,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/epl_poss_stats.csv")
 ```
 
