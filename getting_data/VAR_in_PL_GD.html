@@ -397,22 +397,22 @@ siguiente:</p>
 ## 2  16/17 2016-08-13      2411 Barclays Premier League Crystal Palace
 ## 3  16/17 2016-08-13      2411 Barclays Premier League        Everton
 ## 4  16/17 2016-08-13      2411 Barclays Premier League    Southampton
-## 5  16/17 2016-08-13      2411 Barclays Premier League  Middlesbrough
-## 6  16/17 2016-08-13      2411 Barclays Premier League        Burnley
+## 5  16/17 2016-08-13      2411 Barclays Premier League        Burnley
+## 6  16/17 2016-08-13      2411 Barclays Premier League  Middlesbrough
 ##               team2  spi1  spi2  prob1  prob2 probtie proj_score1 proj_score2
 ## 1    Leicester City 53.57 66.81 0.3459 0.3621  0.2921        1.16        1.24
 ## 2         West Brom 55.19 58.66 0.4214 0.2939  0.2847        1.35        1.14
 ## 3 Tottenham Hotspur 68.02 73.25 0.3910 0.3401  0.2689        1.47        1.38
 ## 4           Watford 69.49 59.33 0.5759 0.1874  0.2367        1.91        1.05
-## 5        Stoke City 56.32 60.35 0.4380 0.2692  0.2927        1.30        1.01
-## 6      Swansea City 58.98 59.74 0.4482 0.2663  0.2854        1.37        1.05
+## 5      Swansea City 58.98 59.74 0.4482 0.2663  0.2854        1.37        1.05
+## 6        Stoke City 56.32 60.35 0.4380 0.2692  0.2927        1.30        1.01
 ##   importance1 importance2 score1 score2  xg1  xg2 nsxg1 nsxg2 adj_score1
 ## 1        38.1        22.2      2      1 0.85 2.77  0.17  1.25       2.10
 ## 2        43.6        34.6      0      1 1.11 0.68  0.84  1.60       0.00
 ## 3        31.9        48.0      1      1 0.73 1.11  0.88  1.81       1.05
 ## 4        34.1        30.7      1      1 1.05 0.22  1.52  0.41       1.05
-## 5        33.9        32.5      1      1 1.40 0.55  1.13  1.06       1.05
-## 6        36.5        29.1      0      1 1.24 1.84  1.71  1.56       0.00
+## 5        36.5        29.1      0      1 1.24 1.84  1.71  1.56       0.00
+## 6        33.9        32.5      1      1 1.40 0.55  1.13  1.06       1.05
 ##   adj_score2 after_covid is_VAR big_six_h big_six_a big_six
 ## 1       1.05           0      0         0         0       0
 ## 2       1.05           0      0         0         0       0
@@ -658,7 +658,82 @@ siguiente:</p>
 <div id="tabla-9-fpl_merged_gw.-fuente-github---fantasy-premier-league" class="section level2">
 <h2>Tabla 9: “fpl_merged_gw”. Fuente: GitHub -
 Fantasy-Premier-League</h2>
-<p>Leemos la data con los stats relacinados a la posesión</p>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(merged_gw_formatted)</code></pre>
+<pre><code>##                 name assists attempted_passes big_chances_created
+## 1    Aaron Cresswell       0                0                   0
+## 2       Aaron Lennon       0                3                   0
+## 3       Aaron Ramsey       0               26                   0
+## 4 Abdoulaye Doucouré       0                0                   0
+## 5  Abdul Rahman Baba       0                0                   0
+## 6     Abel Hernández       1               15                   0
+##   big_chances_missed bonus bps clean_sheets clearances_blocks_interceptions
+## 1                  0     0   0            0                               0
+## 2                  0     0   6            0                               1
+## 3                  0     0   5            0                               2
+## 4                  0     0   0            0                               0
+## 5                  0     0   0            0                               0
+## 6                  0     0  10            0                               0
+##   completed_passes creativity dribbles element errors_leading_to_goal
+## 1                0        0.0        0     454                      0
+## 2                2        0.3        0     142                      0
+## 3               22        4.9        1      16                      0
+## 4                0        0.0        0     482                      0
+## 5                0        0.0        0      80                      0
+## 6               10       12.2        0     163                      0
+##   errors_leading_to_goal_attempt fouls goals_conceded goals_scored ict_index
+## 1                              0     0              0            0       0.0
+## 2                              0     0              0            0       0.9
+## 3                              0     0              3            0       3.0
+## 4                              0     0              0            0       0.0
+## 5                              0     0              0            0       0.0
+## 6                              0     1              1            0       5.7
+##   influence key_passes         kickoff_time loaned_in loaned_out minutes
+## 1       0.0          0 2016-08-15T19:00:00Z         0          0       0
+## 2       8.2          0 2016-08-13T14:00:00Z         0          0      15
+## 3       2.2          0 2016-08-14T15:00:00Z         0          0      60
+## 4       0.0          0 2016-08-13T14:00:00Z         0          0       0
+## 5       0.0          0 2016-08-15T19:00:00Z         0          0       0
+## 6      14.4          1 2016-08-13T11:30:00Z         0          0      90
+##   offside open_play_crosses own_goals penalties_conceded penalties_missed
+## 1       0                 0         0                  0                0
+## 2       0                 0         0                  0                0
+## 3       0                 0         0                  0                0
+## 4       0                 0         0                  0                0
+## 5       0                 0         0                  0                0
+## 6       1                 0         0                  0                0
+##   penalties_saved recoveries red_cards saves tackled tackles target_missed
+## 1               0          0         0     0       0       0             0
+## 2               0          1         0     0       1       2             0
+## 3               0          2         0     0       2       0             1
+## 4               0          0         0     0       0       0             0
+## 5               0          0         0     0       0       0             0
+## 6               0          1         0     0       2       0             2
+##   team_a_score team_h_score threat total_points transfers_balance transfers_in
+## 1            1            2      0            0                 0            0
+## 2            1            1      0            1                 0            0
+## 3            4            3     23            2                 0            0
+## 4            1            1      0            0                 0            0
+## 5            1            2      0            0                 0            0
+## 6            1            2     30            5                 0            0
+##   transfers_out was_home winning_goals yellow_cards GW season position xP
+## 1             0    False             0            0  1  16/17     &lt;NA&gt; NA
+## 2             0     True             0            0  1  16/17     &lt;NA&gt; NA
+## 3             0     True             0            0  1  16/17     &lt;NA&gt; NA
+## 4             0    False             0            0  1  16/17     &lt;NA&gt; NA
+## 5             0     True             0            0  1  16/17     &lt;NA&gt; NA
+## 6             0     True             0            0  1  16/17     &lt;NA&gt; NA
+##   team_name     opponent_team big_six_h big_six_a big_six
+## 1  West Ham           Chelsea         1         0       1
+## 2   Everton Tottenham Hotspur         0         1       1
+## 3   Arsenal         Liverpool         1         1       1
+## 4   Watford       Southampton         0         0       0
+## 5   Chelsea          West Ham         1         0       1
+## 6      Hull    Leicester City         0         0       0</code></pre>
+</div>
+<div id="tabla-10-poss_stats.-fuente-fbref" class="section level2">
+<h2>Tabla 10: “poss_stats”. Fuente: FBREF</h2>
 <p>De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016,
 de aquí podemos empezar a hacer análisis exploratorio.</p>
 <p><strong>Tal vez agregar al campeón de cada temporada, nos podría
