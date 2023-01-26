@@ -41,6 +41,8 @@ source("functions_scripts/df_cleaned_merged_seasons.R", local = knitr::knit_glob
 source("functions_scripts/df_merged_players.R", local = knitr::knit_global())
 #script en donde incluimos las funciones referentes a la tabla cleaned_merged_gw
 source("functions_scripts/df_merged_gw.R", local = knitr::knit_global())
+#script en donde incluimos las funciones referentes a la tabla poss_stats
+source("functions_scripts/df_poss_stats.R", local = knitr::knit_global())
 ```
 
 ```{r local_vars,include=FALSE}
@@ -190,6 +192,24 @@ head(ovrt_df)
 
 ## Tabla 3: "pl_overturns_var". Fuente: ESPN
 
+La tercera tabla que se presenta aquí, al igual que la segunda, se obtiene de la página web de ESPN en donde se detallan las métricas relacionadas a las decisiones que toma el VAR ante diferentes eventos que se van suscitando dentro de cada partido de la PL. Las ligas de estas páginas web por año son las siguientes:
+
+* [2019/20](https://www.espn.com/soccer/english-premier-league/story/3929823/how-var-decisions-have-affected-every-premier-league-club) 
+
+* [2020/21](https://www.espn.com/soccer/english-premier-league/story/4182135/how-var-decisions-affected-every-premier-league-club-in-2020-21)
+
+* [2021/22](https://www.espn.com/soccer/english-premier-league/story/4452736/how-var-decisions-have-affected-every-premier-league-club-in-2021-22)
+
+Dentro de cada página web se detalla brevemente el balance que tuvo cada equipo de la PL en cuanto a decisiones a favor y en contra que tomó el VAR para con ellos dentro de cada temporada, algunos de ellos salen con saldos negativos y otros con saldos positivos. La diferencia de esta tabla con la número 2 es que en esta tabla se detallan más métricas relacionadas a decisiones del VAR. Algunas de esas métricas que se detallan dentro de esta tabla son las siguientes:
+
+1. dga (disallowed goals against): Número total de goles anulados en contra del equipo en cuestión.
+
+2. sdf (subjective decisions for): Número total de decisiones subjetivas del VAR a favor del equipo en cuestión
+
+3. pns (penalties net score): Marcador neto de los penales tomados por cada equipo durante la temporada correspondiente de la EPL. Se considera la siguiente operación: (penalties a favor) - (penalties en contra), lo cual quiere decir, a su vez, que si el valor de esta variable es negativo, entonces el equipo tuvo más penalties marcado en contra que a favor; si el valor de esta variable es positiva, quiere decir que el equipo tuvo más penalties marcados a favor que en contra. Si el equipo correspondiente no cuenta con esta métrica para determinada temporada entonces se le asigna el valor "2019" por default.
+
+Los datos aquí recolectados datan desde la temporada 2019/2020 hasta el día de hoy, esto debido a que el VAR se implementó por primera vez en el fútbol profesional de Inglaterra en el año 2019. Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
+
 ```{r ovrt_var,include=FALSE}
 #Obtenemos la tabla con las métricas de los overturns para la temporada indicada
 des_df_19_20 <- get_pl_overturns_desc(ruta_raw,'19/20')
@@ -227,6 +247,24 @@ head(ovrt_var)
 ```
 
 ## Tabla 4: "var_details". Fuente: ESPN
+
+La cuarta tabla que se presenta aquí, al igual que la segunda y la tercera, se obtiene de la página web de ESPN en donde se detallan los eventos en que el VAR intervino directamente durante cada partido de la PL, estos detalles son por escrito y están a manera de descripción de cada uno. Las ligas de estas páginas web por año son las siguientes:
+
+* [2019/20](https://www.espn.com/soccer/english-premier-league/story/3929823/how-var-decisions-have-affected-every-premier-league-club) 
+
+* [2020/21](https://www.espn.com/soccer/english-premier-league/story/4182135/how-var-decisions-affected-every-premier-league-club-in-2020-21)
+
+* [2021/22](https://www.espn.com/soccer/english-premier-league/story/4452736/how-var-decisions-have-affected-every-premier-league-club-in-2021-22)
+
+Cabe recalcar que los datos que se presentan aquí son precisamente los eventos descritos detalladamente tal cual pasaron durante el partido y sobre la cual el VAR llegó a tomar una decisión. Algunas de las variables que se presentan aquí son las siguientes:
+
+1. team1: Nombre del equipo 1, es quien recibe la indicación del VAR
+
+2. incident: Descripción de la intervención que se llevó a cabo por el VAR
+
+3. type: Flag que indica si la intervención del VAR fue a favor (FOR) o en contra (AGAINST) del equipo 1 (team1)
+
+Los datos aquí recolectados datan desde la temporada 2019/2020 hasta el día de hoy, esto debido a que el VAR se implementó por primera vez en el fútbol profesional de Inglaterra en el año 2019. Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
 
 ```{r var_details,include=FALSE}
 #Empezamos con el proceso para obtener los detalles del VAR en ciertos partidos para cada equipo
@@ -273,6 +311,8 @@ head(var_details)
 ```
 
 ## Tabla 5: "var_details1". Fuente: ESPN
+
+La quinta tabla que se presenta aquí tiene la misma estructura que la tabla número 4, la diferencia es que es en esta tabla no se incluye la variable 'home.away', en su lugar, se manipularon los valores de algunas columnas para que así la columna "team1" ya incluya el nombre del equipo que fue verdaderamente local en el partido correspondiente de la PL, y por otro lado, la columna team2 representa el nombre del equipo que verdaderamente fue visitante durante el partido en cuestión. Todas las demás columnas y estructura de la tabla es la misma a la número 4.
 
 ```{r var_details1,include=FALSE}
 #Empezamos el proceso para obtener la tabla con las descripciones de los incidentes analizados por el VAR
@@ -326,6 +366,18 @@ head(var_details1)
 ```
 
 ## Tabla 6: "stats_epl". Fuente: Football-Data
+
+La tabla número 6 que se presenta aquí muestra datos acerca de algunas estadísticas "comunes" que se dan durante cada partido de la PL, estas estadísticas están más orientadas a dar una descripción general de los principales eventos que se dan durante un partido de la PL, número de faltas cometidas por cada equipo, nuúmero de tiros a gol hechos por cada equipo, etc. Algunas de las variables que contiene la tabla son las siguientes:
+
+1. FTHG (Full Time Home Team Goals): Número total de goles hechos por el equipo local durante todo el partido.
+
+2. AS (Away Team Shots): Número total de tiros hechos por el equipo visitante durante todo el partido.
+
+3. AF (Away Team Fouls Committed): Número total de faltas cometidas por el equipo visitante durante todo el partido.
+
+Los datos fueron obtenidos de la página web [football-data](https://www.football-data.co.uk/englandm.php) y en esta tabla se presentan datos a partir de la temporada 2016/2017.
+
+Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
 
 ```{r epl_stats, include= FALSE}
 #Empezamos con el proceso para obtener la tabla con estadísticas generales de los partidos de la PL
@@ -389,6 +441,18 @@ head(stats_epl)
 
 ## Tabla 7: "fpl_merged_seasons". Fuente: GitHub - Fantasy-Premier-League
 
+La tabla número 7 presentada aquí contiene datos acerca de algunas métricas de los partidos de la PL a nivel temporada, es decir, los datos que se recopilan estan a nivel jornada/temporada, no contiene una descripción más detallada de jugadores o equipos, por ejemplo. También es importante mencionar que estos datos son orientados a ser usados para el juego de [Fantasy Premier League](https://fantasy.premierleague.com) y por lo tanto, en esta tabla se incluyen otras métricas además de las "tradicionales" que se presentan para cada partido de la PL, estas métricas "inusuales" que se presentan en esta tabla van más orientados a mostrar, por ejemplo, el desempeño que tiene cada jugador y/o equipo durante cada partido de la PL, métricas que ayuden a medir el desempeño de cada jugador dentro de la PL jornada tras jornada. Algunas de estas métricas son las siguientes:
+
+1. assists: Número de asistencias hechas por el jugador
+
+2. bps: Bonus Points System, puntos que se le suman/restan al jugador de acuerdo a acciones que realiza durante el partido a manera de medir su desempeño en el mismo
+
+3. creativity: Mide el desempeño del jugador en términos de oportunidades creadas de gol (mayormente derivadas en asistencias). Toma en cuenta frecuencia de pases, cruces, locación en la cancha y calidad de pase final
+
+Los datos se obtuvieron a través del repositorio de GitHub [Fantasy-Premier-League](https://github.com/vaastav/Fantasy-Premier-League) y contiene data a partir de la temporada 2016/2017.
+
+Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
+
 ```{r cleaned_merged_seasons, include=FALSE}
 #Empezamos con el proceso de creación de la tabla acerca de la información detallada de los partidos y jugadores de la PL por cada temporada
 
@@ -451,6 +515,18 @@ head(cleaned_merged_seasons)
 
 ## Tabla 8: "fpl_merged_players". Fuente: GitHub - Fantasy-Premier-League
 
+La tabla número 8 que se presenta aquí, al igual que la número 7, representa datos orientados al juego de Fantasy Premier League, por lo que las variables que podemos esperar aquí también son datos que ayudan a describir el desempeño de los jugadores jornada tras jornada de la PL. La principal diferencia de esta tabla con la número 7 es que esta tabla está a nivel jugador, es decir, estas métricas estan dedicadas a dar un mejor detalle de las características del jugador y, a su vez, a dar detalles de su desempeño jornada tras jornada de la PL, pero la estructura es en esencia la misma. Algunas de las métricas que se presentan en esta tabla son las siguientes:
+
+1. threat: Puntaje total atribuido a la amenaza que implicaba el jugador de acuerdo a FPL en la temporada correspondiente de la PL
+
+2. position_name: Posición del jugador dentro del campo de juego
+
+3. clean_sheets: Número total de porterías imbatidas acumuladas por el jugador en la temporada correspondiente de la PL
+
+Los datos se obtuvieron a través del repositorio de GitHub [Fantasy-Premier-League](https://github.com/vaastav/Fantasy-Premier-League) y contiene data a partir de la temporada 2016/2017.
+
+Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
+
 ```{r fpl_merged_players,include=FALSE}
 #leemos la data
 cleaned_players_1617 <- get_pl_merged_players(ruta_raw,'16/17')
@@ -508,6 +584,18 @@ Una vista general de algunos registros de esta tabla es la siguiente:
 head(merged_cleaned_players)
 ```
 ## Tabla 9: "fpl_merged_gw". Fuente: GitHub - Fantasy-Premier-League
+
+La tabla número 9 que se presenta aquí tiene el mismo fin que el de las tablas 7 y 8, representar información orientada al juego Fantasy Premier League, por lo que aquí también podemos esperar datos que representen el desemnpeño de los jugadores y/o equipos jornada tras jornada de la PL. La principal diferencia de esta tabla con las anteriores dos es que aquí la información está a nivel jornada, es decir, aquí se presenta información mas detallada con respecto a cada jornada y con la descripción de cada uno en detalle, pero la estructura es en esencia la misma. Algunas de las métricas que se presentan en esta tabla son las siguientes:
+
+1. big_chances_created: Número total de grandes oportunidades creadas, hacia gol, por el jugador en la jornada correspondiente de la PL
+
+2. completed_passes: Número total de pases completados hechos por el jugador en la jornada correspondiente de la PL
+
+3. penalties_conceded: Número total de penalties concedidos por el jugador en la jornada correspondiente de la PL 
+
+Los datos se obtuvieron a través del repositorio de GitHub [Fantasy-Premier-League](https://github.com/vaastav/Fantasy-Premier-League) y contiene data a partir de la temporada 2016/2017.
+
+Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
 
 ```{r merged_gw_formatted,include=FALSE}
 #leemos la data
@@ -612,11 +700,25 @@ head(merged_gw_formatted)
 
 ## Tabla 10: "poss_stats". Fuente: FBREF
 
+La tabla número 10 que se presenta aquí contiene el resumen de algunas estadísticas muy generales acerca de los equipos de la PL temporada tras temporada, estas estadísticas podrían pensarse como aquellas que describen de manera muy general el desempeño de los equipos de la PL a través de cada temporada, desde los minutos jugados, hasta el tiempo de posesión en general del equipo durante toda la temporada. La data que se presenta aquí es desde la temporada 2016/2017 al día de hoy. 
+
+Algunas de las variables que se presentan en esta tabla son las siguientes:
+
+1. goals_scored_90: Número de goles anotados por cada 90 mins en la temporada
+
+2. assists_90: Número de asistencias hechas por cada 90 mins en la temporada
+
+3. poss: Porcentaje de posesión total del balón en la temporada
+
+Los datos aquí consultados se obtuvieron de la página [FBREF](https://fbref.com/en/comps/9/2021-2022/2021-2022-Premier-League-Stats) (página de ejemplo para la temporada 2021-2022).
+
+Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
+
 ```{r poss_stats,include=FALSE}
+
 #leemos la data
-poss_stats <- read.csv('/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/epl_stats_poss.csv')
-#cambiamos nombre de columna
-poss_stats <- poss_stats %>% rename(min_played = miin_played)
+poss_stats <- get_poss_stats(ruta_raw)
+
 #hacemos cambio de nombre de los equipos para homologar con demas dfs
 poss_stats$team <- sub_value_df(poss_stats$team,'Bournemouth','AFC Bournemouth')
 poss_stats$team <- sub_value_df(poss_stats$team,'Brighton','Brighton & Hove Albion')
@@ -629,15 +731,19 @@ poss_stats$team <- sub_value_df(poss_stats$team,'Sheffield Utd','Sheffield Unite
 poss_stats$team <- sub_value_df(poss_stats$team,'Stoke City','Stoke')
 poss_stats$team <- sub_value_df(poss_stats$team,'Swansea City','Swansea')
 poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
+
+#Escribimos la tabla final a la carpeta local
+
+#declaramos la ruta final de la tabla
+ruta_final_poss_stats <- paste(ruta_guardado,'epl_poss_stats.csv',sep = "")
+#Lo escribimos
+write_csv(poss_stats,ruta_final_poss_stats)
 ```
 
-```{r load_to_local_csv,include=FALSE}
-#Escribimos las tablas en archivos csv para no perderlos
+Una vista general de algunos registros de esta tabla es la siguiente:
 
-#write_csv(poss_stats,"/Users/pedrovela/Documents/Git_repos/var_epl/tables/epl_poss_stats.csv")
+```{r poss_stats_view}
+head(poss_stats)
 ```
 
-De aquí ya tenemos datos acerca de 1900 partidos de la PL desde 2016, de aquí podemos empezar a hacer análisis exploratorio.
-
-**Tal vez agregar al campeón de cada temporada, nos podría servir como indicador de algo en cuanto a métricas**
-
+Una vez obtenida toda esta data, lo que se pretende lograr a continuación es el análisis estadístico de tipo descriptivo, predictivo e inferencial del VAR para con el fútbol profesional inglés a través de las últimas temporadas vs las temporadas anteriores en que el VAR no existía como una realidad dentro del fútbol profesional. 
