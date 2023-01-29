@@ -23,6 +23,13 @@ season_format <- function(season){
   return(season_format)
 }
 
+#Función para obtener la ruta en donde guardamos la data raw de FPL
+get_fpl_directory <- function(){
+  ruta_fpl <- '/Users/pedrovela/Docs/Fantasy-Premier-League/data/'
+  
+  return(ruta_fpl)
+}
+
 #Función para obtener la ruta en donde guardaremos las tablas finales
 get_tables_directory <- function(){
   ruta <- '/Users/pedrovela/Documents/Git_repos/var_epl/tables/'
@@ -72,4 +79,26 @@ get_players_catalog <- function(ruta_file,season){
   ply_tms_catalog <- players_catalog %>% left_join(teams_catalog, by = c('season','team'))
   
   return(ply_tms_catalog)
+}
+
+#Función para cargar los CSVs de la FPL a las carpetas de info raw
+load_raw_csv <- function(ruta_csv,file_names,ruta_guardado,nombres_guardado){
+  #Creamos las variables que nos ayudarán con el loop
+  num_files <- length(file_names)
+  #Creamos el loop para ir agarrando cada nombre de file
+  for (x in 1:num_files) {
+    #Armamos la ruta final de donde leeremos el csv
+    ruta_leer <- paste0(ruta_csv,file_names[x])
+    #Leemos el archivo localmente
+    csv_raw <- read.csv(ruta_leer)
+    #Leemos el nombre correspondiente con el que se guardará el file 
+    nombre_guardado <- nombres_guardado[x]
+    #Armamos la ruta final para la carpeta raw
+    ruta_raw <- paste0(ruta_guardado,nombre_guardado)
+    #Guardamos el archivo dentro de la carpeta raw
+    write_csv(csv_raw,ruta_raw)
+    #Imprimimos de éxito
+    print(paste('Archivo',nombre_guardado,'guardado'))
+  }
+  return('Archivos guardados')
 }

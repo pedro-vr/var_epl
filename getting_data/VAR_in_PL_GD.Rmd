@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r libreries, include = FALSE}
+```{r libraries, include = FALSE}
 #librerias a utilizar 
 #install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt",
             #       "urltools"))
@@ -27,10 +27,10 @@ library(methods)
 ```
 
 ```{r load_scripts,include=FALSE}
-#script en donde leemos la data de FiveThirtyEight
-source("functions_scripts/df_premier_league.R", local = knitr::knit_global())
 #script en donde incluimos las funciones globales (del ambiente)
 source("functions_scripts/general_functions.R", local = knitr::knit_global())
+#script en donde leemos la data de FiveThirtyEight
+source("functions_scripts/df_premier_league.R", local = knitr::knit_global())
 #script en donde incluimos las funciones referentes a la tabla pl_overturns
 source("functions_scripts/df_pl_overturns.R", local = knitr::knit_global())
 #script en donde incluimos las funciones referentes a la tabla pl_stats
@@ -48,6 +48,24 @@ source("functions_scripts/df_poss_stats.R", local = knitr::knit_global())
 ```{r local_vars,include=FALSE}
 #Agregamos las variables locales
 
+#ruta para el folder con la data raw de FPL
+ruta_fpl <- get_fpl_directory()
+#Nombre de los archivos que se actualizaron y se deben enviar a la carpeta del repo propio
+files_names <- c('cleaned_merged_seasons.csv',
+                 '2016-17/gws/merged_gw.csv','2016-17/cleaned_players.csv','2016-17/players_raw.csv',
+                 '2017-18/gws/merged_gw.csv','2017-18/cleaned_players.csv','2017-18/players_raw.csv',
+                 '2018-19/gws/merged_gw.csv','2018-19/cleaned_players.csv','2018-19/players_raw.csv',
+                 '2019-20/gws/merged_gw.csv','2019-20/cleaned_players.csv','2019-20/players_raw.csv',
+                 '2020-21/gws/merged_gw.csv','2020-21/cleaned_players.csv','2020-21/players_raw.csv',
+                 '2021-22/gws/merged_gw.csv','2021-22/cleaned_players.csv','2021-22/players_raw.csv')
+#Nombre de los archivos con los que se guardarán en el folder del repo propio
+nombres_finales <- c('cleaned_merged_seasons.csv',
+                     'merged_gw_1617.csv','cleaned_players_1617.csv','players_raw_1617.csv',
+                     'merged_gw_1718.csv','cleaned_players_1718.csv','players_raw_1718.csv',
+                     'merged_gw_1819.csv','cleaned_players_1819.csv','players_raw_1819.csv',
+                     'merged_gw_1920.csv','cleaned_players_1920.csv','players_raw_1920.csv',
+                     'merged_gw_2021.csv','cleaned_players_2021.csv','players_raw_2021.csv',
+                     'merged_gw_2122.csv','cleaned_players_2122.csv','players_raw_2122.csv')
 #ruta para guardar tablas finales
 ruta_guardado <- get_tables_directory()
 #ruta para leer data raw
@@ -61,6 +79,15 @@ players_teams_catalog_2021 <- get_players_catalog(ruta_raw,'20/21')
 players_teams_catalog_2122 <- get_players_catalog(ruta_raw,'21/22')
 #Unimos los catálogos de cada temporada en uno solo
 players_teams_catalog <- players_teams_catalog_1617 %>% bind_rows(players_teams_catalog_1718) %>% bind_rows(players_teams_catalog_1819) %>% bind_rows(players_teams_catalog_1920) %>% bind_rows(players_teams_catalog_2021) %>% bind_rows(players_teams_catalog_2122)
+```
+
+```{r update_fpl_data,include=FALSE}
+#En esta parte actualizamos la data proveniente del repo de GitHub de la FPL
+
+#Actualizamos la data vía Git
+
+#Una vez que ya tenemos los archivos actualizados vía el Git, los subimos a sus respectivas carpetas del repo propio
+load_raw_csv(ruta_fpl,files_names,ruta_raw,nombres_finales)
 ```
 
 # Tablas de información acerca de la PL
