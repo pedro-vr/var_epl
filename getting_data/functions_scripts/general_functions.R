@@ -1,6 +1,9 @@
 #Funciones que se utilizan para más de un proceso de creación de tabla de datos
 #Autor: Pedro Velázquez
 
+#Instalamos las librerias a utilizar
+library(tidyr)
+
 #Función para verificar si un equipo pertenece al Big Six
 is_big_six <- function(team_name){
   big_six_teams <- c('arsenal','chelsea','liverpool','manchester city','manchester united','tottenham hotspur')
@@ -21,6 +24,23 @@ season_format <- function(season){
   season_format <- paste(season_comp_1,season_comp_2,sep = "/")
   
   return(season_format)
+}
+
+#Función para obtener la dirección del repo
+get_fpl_repo_directory <- function(){
+  ruta_repo <- '/Users/pedrovela/Docs/Fantasy-Premier-League'
+  
+  return(ruta_repo)
+}
+
+#Función para obtener las credenciales de GitHub
+my_git_credentials <- function(){
+  username <- 'pedro-vr'
+  pw <- 'Gtfr45%al07.'
+    
+  return_list = list("username" = username, "pw" = pw)
+  
+  return(return_list)
 }
 
 #Función para obtener la ruta en donde guardamos la data raw de FPL

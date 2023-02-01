@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r libraries, include = FALSE}
 #librerias a utilizar 
 #install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt",
-            #       "urltools"))
+            #       "urltools","git2r"))
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -24,6 +24,7 @@ library(tidyverse)
 library(robotstxt)
 library(urltools)
 library(methods)
+library(git2r)
 ```
 
 ```{r load_scripts,include=FALSE}
@@ -48,6 +49,10 @@ source("functions_scripts/df_poss_stats.R", local = knitr::knit_global())
 ```{r local_vars,include=FALSE}
 #Agregamos las variables locales
 
+#Ruta del repo en general de FPL
+ruta_fpl_repo <- get_fpl_repo_directory()
+#Lista con credenciales de Git
+my_git_credentials <- my_git_credentials()
 #ruta para el folder con la data raw de FPL
 ruta_fpl <- get_fpl_directory()
 #Nombre de los archivos que se actualizaron y se deben enviar a la carpeta del repo propio
@@ -85,6 +90,9 @@ players_teams_catalog <- players_teams_catalog_1617 %>% bind_rows(players_teams_
 #En esta parte actualizamos la data proveniente del repo de GitHub de la FPL
 
 #Actualizamos la data vía Git
+pull(repo = ruta_fpl_repo,
+     credentials = cred_user_pass(username = my_git_credentials$username,
+                                  password = my_git_credentials$pw))
 
 #Una vez que ya tenemos los archivos actualizados vía el Git, los subimos a sus respectivas carpetas del repo propio
 load_raw_csv(ruta_fpl,files_names,ruta_raw,nombres_finales)
