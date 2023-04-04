@@ -12,8 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r libraries,include=FALSE}
 #librerias a utilizar
 
-#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt","urltools","fmsb","devtools","vcd","aplpack","GGally","wesanderson","e1071","viridis","hrbrthemes"))
+#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt","urltools","fmsb","devtools","vcd","aplpack","GGally","wesanderson","e1071","viridis","hrbrthemes","tinytex"))
 #devtools::install_github("ricardo-bion/ggradar", dependencies=TRUE)
+#tinytex::install_tinytex()
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -36,33 +37,20 @@ library(viridis)
 library(hrbrthemes)
 ```
 
-```{r functions, include=FALSE}
-#Funcion para leer la tabla a analizar
+```{r load_scripts, include=FALSE}
+#script en donde leemos las funciones generales para este script
+source("functions_scripts/general_functions.R", local = knitr::knit_global())
+```
 
-get_df <- function(df_number,is_work_computer=F){
-  
-  ruta_personal = '/Users/pedrovela/Documents/Git_repos/var_epl/tables'
-  ruta_trabajo = '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/VAR_soccer/tables' 
-  
-  df_name <- switch (as.character(df_number),
-    '1' = '/premier_league.csv', 
-    '2' = '/pl_overturns_var.csv', 
-    '3' = '/var_details.csv',
-    '4' = '/var_details1.csv', 
-    '5' = '/stats_epl.csv', 
-    '6' = '/fpl_merged_seasons.csv',
-    '7' = '/fpl_merged_players.csv',
-    '8' = '/fpl_merged_gw.csv',
-    '9' = '/epl_poss_stats.csv'
-    )
-  
-  if(is_work_computer)
-    df_path <-paste(ruta_trabajo,df_name,sep = "")
-  else 
-    df_path <- paste(ruta_personal,df_name,sep = "")
-  
-  df_final <- read.csv(df_path)
-}
+```{r local_variables,include=FALSE}
+#ruta para el file donde hacemos el ETL
+ruta_etl <- get_etl_file_directory()
+ruta_final_etl <- paste0(ruta_etl,"VAR_in_PL_GD.Rmd")
+```
+
+```{r render_etl_file, include = FALSE}
+#Función para actualizar los datos y hacer el ETL, poner T si se requiere hacerlo
+render_etl_file(will_render = F,ruta_render = ruta_final_etl)
 ```
 
 ### 1. JUSTIFICACIÓN
@@ -84,9 +72,9 @@ Analizar el efecto del VAR dentro de partidos oficiales del fútbol profesional 
 
 #### 3.2 Específicos
 
-  a) Analizar efecto en el dinamismo de los equipos dentro de cada partido que juegan
-  b) Analizar efecto en generación de oportunidades de gol, ¿Los jugadores toman mayores riesgos en equipo con la presencia del VAR?
-  c) Analizar efecto en individualidades y trabajo en equipo
+  a) Analizar el efecto que ha tenido el VAR en el dinamismo de los equipos dentro de cada partido que juegan
+  b) Analizar el efecto del VAR en generación de oportunidades de gol, ¿Los jugadores toman mayores riesgos en equipo con la presencia del VAR?
+  c) Analizar el efecto del VAR en individualidades y trabajo en equipo. ¿Los jugadores han sido más propositivos en equipo debido a la implementación del VAR o, por el contrario, ha generado que los jugadores se arriesguen en hacer más jugadas individuales?
   d) ¿Realmente se genera <u>**justicia deportiva**</u> con el VAR?
   
 ### 4. PREGUNTA DE INVESTIGACIÓN
@@ -99,11 +87,13 @@ Por lo tanto, es impoprtante hacer un análisis acerca de las ventajas y desvent
 
 ### 5. HIPÓTESIS
 
-Si bien el VAR es una herramienta que permite grandes avances tecnológicos y arbitrales dentro del fútbol moderno, es bien sabido que su desempeño no ha sido la óptima dentro de cada partido de fútbol. En varias ocasiones se ha podido observar que el VAR ha generado más complicaciones en cada partido de fútbol, por ejemplo, pérdida de tiempo de jugo a la hora de consultar el VAR, malas intervenciones del VAR en decisiones arbitrales (tanto en equivocaciones a la hora de tomar la decisión arbitral, como en negligencia de intervención cuando se necesita, entre otros). 
+Si bien el VAR es una herramienta que permite grandes avances tecnológicos y arbitrales dentro del fútbol moderno, es bien sabido que su desempeño no ha sido la óptima, o, al menos, la deseada dentro de cada partido de fútbol. En varias ocasiones se ha podido observar que el VAR ha generado más complicaciones en cada partido de fútbol, por ejemplo, pérdida de tiempo de jugo a la hora de consultar el VAR, malas intervenciones del VAR en decisiones arbitrales (tanto en equivocaciones a la hora de tomar la decisión arbitral, como en negligencia de intervención cuando se necesita, entre otros). 
 
 Con ello, se podría llegar a pensar que el VAR está trayendo consigo más aspectos negativos que positivos en el fútbol moderno, así, la hipótesis central de esta investigación es la siguiente:
 
 <div align="center"> **El VAR influye negativamente en el desarrollo de los partidos profesionales de fútbol inglés ,desde su implementación, hasta el día de hoy** </div>
+
+<div align="center"> **Desde la llegada del VAR al fútbol inglés, los equipos de fútbol profesional inglés son menos dinámicos, propositivos, es decir, el VAR ha hecho al fútbol menos dinámico** </div>
 
 ### 6. DESARROLLO
 

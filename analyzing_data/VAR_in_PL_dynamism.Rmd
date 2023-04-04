@@ -1,0 +1,202 @@
+---
+title: "El efecto del VAR en el dinamismo del fútbol profesional inglés"
+author: "Pedro Alan Velázquez Romero"
+date: "3/15/2023"
+output: html_document
+params:
+  is_work_computer: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries,include=FALSE}
+#librerias a utilizar
+
+#install.packages(c("dplyr","ggplot2","tidyr","httr","XML","rvest","xml2","tidyverse","robotstxt","urltools","fmsb","devtools","vcd","aplpack","GGally","wesanderson","e1071","viridis","hrbrthemes","tinytex"))
+#devtools::install_github("ricardo-bion/ggradar", dependencies=TRUE)
+#tinytex::install_tinytex()
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(rvest)
+library(tidyverse)
+library(robotstxt)
+library(urltools)
+library(methods)
+library(ggradar)
+library(scales)
+library(tibble)
+library(fmsb)
+library(vcd)
+library(GGally)
+library(aplpack)
+library(e1071)
+library(wesanderson)
+library(gridExtra)
+library(viridis)
+library(hrbrthemes)
+```
+
+```{r load_scripts, include=FALSE}
+#script en donde leemos las funciones generales para este script
+source("functions_scripts/general_functions.R", local = knitr::knit_global())
+```
+
+```{r local_variables,include=FALSE}
+#variable para controlar desde donde estoy ejecutando el código
+is_work_computer = params$is_work_computer
+#ruta para el file donde hacemos el ETL
+ruta_etl <- get_etl_file_directory(is_work_computer)
+ruta_final_etl <- paste0(ruta_etl,"VAR_in_PL_GD.Rmd")
+#Ruta de la carpeta con las imagenes a incluir en el Rmd
+ruta_imagenes <- get_images_directory()
+#Ruta a la imagen del mapa de xG de The Athletic
+ruta_mapa_xg <- paste0(ruta_imagenes,'xg_map.png')
+```
+
+```{r render_etl_file, include = FALSE}
+#Función para actualizar los datos y hacer el ETL, poner T si se requiere hacerlo
+render_etl_file(will_render = F,ruta_render = ruta_final_etl,is_work_computer = is_work_computer)
+```
+
+### 1. JUSTIFICACIÓN
+
+El VAR es una herramienta tecnológica de reciente implementación dentro del fútbol que promete grandes avances en cuanto a decisiones arbitrales en cada partido que se juegue, sin embargo, existe la disputa de aquellos que afirman que el VAR en realidad no aporta nada extra al fútbol, incluso hay algunas personas que llegan a afirmar que éste funge más como un detractor del fútbol que una ayuda al mismo. Sobre este debate es que se inspira al realizar la presente investigación, para así poder afirmar, o negar, con datos, dichas declaraciones hacia con el VAR. Por lo tanto, lo que se busca aquí es descubrir el verdadero aporte del VAR dentro del fútbol profesional.
+
+### 2. DELIMITACIÓN DEL PROBLEMA
+
+"El efecto (papel/desempeño) del VAR dentro de partidos oficiales del fútbol profesional inglés desde su implementación (2019) al día de hoy"
+
+  - <u>**Espacial**</u>: Inglaterra - Premier League (PL)
+  - <u>**Temporal**</u>: 2016-2022 (Tomando en cuenta solamente partidos oficiales de la PL)
+
+### 3. OBJETIVOS
+
+#### 3.1 Generales
+
+Analizar el efecto del VAR dentro de partidos oficiales del fútbol profesional inglés desde su implementación (2019) al día de hoy
+
+#### 3.2 Específicos
+
+  a) Analizar el efecto que ha tenido el VAR en el dinamismo de los equipos dentro de cada partido que juegan
+  b) Analizar el efecto del VAR en generación de oportunidades de gol, ¿Los jugadores toman mayores riesgos en equipo con la presencia del VAR?
+  c) Analizar el efecto del VAR en individualidades y trabajo en equipo. ¿Los jugadores han sido más propositivos en equipo debido a la implementación del VAR o, por el contrario, ha generado que los jugadores se arriesguen en hacer más jugadas individuales?
+  d) ¿Realmente se genera <u>**justicia deportiva**</u> con el VAR?
+  
+### 4. PREGUNTA DE INVESTIGACIÓN
+
+<u> ¿Qué tipo de efectos (positivos/negativos) tuvo la implementación del VAR dentro de los partidos en el fútbol profesional inglés? </u>
+
+El VAR es la herramienta tecnológica más reciente que se ha implementado dentro del fútbol profesional en todo el mundo. El propósito pricipal de esta implementación es generar mayor justicia deportiva en cada partido de fútbol con respecto a decisiones arbitrales, sin embargo, al ser una herramienta dce tecnología moderna y totalmente nueva dentro del ambiente del fútbol, ésta puede presentar mayores fallas en su funcionamiento y esto, a su vez, puede llegar a ocasionar mayores repercusiones dentro del fútbol y el desarrollo de los partidos (en dinamismo, desempeño de los equipos, etc.). 
+
+Por lo tanto, es impoprtante hacer un análisis acerca de los diferentes efectos, tanto negativos como positivos, que ha traído el VAR hasta el día de hoy dentro del fútbol y con ello poder discernir sobre si es una herramienta que vale la pena implementar dentro del fútbol moderno.
+
+### 5. HIPÓTESIS
+
+Si bien el VAR es una herramienta que permite grandes avances tecnológicos y arbitrales dentro del fútbol moderno, es bien sabido que su desempeño no ha sido la óptima, o, al menos, la deseada dentro de cada partido de fútbol. En varias ocasiones se ha podido observar que el VAR ha generado más complicaciones en cada partido de fútbol, por ejemplo, pérdida de tiempo de jugo a la hora de consultar el VAR, malas intervenciones del VAR en decisiones arbitrales (tanto en equivocaciones a la hora de tomar la decisión arbitral, como en negligencia de intervención cuando se necesita, entre otros). 
+
+Con ello, se podría llegar a pensar que el VAR está trayendo consigo más aspectos negativos que positivos en el fútbol moderno, así, la hipótesis central de esta investigación es la siguiente:
+
+<div align="center"> **El VAR influye negativamente en el desarrollo de los partidos profesionales de fútbol inglés ,desde su implementación, hasta el día de hoy** </div>
+
+<div align="center"> **Desde la llegada del VAR al fútbol inglés, los equipos de fútbol profesional inglés son menos dinámicos, propositivos, es decir, el VAR ha hecho al fútbol menos dinámico** </div>
+
+### 6. DESARROLLO
+
+#### 6.1 Análisis exploratorio
+
+Como primer acercamiento hacia la prueba de la hipótesis planteada anteriormente, se analizarán los datos que nos arrojó, por una parte, el fútbol profesional jugado en Inglaterra desde la temporada 2016/2017 hasta el día de hoy (temporada 2021/2022), y por otro lado, el desempeño del VAR dentro de esta misma liga profesional de fútbol desde la temporada 2019/2020 (pimera implementación) hasta el día de hoy (temporada 2021/2022) con la mirada puesta en temas de dinamismo del fútbol.
+
+Dentro del fútbol podemos dividir sus posiciones de juego dentro de tres principales: Media, Defensa y Delantera, cada una de ellas con un propósito específico para cada partido de fútbol dependiendo de varios factores (el entrenador en turno, localía, competencia, etc.). Sin embargo, podemos ser capaces de describir de manera muy general los roles de cada posición dentro de cada partido de fútbol: en primer lugar, la defensa tiene como rol principal bloquear a toda costa los intentos de gol que realice el equipo contrario; en segundo lugar, la media (quienes a título personal pienso que tienen el trabajo más extenso) tiene la labor de, por un lado, tomar los balones que logran recuperar en la defensa para, después, acarrear el balón lo suficiente por la cancha hasta que, finalmente, logran distribuir esos balones a la delantera; y, por, último, la delantera tiene como deber principal hacer que los balones terminen dentro de las redes y acumular el mayor número de goles posibles. Una combinación de buenos jugadores en cada posición (que se dedican a hacer un trabajo impecable dentro de cada una) es lo que puede crear lo que se llama un buen equipo.
+
+Teniendo esto en cuenta, podemos empezar a hablar de buenos desempeños de los jugadores en cada posición y, por consiguiente, de un buen desempeño de equipo en general, por lo tanto, el siguiente análisis que se realizará es precisamente el desglose del desempeño de los jugadores en cada posición y así poder ir comprobando, en primer lugar, la hipótesis sobre la baja de desempeño de jugadores con la llegada del VAR y, en segundo lugar, si es que los equipos en general han tenido esta baja de desempeño y dinamismo dentro del fútbol inglés con la llegada del VAR al mismo.
+
+La influencia del VAR se tomará en cuenta dentro de cada posición del jugador de fútbol con los siguientes dos puntos:
+
+1. Se tomará en cuenta la **fecha de implementación del VAR** dentro de la PL, es decir, se hará una comparación de manera temporal tomando en cuenta los valores de estas métricas antes del VAR (temporada 2018-2019 hacia atrás) y después del VAR (temporada 2019-2020 en adelante)
+
+2. Se tratará de identificar aquellos partidos en los que sabemos que hubo una intervención puntual del VAR para así poder empezar a asignar diferentes pesos (positivos o negativos según sea el caso) a los valores de las diferentes métricas
+
+Sobre el segundo punto se hará una descripción puntual del método a aplicar cuando se tenga el caso.
+
+##### 6.1.1 La buena defensa en la PL, ¿los muros defensivos se derrumban?
+
+En el primer punto a tratar, se analizará el desempeño de las diferentes defensas en la PL en el periodo pre y post VAR. La intención de analizar en primera instancia el desempeño de la defensa dentro de los partidos es que, en primer lugar, la defensa es la primera línea de ataque dentro del fútbol, algunos entrenadores son fieles apoyadores de esta noción, otros tantos no comulgan demasiado con esta idea, en lo personal, yo si pienso que la defensa si es la primera línea de ataque y por eso es que se pretende analizar en primera instancia esta posición dentro del fútbol. [aquí poner alguna cita de entrenadores que hayan dicho algo acerca de la primera línea de ataque que es la defensa]
+
+Ahora, las métricas que analizaremos para la defensa serán las siguientes:
+
+- Número de pases a favor del equipo a analizar (attempted_passes: fpl_merged_gw + completed_passes:fpl_merged_gw + key_passes:fpl_merged_gw + xP:fpl_merged_gw)
+- Número de pases en contra o número de pases permitidos por el equipo a analizar (attempted_passes: fpl_merged_gw + completed_passes:fpl_merged_gw + key_passes:fpl_merged_gw + xP:fpl_merged_gw)
+- Deep xG? Aquí podemos contar los xG que tengan la menor probabilidad, i.e., que tengan un valor muy cercano a cero para tomar en cuenta de qué tanta disposición un equipo permite al otro en cuanto a tiros o en cuanto a acercarse a su área (xG:fpl_merged_gw)
+- Tiempo de posesión (%) -- o.f. (open field) (poss:epl_poss_stats)
+* Correlacionado a la media (tal vez incluir esta métrica después) -- o.f.
+- Número de pases cruzados -- o.f. (open_play_crosses:fpl_merged_gw + xP:fpl_merged_gw)
+* Número de pases en un radio de 20 yardas ¿? -- o.f.(xP:fpl_merged_gw)
+- Distancia de tiros -- g.m. (goalmouth) (xG: fpl_merged_gw) fijarse en el mapa de _The Athletic_ y de ahí estimar una distancia del tiro
+- % tiros a 10 yardas del área grande o en el área grande y chica -- g.m. (goalmouth) (xg1:premier_league + xg2:premier_league)
+- % Pases "peligrosos" que se convirtieron en oportunidades de gol -- g.m.(xP:fpl_merged_gw + key_passes:fpl_merged_gw)
+* Número de tiros permitidos por acarreos profundos -- g.m. (xG?)
+- % tiros salvados -- g.m. (HST:epl_stats + AST:epl_stats - FTHG:epl_stats - FTAG:epl_stats)
+- % tiros a puerta -- g.m. (HST:epl_stats + AST:epl_stats)
+- % bloqueos -- g.m. (clearances_blocks_interceptions:fpl_merged_gw)
+- Número de pases por tiro (key_passes:fpl_merged_gw + xP:fpl_merged_gw)
+- $PPDA = \frac{PPEA}{TAD}$ con $PPEA$ = Número de pases hechos por el equipo atacante y $TAD$ = Total de acciones defensivas
+- Field Tilt: $FT = \frac{FTP}{TFTP}$ con $FTP$ = Número de pases finales en el último tercio del campo para el equipo atacante y $TFTP$ = Número total de pases hechos en el último tercio del campo en todo el partido
+- % Pases completados (completed_passes:fpl_merged_gw + key_passes:fpl_merged_gw + xP:fpl_merged_gw)
+* Distancia de los toques no defensivos desde la mitad del campo
+- % pases largos o cruzados (open_play_crosses:fpl_merged_gw + xP:fpl_merged_gw)
+* ¿Cómo medir cuando los equipos obligan al contrario a expandirse al campo? Jugar en las bandas
+- % Intercepciones (clearances_blocks_interceptions:fpl_merged_gw + recoveries:fpl_merged_gw)
+- % Tackles (fouls:fpl_merged_gw + tackled:fpl_merged_gw)
+- clean sheets (fpl_merged_gw)
+- Despejes (clearances_blocks_interceptions:fpl_merged_gw)
+- goals conceded (fpl_merged_gw)
+- fouls (fpl_merged_gw)
+- own_goals (fpl_merged_gw)
+- penalties_conceded (fpl_merged_gw)
+- penalties_saved (fpl_merged_gw)
+- red_cards (fpl_merged_gw)
+- saves (fpl_merged_gw)
+- team_h/a_score (fpl_merged_gw)
+- yellow_cards (fpl_merged_gw)
+
+Todas estas mètricas fueron recopiladas de muchos autores que escribieron en algún momento sobre el análisis que se debe plantear para poder medir a los defensas con la intención de poder conocer que tan efectiva es dentro de un partido de fútbol. Ahora, estas métricas que se presentan aquí son presentadas de manera aislada al VAR, es decir, aquí no se toma en cuenta la influencia del VAR dentro del fútbol para con estas métricas, precisamente la intención del presente análisis es poder hacer un análisis detallado de estas métricas ya teniendo en cuenta la influencia del VAR dentro del fútbol para poder verificar si es que ha disminuido su eficiencia dentro del fútbol.
+
+Teniendo esto en cuenta, podemos dividir el actuar de una defensa de fútbol en dos: la "buena defensa" y la "mala defensa"; cuando hablamos de una "mala defensa" es aquella que, hablando estrictamente, no consigue ya sea despojar del balón al contrario (el cual puede desembocar en un tiro a puerta o desviado) o, por otro lado, consigue despojar del balón al contrario pero lo consigue realizando alguna falta al contrario; por otro lado, cuando hablamos de la "buena defensa" nos referimos a aquellas acciones defensivas que logran despojar del balón al contrario sin necesidad de una falta, o bien, que el balón llegue de alguna manera a los 3 palos del portero (o tiro desviado). Por consiguiente, analizaremos estos dos tipos de defensa por separado.
+
+##### 6.1.1.1 La Mala defensa
+
+El primer tipo de defensa a analizar será aquella que yo denomino como la "mala defensa", es decir, aquella defensa que por un lado, se tiene que valer de faltas para poder despejar del balón al contrario o, por otro lado, permiten que el contrario realice tiros con alta probabilidad de gol originado de un alto tiempo de posesión del equipo contrario. Es claro que estas medidas son negativas para poder describir a una defensa dentro de un equipo de fútbol y es claro que lo que deseamos aquí es que este tipo de acciones vayan a la baja siempre pero siempre de la mano con un crecimiento de acciones de "buena defensa" (descritos en otro apartado), por lo tanto, uno de los resultados que esperamos ver en este apartado es **una baja en acciones consideradas como faltas o interrupciones del juego por parte de la defensa**, ahora, por otro lado, lo que deseamos combinar en este apartado es la influencia del VAR en la defensa de los diferentes equipos de la PL, por lo que, el siguiente resultado (ya combinado con el VAR) que deseamos ver en este apartado, de manera general, es **una disminución en las acciones defensivas consideradas como "malas"**, ya que si nuestra hipótesis estipula que el VAR afecta de manera negativa en el fútbol profesional inglés entonces lo que esperamos es más interrupciones de juego y, por lo tanto, una disminución de acciones defensivas malas. Con esto, podríamos decir que lo que esperamos es ver una especie de doble efecto negativo, una "doble disminución" es las acciones defensivas malas.
+
+Para poder medir este tipo de acciones defensivas tomaremos en consideración las siguientes variables:
+
+- Número de pases permitidos en contra del equipo a analizar--
+- Tiempo de posesión del equipo contrario-falta cruzar para obtener el tiempo de posesión
+- Número de pases cruzados completados hechos por el equipo contrario-
+- Número de pases en un radio de 20 yardas-
+- Número de tiros hechos por el equipo contrario: Aquí se le dará un peso dependiendo de la distancia a la cual se realizan estos tiros (basado a su vez en su xG) y a su vez de si éstos fueron hechos a portería o no.-falta cruzar para obtener tiros y xG
+- Número de pases "peligrosos" o claves que se convierten a su vez en oportunidades de gol-
+- Número de pases por tiro hecho por el equipo contrario (aquí buscamos solo aquellos valores altos ya que eso define a una "mala defensa")- falta cruzar con tabla para conseguir los tiros
+- PPDA (aquí buscamos valores cercanos a cero)
+- Field Tilt (aquí buscamos valores alejados de cero)
+- Número de goles concedidos-
+- Número de faltas cometidas-
+- Número de goles hechos en propia puerta-
+- Número de penalties concedidos-
+- Número de tarjetas rojas mostradas a la defensa-
+- Número de tarjetas amarillas mostradas a la defensa-
+
+```{r sanciones_arbitrales,include=FALSE}
+#Leemos el df de donde obtendremos las primera métricas acerca de faltas y pases hechos
+df_faltas <- get_df(8) %>% select(c('season','team_name','opponent_team','kickoff_time','GW','yellow_cards','red_cards','penalties_conceded','own_goals','fouls','goals_conceded','completed_passes','key_passes','xP','open_play_crosses','attempted_passes'))
+#Leemos el df de done obtendremos el xG de los equipos
+df_xg <- get_df(1) %>% select(c('season','date','team1','team2','xg1','xg2'))
+```
+
+```{r show_sanciones_arbitrales}
+head(df_xg)
+```
+
+![Imagen tomada de [The Athletic](https://theathletic.com/3145563/2022/02/24/how-shot-locations-have-changed-in-the-premier-league/)](`r ruta_mapa_xg`){Width=500}
