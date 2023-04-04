@@ -1,6 +1,9 @@
 #Funciones que se utilizan para más de un proceso de creación de tabla de datos
 #Autor: Pedro Velázquez
 
+#Instalamos las librerias a utilizar
+library(tidyr)
+
 #Función para verificar si un equipo pertenece al Big Six
 is_big_six <- function(team_name){
   big_six_teams <- c('arsenal','chelsea','liverpool','manchester city','manchester united','tottenham hotspur')
@@ -23,6 +26,23 @@ season_format <- function(season){
   return(season_format)
 }
 
+#Función para obtener la dirección del repo
+get_fpl_repo_directory <- function(){
+  ruta_repo <- '/Users/pedrovela/Docs/Fantasy-Premier-League'
+  
+  return(ruta_repo)
+}
+
+#Función para obtener las credenciales de GitHub
+my_git_credentials <- function(){
+  username <- 'pedro-vr'
+  pw <- 'Gtfr45%al07.'
+    
+  return_list = list("username" = username, "pw" = pw)
+  
+  return(return_list)
+}
+
 #Función para obtener la ruta en donde guardamos la data raw de FPL
 get_fpl_directory <- function(){
   ruta_fpl <- '/Users/pedrovela/Docs/Fantasy-Premier-League/data/'
@@ -31,15 +51,21 @@ get_fpl_directory <- function(){
 }
 
 #Función para obtener la ruta en donde guardaremos las tablas finales
-get_tables_directory <- function(){
-  ruta <- '/Users/pedrovela/Documents/Git_repos/var_epl/tables/'
+get_tables_directory <- function(is_work_computer=F){
+  if(is_work_computer)
+    ruta <- '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/var_epl/tables/'
+  else
+    ruta <- '/Users/pedrovela/Documents/Git_repos/var_epl/tables/'
   
   return(ruta)
 }
 
 #Función para obtener la ruta de la info raw
-get_raw_directory <- function(){
-  ruta_raw <- '/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/'
+get_raw_directory <- function(is_work_computer=F){
+  if(is_work_computer)
+    ruta_raw <- '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/var_epl/getting_data/raw_data/'
+  else
+    ruta_raw <- '/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/'
   
   return(ruta_raw)
 }
