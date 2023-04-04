@@ -3,6 +3,8 @@ title: "Getting PL data (2016-present)"
 author: "Pedro Alan Velázquez Romero"
 date: "5/3/2021"
 output: html_document
+params:
+  is_work_computer: false
 ---
 
 ```{r setup, include=FALSE}
@@ -72,9 +74,9 @@ nombres_finales <- c('cleaned_merged_seasons.csv',
                      'merged_gw_2021.csv','cleaned_players_2021.csv','players_raw_2021.csv',
                      'merged_gw_2122.csv','cleaned_players_2122.csv','players_raw_2122.csv')
 #ruta para guardar tablas finales
-ruta_guardado <- get_tables_directory()
+ruta_guardado <- get_tables_directory(params$is_work_computer)
 #ruta para leer data raw
-ruta_raw <- get_raw_directory()
+ruta_raw <- get_raw_directory(params$is_work_computer)
 #catalogo de jugadores y equipos por temporada
 players_teams_catalog_1617 <- get_players_catalog(ruta_raw,'16/17')
 players_teams_catalog_1718 <- get_players_catalog(ruta_raw,'17/18')

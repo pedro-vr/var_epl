@@ -51,15 +51,21 @@ get_fpl_directory <- function(){
 }
 
 #Función para obtener la ruta en donde guardaremos las tablas finales
-get_tables_directory <- function(){
-  ruta <- '/Users/pedrovela/Documents/Git_repos/var_epl/tables/'
+get_tables_directory <- function(is_work_computer=F){
+  if(is_work_computer)
+    ruta <- '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/var_epl/tables/'
+  else
+    ruta <- '/Users/pedrovela/Documents/Git_repos/var_epl/tables/'
   
   return(ruta)
 }
 
 #Función para obtener la ruta de la info raw
-get_raw_directory <- function(){
-  ruta_raw <- '/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/'
+get_raw_directory <- function(is_work_computer=F){
+  if(is_work_computer)
+    ruta_raw <- '/Users/pedro.velazquez/Library/Mobile Documents/com~apple~CloudDocs/Documents/Git_repos/var_epl/getting_data/raw_data/'
+  else
+    ruta_raw <- '/Users/pedrovela/Documents/Git_repos/var_epl/getting_data/raw_data/'
   
   return(ruta_raw)
 }
