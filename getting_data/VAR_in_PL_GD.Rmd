@@ -46,6 +46,8 @@ source("functions_scripts/df_merged_players.R", local = knitr::knit_global())
 source("functions_scripts/df_merged_gw.R", local = knitr::knit_global())
 #script en donde incluimos las funciones referentes a la tabla poss_stats
 source("functions_scripts/df_poss_stats.R", local = knitr::knit_global())
+#script en donde incluimos las funciones referentes a la tabla action_zones
+source("functions_scripts/df_action_zones.R", local = knitr::knit_global())
 ```
 
 ```{r local_vars,include=FALSE}
@@ -780,6 +782,40 @@ write_csv(poss_stats,ruta_final_poss_stats)
 Una vista general de algunos registros de esta tabla es la siguiente:
 
 ```{r poss_stats_view}
+head(poss_stats)
+```
+
+## Tabla 11: "pl_action_zones". Fuente: WhoScored.com
+
+```{r action_zones,include=FALSE}
+
+#leemos la data
+action_zones <- get_action_zones(ruta_raw)
+
+#hacemos cambio de nombre de los equipos para homologar con demas dfs
+poss_stats$team <- sub_value_df(poss_stats$team,'Bournemouth','AFC Bournemouth')
+poss_stats$team <- sub_value_df(poss_stats$team,'Brighton','Brighton & Hove Albion')
+poss_stats$team <- sub_value_df(poss_stats$team,'Cardiff City','Cardiff')
+poss_stats$team <- sub_value_df(poss_stats$team,'Hull City','Hull')
+poss_stats$team <- sub_value_df(poss_stats$team,'Leeds United','Leeds')
+poss_stats$team <- sub_value_df(poss_stats$team,'Manchester Utd','Manchester United')
+poss_stats$team <- sub_value_df(poss_stats$team,'Newcastle Utd','Newcastle')
+poss_stats$team <- sub_value_df(poss_stats$team,'Sheffield Utd','Sheffield United')
+poss_stats$team <- sub_value_df(poss_stats$team,'Stoke City','Stoke')
+poss_stats$team <- sub_value_df(poss_stats$team,'Swansea City','Swansea')
+poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
+
+#Escribimos la tabla final a la carpeta local
+
+#declaramos la ruta final de la tabla
+ruta_final_action_zones <- paste(ruta_guardado,'pl_action_zones.csv',sep = "")
+#Lo escribimos
+write_csv(action_zones,ruta_final_action_zones)
+```
+
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r action_zones_view}
 head(poss_stats)
 ```
 
