@@ -51,7 +51,7 @@ is_work_computer = params$is_work_computer
 ruta_etl <- get_etl_file_directory(is_work_computer)
 ruta_final_etl <- paste0(ruta_etl,"VAR_in_PL_GD.Rmd")
 #Ruta de la carpeta con las imagenes a incluir en el Rmd
-ruta_imagenes <- get_images_directory()
+ruta_imagenes <- get_images_directory(is_work_computer)
 #Ruta a la imagen del mapa de xG de The Athletic
 ruta_mapa_xg <- paste0(ruta_imagenes,'xg_map.png')
 ```
@@ -172,13 +172,13 @@ El primer tipo de defensa a analizar será aquella que yo denomino como la "mala
 
 Para poder medir este tipo de acciones defensivas tomaremos en consideración las siguientes variables:
 
-- Número de pases permitidos en contra del equipo a analizar--
-- Tiempo de posesión del equipo contrario-falta cruzar para obtener el tiempo de posesión
+- Número de pases permitidos en contra del equipo a analizar-
+- Tiempo de posesión del equipo contrario-
 - Número de pases cruzados completados hechos por el equipo contrario-
 - Número de pases en un radio de 20 yardas-
-- Número de tiros hechos por el equipo contrario: Aquí se le dará un peso dependiendo de la distancia a la cual se realizan estos tiros (basado a su vez en su xG) y a su vez de si éstos fueron hechos a portería o no.-falta cruzar para obtener tiros y xG
+- Número de tiros hechos por el equipo contrario: Aquí se le dará un peso dependiendo de la distancia a la cual se realizan estos tiros (basado a su vez en su xG) y a su vez de si éstos fueron hechos a portería o no-
 - Número de pases "peligrosos" o claves que se convierten a su vez en oportunidades de gol-
-- Número de pases por tiro hecho por el equipo contrario (aquí buscamos solo aquellos valores altos ya que eso define a una "mala defensa")- falta cruzar con tabla para conseguir los tiros
+- Número de pases por tiro hecho por el equipo contrario (aquí buscamos solo aquellos valores altos ya que eso define a una "mala defensa")-
 - PPDA (aquí buscamos valores cercanos a cero)
 - Field Tilt (aquí buscamos valores alejados de cero)
 - Número de goles concedidos-
@@ -188,15 +188,65 @@ Para poder medir este tipo de acciones defensivas tomaremos en consideración la
 - Número de tarjetas rojas mostradas a la defensa-
 - Número de tarjetas amarillas mostradas a la defensa-
 
-```{r sanciones_arbitrales,include=FALSE}
+```{r load_dfs,include=FALSE}
 #Leemos el df de donde obtendremos las primera métricas acerca de faltas y pases hechos
-df_faltas <- get_df(8) %>% select(c('season','team_name','opponent_team','kickoff_time','GW','yellow_cards','red_cards','penalties_conceded','own_goals','fouls','goals_conceded','completed_passes','key_passes','xP','open_play_crosses','attempted_passes'))
-#Leemos el df de done obtendremos el xG de los equipos
-df_xg <- get_df(1) %>% select(c('season','date','team1','team2','xg1','xg2'))
+df_gw <- get_df(8,is_work_computer) %>% select(c('season','team_name','opponent_team','kickoff_time','GW','yellow_cards','red_cards','penalties_conceded','own_goals','fouls','goals_conceded','completed_passes','key_passes','xP','open_play_crosses','attempted_passes'))
+#Leemos el df de donde obtendremos el xG de los equipos
+df_xg <- get_df(1,is_work_computer) %>% select(c('season','date','team1','team2','xg1','xg2'))
+#Leemos el df de donde obtendremos el núm de tiros hechos por los equipos
+df_shots <- get_df(5,is_work_computer) %>% select(c('season','Date','HomeTeam','AwayTeam','HS','AS','HST','AST'))
+#Leemos el df de donde obtendremos el tiempo de posesión por equipo
+df_poss <- get_df(9,is_work_computer) %>% select(c('season','team','poss'))
+#Leemos el df de donde obtendremos el detalle de las interveciones del VAR
+df_var_details <- get_df(4,is_work_computer) %>% select(-c('big_six','big_six_h','big_six_a'))
 ```
 
-```{r show_sanciones_arbitrales}
-head(df_xg)
+```{r merge_data,include=FALSE}
+#Antes de empezar a unir la data vamos a aplicar funciones agregadas a la tabla df_gw para obtener las métricas por temporada y GW
+df_gw <- df_gw %>% group_by(season,team_name,GW) %>% summarise(yellow_cards = sum(yellow_cards),red_cards = sum(red_cards),
+                                                               penalties_conceded = sum(penalties_conceded),
+                                                               own_goals = sum(own_goals),fouls = sum(fouls), 
+                                                               goals_conceded = max(goals_conceded), 
+                                                               num_passes = sum(completed_passes),
+                                                               cross_passes = sum(open_play_crosses))
+#Ahora agrupamos más para tener la data a nivel temporada
+df_gw <- df_gw %>% group_by(season,team_name) %>% summarise(matches = max(GW),yellow_cards = sum(yellow_cards),
+                                                            red_cards = sum(red_cards), penalties_conceded = sum(penalties_conceded),
+                                                            own_goals = sum(own_goals),fouls = sum(fouls), 
+                                                            total_goals_conceded = sum(goals_conceded), 
+                                                            avg_goals_conceded = round(mean(goals_conceded),2), 
+                                                            num_passes = sum(num_passes),cross_passes = sum(cross_passes))
+#Hacemos el promedio de xG por temporada y equipo
+df_xg <- df_xg %>% group_by(season,team1) %>% summarise(avg_xg = round(mean(xg2,na.rm = T),2), total_xg = round(sum(xg2,na.rm = T),2))
+#Antes de hacer el cruce, homologamos los nombres de los equipos
+df_gw$team_name <- sub_value_df(df_gw$team_name,'Bournemouth','AFC Bournemouth')
+df_gw$team_name <- sub_value_df(df_gw$team_name,'Brighton & Hove Albion','Brighton and Hove Albion')
+df_gw$team_name <- sub_value_df(df_gw$team_name,'Cardiff','Cardiff City')
+df_gw$team_name <- sub_value_df(df_gw$team_name,'Huddersfield','Huddersfield Town')
+df_gw$team_name <- sub_value_df(df_gw$team_name,'Hull','Hull City')
+df_gw$team_name <- sub_value_df(df_gw$team_name,'Newcastle','Newcastle United')
+df_gw$team_name <- sub_value_df(df_gw$team_name,'Stoke','Stoke City')
+df_gw$team_name <- sub_value_df(df_gw$team_name,'Swansea','Swansea City')
+#Cruzamos la primera data
+df_prev <- df_gw %>% inner_join(df_xg,by = c('season','team_name' = 'team1')) %>% rename(avg_xg_conceded = avg_xg, 
+                                                                                         total_xg_conceded = total_xg)
+#Hacemos el total de tiros hechos por el equipo contrario por temporada y equipo
+df_shots <- df_shots %>% group_by(season,HomeTeam) %>% summarise(total_shots_conceded = sum(AS), 
+                                                                 total_shots_target_conceded = sum(AST))
+#Homologamos el nombre de los equipos
+df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Brighton & Hove Albion','Brighton and Hove Albion')
+df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Cardiff','Cardiff City')
+df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Huddersfield','Huddersfield Town')
+df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Hull','Hull City')
+df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Newcastle','Newcastle United')
+df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Stoke','Stoke City')
+df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Swansea','Swansea City')
+#Hacemos el segundo cruce de data
+df_prev1 <- df_prev %>% inner_join(df_shots,by = c('season','team_name'='HomeTeam'))
+```
+
+```{r show_dfs}
+head(df_prev1)
 ```
 
 ![Imagen tomada de [The Athletic](https://theathletic.com/3145563/2022/02/24/how-shot-locations-have-changed-in-the-premier-league/)](`r ruta_mapa_xg`){Width=500}
