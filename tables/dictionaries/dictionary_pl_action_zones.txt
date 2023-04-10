@@ -1,0 +1,15 @@
+Diccionario tabla: pl_action_zones
+
+Tabla que contiene el porcentaje (%) de tiempo de acción de los equipos en cada tercio de la cancha
+
+1. season: Identificador de la temporada correspondiente de la EPL
+
+2. team_name: Nombre del equipo
+
+3. own_third: Porcentaje de acción total del equipo correspondiente en el primer tercio de la cancha (campo propio) para la temporada correspondiente
+ 
+4. middle_third: Porcentaje de acción total del equipo correspondiente en el segundo tercio de la cancha (campo compartido) para la temporada correspondiente
+
+5. opposition_third: Porcentaje de acción total del equipo correspondiente en el último tercio de la cancha (campo rival) para la temporada correspondiente
+
+Obtenido de: https://www.whoscored.com/Regions/252/Tournaments/2/Seasons/6335/Stages/13796/TeamStatistics/England-Premier-League-2016-2017

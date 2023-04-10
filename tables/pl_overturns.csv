@@ -3,7 +3,7 @@ season,team,ns,df,da,big_six
 19/20,Manchester United,7,10,3,1
 19/20,Crystal Palace,4,8,4,0
 19/20,Burnley,3,7,4,0
-19/20,Newcastle,3,3,0,0
+19/20,Newcastle United,3,3,0,0
 19/20,Southampton,3,8,5,0
 19/20,Liverpool,2,5,3,1
 19/20,Leicester City,1,8,7,0
@@ -28,10 +28,10 @@ season,team,ns,df,da,big_six
 20/21,Leicester City,2,9,7,0
 20/21,Brighton & Hove Albion,1,9,8,0
 20/21,Crystal Palace,1,6,5,0
-20/21,Leeds,1,5,4,0
+20/21,Leeds United,1,5,4,0
 20/21,Manchester City,1,5,4,1
 20/21,Manchester United,0,9,9,1
-20/21,Newcastle,0,5,5,0
+20/21,Newcastle United,0,5,5,0
 20/21,Southampton,0,7,7,0
 20/21,West Ham,-1,5,6,0
 20/21,Tottenham Hotspur,-3,7,10,1
@@ -51,11 +51,11 @@ season,team,ns,df,da,big_six
 21/22,Tottenham Hotspur,1,4,5,1
 21/22,Aston Villa,0,4,4,0
 21/22,Crystal Palace,0,6,6,0
-21/22,Leeds,-1,5,4,0
-21/22,Newcastle,-1,9,8,0
+21/22,Leeds United,-1,5,4,0
+21/22,Newcastle United,-1,9,8,0
 21/22,Manchester United,-2,8,6,1
 21/22,Wolves,-2,6,4,0
 21/22,Everton,-3,9,6,0
 21/22,Burnley,-6,8,2,0
 21/22,Leicester City,-6,8,2,0
-21/22,Norwich,-6,11,5,0
+21/22,Norwich City,-6,11,5,0

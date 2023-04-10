@@ -1,0 +1,121 @@
+season,team_name,own_third,middle_third,opposition_third
+16/17,Hull City,0.32,0.45,0.23
+16/17,Sunderland,0.31,0.43,0.26
+16/17,Middlesbrough,0.31,0.46,0.23
+16/17,West Brom,0.31,0.43,0.26
+16/17,Burnley,0.3,0.43,0.27
+16/17,Watford,0.3,0.43,0.28
+16/17,Crystal Palace,0.3,0.41,0.29
+16/17,AFC Bournemouth,0.3,0.43,0.28
+16/17,Everton,0.29,0.43,0.28
+16/17,Stoke City,0.29,0.45,0.27
+16/17,Leicester City,0.28,0.45,0.27
+16/17,Swansea City,0.28,0.45,0.27
+16/17,West Ham,0.27,0.47,0.27
+16/17,Arsenal,0.26,0.43,0.32
+16/17,Chelsea,0.26,0.44,0.29
+16/17,Southampton,0.26,0.46,0.28
+16/17,Tottenham Hotspur,0.25,0.43,0.32
+16/17,Manchester United,0.25,0.45,0.31
+16/17,Manchester City,0.23,0.44,0.33
+16/17,Liverpool,0.23,0.45,0.32
+17/18,Brighton & Hove Albion,0.32,0.45,0.23
+17/18,Everton,0.31,0.43,0.27
+17/18,West Brom,0.31,0.43,0.26
+17/18,Swansea City,0.3,0.46,0.25
+17/18,AFC Bournemouth,0.3,0.43,0.27
+17/18,Stoke City,0.3,0.45,0.26
+17/18,Leicester City,0.29,0.45,0.27
+17/18,West Ham,0.29,0.45,0.25
+17/18,Newcastle,0.29,0.45,0.25
+17/18,Burnley,0.29,0.43,0.28
+17/18,Crystal Palace,0.29,0.43,0.28
+17/18,Huddersfield Town,0.28,0.45,0.27
+17/18,Chelsea,0.27,0.44,0.29
+17/18,Southampton,0.27,0.45,0.28
+17/18,Manchester United,0.27,0.44,0.3
+17/18,Arsenal,0.26,0.44,0.3
+17/18,Watford,0.26,0.44,0.29
+17/18,Tottenham Hotspur,0.25,0.44,0.32
+17/18,Liverpool,0.23,0.47,0.3
+17/18,Manchester City,0.21,0.44,0.34
+18/19,AFC Bournemouth,0.31,0.44,0.26
+18/19,Newcastle,0.3,0.47,0.24
+18/19,Brighton & Hove Albion,0.3,0.45,0.23
+18/19,Crystal Palace,0.3,0.45,0.25
+18/19,Arsenal,0.29,0.45,0.27
+18/19,Burnley,0.29,0.45,0.27
+18/19,Fulham,0.29,0.47,0.24
+18/19,Leicester City,0.28,0.46,0.27
+18/19,West Ham,0.28,0.47,0.25
+18/19,Watford,0.28,0.45,0.27
+18/19,Cardiff City,0.28,0.44,0.28
+18/19,Tottenham Hotspur,0.27,0.45,0.28
+18/19,Southampton,0.27,0.46,0.28
+18/19,Everton,0.27,0.44,0.3
+18/19,Wolves,0.27,0.48,0.24
+18/19,Manchester United,0.27,0.46,0.27
+18/19,Huddersfield Town,0.26,0.46,0.27
+18/19,Chelsea,0.24,0.44,0.32
+18/19,Liverpool,0.23,0.47,0.31
+18/19,Manchester City,0.19,0.46,0.35
+19/20,Norwich City,0.35,0.42,0.23
+19/20,Arsenal,0.32,0.42,0.27
+19/20,Aston Villa,0.32,0.41,0.27
+19/20,Newcastle,0.31,0.46,0.22
+19/20,Crystal Palace,0.31,0.43,0.26
+19/20,AFC Bournemouth,0.3,0.43,0.27
+19/20,Tottenham Hotspur,0.29,0.46,0.26
+19/20,Brighton & Hove Albion,0.29,0.43,0.28
+19/20,Leicester City,0.28,0.44,0.28
+19/20,Watford,0.28,0.44,0.28
+19/20,Wolves,0.28,0.47,0.26
+19/20,Everton,0.28,0.43,0.29
+19/20,West Ham,0.28,0.45,0.27
+19/20,Manchester United,0.27,0.43,0.3
+19/20,Burnley,0.27,0.44,0.29
+19/20,Sheffield United,0.26,0.43,0.32
+19/20,Chelsea,0.25,0.45,0.3
+19/20,Southampton,0.25,0.45,0.3
+19/20,Liverpool,0.23,0.44,0.33
+19/20,Manchester City,0.21,0.43,0.36
+20/21,Leeds United,0.32,0.41,0.27
+20/21,Newcastle,0.32,0.44,0.25
+20/21,Everton,0.31,0.44,0.25
+20/21,West Brom,0.31,0.43,0.27
+20/21,Crystal Palace,0.3,0.46,0.24
+20/21,Aston Villa,0.3,0.41,0.31
+20/21,Tottenham Hotspur,0.29,0.46,0.25
+20/21,Arsenal,0.28,0.43,0.29
+20/21,Leicester City,0.28,0.45,0.28
+20/21,Southampton,0.28,0.46,0.26
+20/21,Chelsea,0.28,0.44,0.29
+20/21,West Ham,0.28,0.46,0.27
+20/21,Wolves,0.28,0.46,0.26
+20/21,Brighton & Hove Albion,0.28,0.43,0.29
+20/21,Sheffield United,0.28,0.43,0.3
+20/21,Fulham,0.28,0.43,0.27
+20/21,Burnley,0.27,0.43,0.3
+20/21,Manchester United,0.26,0.42,0.31
+20/21,Liverpool,0.23,0.44,0.34
+20/21,Manchester City,0.2,0.46,0.33
+21/22,Norwich City,0.34,0.41,0.24
+21/22,Leicester City,0.32,0.43,0.25
+21/22,Brentford,0.32,0.41,0.26
+21/22,Wolves,0.32,0.44,0.25
+21/22,Leeds United,0.31,0.41,0.27
+21/22,Watford,0.31,0.43,0.27
+21/22,Crystal Palace,0.31,0.43,0.27
+21/22,Newcastle,0.3,0.44,0.26
+21/22,Burnley,0.29,0.41,0.3
+21/22,West Ham,0.29,0.43,0.29
+21/22,Tottenham Hotspur,0.29,0.44,0.26
+21/22,Everton,0.29,0.43,0.29
+21/22,Aston Villa,0.28,0.42,0.29
+21/22,Manchester United,0.28,0.43,0.28
+21/22,Brighton & Hove Albion,0.28,0.41,0.3
+21/22,Arsenal,0.27,0.42,0.32
+21/22,Southampton,0.27,0.42,0.3
+21/22,Chelsea,0.26,0.43,0.31
+21/22,Liverpool,0.22,0.43,0.35
+21/22,Manchester City,0.2,0.43,0.38
