@@ -394,32 +394,32 @@ siguiente:</p>
 <pre class="r"><code>head(premier_league)</code></pre>
 <pre><code>##   season       date league_id                  league          team1
 ## 1  16/17 2016-08-13      2411 Barclays Premier League      Hull City
-## 2  16/17 2016-08-13      2411 Barclays Premier League    Southampton
+## 2  16/17 2016-08-13      2411 Barclays Premier League  Middlesbrough
 ## 3  16/17 2016-08-13      2411 Barclays Premier League        Burnley
-## 4  16/17 2016-08-13      2411 Barclays Premier League  Middlesbrough
-## 5  16/17 2016-08-13      2411 Barclays Premier League Crystal Palace
-## 6  16/17 2016-08-13      2411 Barclays Premier League        Everton
+## 4  16/17 2016-08-13      2411 Barclays Premier League    Southampton
+## 5  16/17 2016-08-13      2411 Barclays Premier League        Everton
+## 6  16/17 2016-08-13      2411 Barclays Premier League Crystal Palace
 ##               team2  spi1  spi2  prob1  prob2 probtie proj_score1 proj_score2
 ## 1    Leicester City 53.57 66.81 0.3459 0.3621  0.2921        1.16        1.24
-## 2           Watford 69.49 59.33 0.5759 0.1874  0.2367        1.91        1.05
+## 2        Stoke City 56.32 60.35 0.4380 0.2692  0.2927        1.30        1.01
 ## 3      Swansea City 58.98 59.74 0.4482 0.2663  0.2854        1.37        1.05
-## 4        Stoke City 56.32 60.35 0.4380 0.2692  0.2927        1.30        1.01
-## 5         West Brom 55.19 58.66 0.4214 0.2939  0.2847        1.35        1.14
-## 6 Tottenham Hotspur 68.02 73.25 0.3910 0.3401  0.2689        1.47        1.38
+## 4           Watford 69.49 59.33 0.5759 0.1874  0.2367        1.91        1.05
+## 5 Tottenham Hotspur 68.02 73.25 0.3910 0.3401  0.2689        1.47        1.38
+## 6         West Brom 55.19 58.66 0.4214 0.2939  0.2847        1.35        1.14
 ##   importance1 importance2 score1 score2  xg1  xg2 nsxg1 nsxg2 adj_score1
 ## 1        38.1        22.2      2      1 0.85 2.77  0.17  1.25       2.10
-## 2        34.1        30.7      1      1 1.05 0.22  1.52  0.41       1.05
+## 2        33.9        32.5      1      1 1.40 0.55  1.13  1.06       1.05
 ## 3        36.5        29.1      0      1 1.24 1.84  1.71  1.56       0.00
-## 4        33.9        32.5      1      1 1.40 0.55  1.13  1.06       1.05
-## 5        43.6        34.6      0      1 1.11 0.68  0.84  1.60       0.00
-## 6        31.9        48.0      1      1 0.73 1.11  0.88  1.81       1.05
+## 4        34.1        30.7      1      1 1.05 0.22  1.52  0.41       1.05
+## 5        31.9        48.0      1      1 0.73 1.11  0.88  1.81       1.05
+## 6        43.6        34.6      0      1 1.11 0.68  0.84  1.60       0.00
 ##   adj_score2 after_covid is_VAR big_six_h big_six_a big_six
 ## 1       1.05           0      0         0         0       0
 ## 2       1.05           0      0         0         0       0
 ## 3       1.05           0      0         0         0       0
 ## 4       1.05           0      0         0         0       0
-## 5       1.05           0      0         0         0       0
-## 6       1.05           0      0         0         1       1</code></pre>
+## 5       1.05           0      0         0         1       1
+## 6       1.05           0      0         0         0       0</code></pre>
 </div>
 <div id="tabla-2-pl_overturns.-fuente-espn" class="section level2">
 <h2>Tabla 2: “pl_overturns”. Fuente: ESPN</h2>
@@ -460,7 +460,7 @@ siguiente:</p>
 ## 2  19/20      Manchester United  7 10  3       1
 ## 3  19/20         Crystal Palace  4  8  4       0
 ## 4  19/20                Burnley  3  7  4       0
-## 5  19/20              Newcastle  3  3  0       0
+## 5  19/20       Newcastle United  3  3  0       0
 ## 6  19/20            Southampton  3  8  5       0</code></pre>
 </div>
 <div id="tabla-3-pl_overturns_var.-fuente-espn" class="section level2">
@@ -510,15 +510,15 @@ siguiente:</p>
 ## 2  19/20      Manchester United  7 10  3       1   13   1   0   2   7   6   6
 ## 3  19/20         Crystal Palace  4  8  4       0   12   3   4   0   1   2   6
 ## 4  19/20                Burnley  3  7  4       0   11   2   3   1   4   2   4
-## 5  19/20       Newcastle United  3  3  0       0    3   1   0   0   0   1   2
-## 6  19/20            Southampton  3  8  5       0   13   0   0   1   7   6   1
+## 5  19/20            Southampton  3  8  5       0   13   0   0   1   7   6   1
+## 6  19/20              Liverpool  2  5  3       1    8   1   3   0   4   2   1
 ##   sda nsc  pns rcns
 ## 1   0   2 2019 2019
 ## 2   2   4 2019 2019
 ## 3   2   4 2019 2019
 ## 4   2   2 2019 2019
-## 5   0   2 2019 2019
-## 6   4  -3 2019 2019</code></pre>
+## 5   4  -3 2019 2019
+## 6   1   0 2019 2019</code></pre>
 </div>
 <div id="tabla-4-var_details.-fuente-espn" class="section level2">
 <h2>Tabla 4: “var_details”. Fuente: ESPN</h2>
@@ -640,22 +640,22 @@ esta tabla se puede consultar el repositorio de <a href="https://github.com/pedr
 <p>Una vista general de algunos registros de esta tabla es la
 siguiente:</p>
 <pre class="r"><code>head(stats_epl)</code></pre>
-<pre><code>##         Date Time               HomeTeam          AwayTeam FTHG FTAG FTR HTHG
-## 1   01/01/17 &lt;NA&gt;                Arsenal    Crystal Palace    2    0   H    1
-## 2   01/01/17 &lt;NA&gt;                Watford Tottenham Hotspur    1    4   A    0
-## 3 01/01/2018 &lt;NA&gt; Brighton &amp; Hove Albion   AFC Bournemouth    2    2   D    1
-## 4 01/01/2018 &lt;NA&gt;                Burnley         Liverpool    1    2   A    0
-## 5 01/01/2018 &lt;NA&gt;                Everton Manchester United    0    2   A    0
-## 6 01/01/2018 &lt;NA&gt;         Leicester City      Huddersfield    3    0   H    0
-##   HTAG HTR    Referee HS AS HST AST HC AC HF AF HY AY HR AR season big_six_h
-## 1    0   H A Marriner 22  7   7   4  8  4  9  7  1  1  0  0  16/17         1
-## 2    3   A   M Oliver  6 19   2   6  0  3 11  6  3  0  0  0  16/17         0
-## 3    1   D   M Oliver 15 26   6   8  5 12 13  9  2  1  0  0  17/18         0
-## 4    0   D     R East 13 19   4   5  3  9  4 12  0  0  0  0  17/18         0
-## 5    0   D A Marriner 12 21   0   6  6  6 11 10  2  0  0  0  17/18         0
-## 6    0   D    G Scott 11  6   5   1  4  1  7  9  1  1  0  0  17/18         0
+<pre><code>##         Date Time          HomeTeam          AwayTeam FTHG FTAG FTR HTHG HTAG
+## 1   01/01/17 &lt;NA&gt;    Crystal Palace    Crystal Palace    2    0   H    1    0
+## 2   01/01/17 &lt;NA&gt; Tottenham Hotspur Tottenham Hotspur    1    4   A    0    3
+## 3 01/01/2018 &lt;NA&gt;   AFC Bournemouth   AFC Bournemouth    2    2   D    1    1
+## 4 01/01/2018 &lt;NA&gt;         Liverpool         Liverpool    1    2   A    0    0
+## 5 01/01/2018 &lt;NA&gt; Manchester United Manchester United    0    2   A    0    0
+## 6 01/01/2018 &lt;NA&gt;      Huddersfield      Huddersfield    3    0   H    0    0
+##   HTR    Referee HS AS HST AST HC AC HF AF HY AY HR AR season big_six_h
+## 1   H A Marriner 22  7   7   4  8  4  9  7  1  1  0  0  16/17         0
+## 2   A   M Oliver  6 19   2   6  0  3 11  6  3  0  0  0  16/17         1
+## 3   D   M Oliver 15 26   6   8  5 12 13  9  2  1  0  0  17/18         0
+## 4   D     R East 13 19   4   5  3  9  4 12  0  0  0  0  17/18         1
+## 5   D A Marriner 12 21   0   6  6  6 11 10  2  0  0  0  17/18         1
+## 6   D    G Scott 11  6   5   1  4  1  7  9  1  1  0  0  17/18         0
 ##   big_six_a big_six
-## 1         0       1
+## 1         0       0
 ## 2         1       1
 ## 3         0       0
 ## 4         1       1
@@ -714,7 +714,7 @@ siguiente:</p>
 ## 2 2016-08-13T14:00:00Z      15 Tottenham Hotspur         0                0
 ## 3 2016-08-14T15:00:00Z      60         Liverpool         0                0
 ## 4 2016-08-13T14:00:00Z       0       Southampton         0                0
-## 5 2016-08-13T14:00:00Z      69             Stoke         0                0
+## 5 2016-08-13T14:00:00Z      69        Stoke City         0                0
 ## 6 2016-08-14T15:00:00Z      75           Arsenal         0                0
 ##   penalties_saved red_cards round saves team_a_score team_h_score threat
 ## 1               0         0     1     0            1            2      0
@@ -789,11 +789,11 @@ siguiente:</p>
 ## 5         0            6                 0.8  16/17       NA
 ## 6         0            4                13.9  16/17       NA
 ##                       name id_player position_name team_name
-## 1             David Ospina        NA          &lt;NA&gt;      &lt;NA&gt;
-## 2                Petr Cech        NA          &lt;NA&gt;      &lt;NA&gt;
-## 3        Laurent Koscielny        NA          &lt;NA&gt;      &lt;NA&gt;
-## 4          Per Mertesacker        NA          &lt;NA&gt;      &lt;NA&gt;
-## 5 Gabriel Armando de Abreu        NA          &lt;NA&gt;      &lt;NA&gt;
+## 1             David Ospina        NA          &lt;NA&gt;          
+## 2                Petr Cech        NA          &lt;NA&gt;          
+## 3        Laurent Koscielny        NA          &lt;NA&gt;          
+## 4          Per Mertesacker        NA          &lt;NA&gt;          
+## 5 Gabriel Armando de Abreu        NA          &lt;NA&gt;          
 ## 6          Héctor Bellerín         6           DEF   Arsenal</code></pre>
 </div>
 <div id="tabla-9-fpl_merged_gw.-fuente-github---fantasy-premier-league" class="section level2">
@@ -894,7 +894,7 @@ siguiente:</p>
 ## 3   Arsenal         Liverpool         1         1       1
 ## 4   Watford       Southampton         0         0       0
 ## 5   Chelsea          West Ham         1         0       1
-## 6      Hull    Leicester City         0         0       0</code></pre>
+## 6 Hull City    Leicester City         0         0       0</code></pre>
 </div>
 <div id="tabla-10-poss_stats.-fuente-fbref" class="section level2">
 <h2>Tabla 10: “poss_stats”. Fuente: FBREF</h2>
@@ -944,6 +944,42 @@ siguiente:</p>
 ## 4                          3.53  16/17
 ## 5                          2.00  16/17
 ## 6                          2.63  16/17</code></pre>
+</div>
+<div id="tabla-11-pl_action_zones.-fuente-whoscored.com" class="section level2">
+<h2>Tabla 11: “pl_action_zones”. Fuente: WhoScored.com</h2>
+<p>La tabla número 11 que se presenta aquí contiene información acerca
+del porcentaje (%) de tiempo de acción que tuvo cada equipo en general
+durante toda la temporada dentro de cada tercio de la cancha en cada
+partido de la PL. La data que se presenta aquí es desde la temporada
+2016/2017 al día de hoy.</p>
+<p>Algunas de las variables que se presentan en esta tabla son las
+siguientes:</p>
+<ol style="list-style-type: decimal">
+<li><p>team_name: Nombre del equipo de la PL</p></li>
+<li><p>own_third: Porcentaje (%) de tiempo que ocupó el equipo
+correspondiente dentro del primer tercio de la cancha (propia cancha)
+durante toda la temporada correspondiente</p></li>
+<li><p>opposition_third: Porcentaje (%) de tiempo que ocupó el equipo
+correspondiente dentro del último tercio de la cancha (cancha rival)
+durante toda la temporada correspondiente</p></li>
+</ol>
+<p>Los datos aquí consultados se obtuvieron de la página <a href="https://www.whoscored.com/Regions/252/Tournaments/2/Seasons/6335/Stages/13796/TeamStatistics/England-Premier-League-2016-2017">WhoScored.com</a>
+(página de ejemplo para la temporada 2016-2017).</p>
+<p>Para información más detallada de las variables que se presentan en
+esta tabla se puede consultar el repositorio de <a href="https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries">GitHub</a>.</p>
+<p>Una vista general de algunos registros de esta tabla es la
+siguiente:</p>
+<pre class="r"><code>head(action_zones)</code></pre>
+<pre><code>##   season     team_name own_third middle_third opposition_third
+## 1  16/17     Hull City      0.32         0.45             0.23
+## 2  16/17    Sunderland      0.31         0.43             0.26
+## 3  16/17 Middlesbrough      0.31         0.46             0.23
+## 4  16/17     West Brom      0.31         0.43             0.26
+## 5  16/17       Burnley      0.30         0.43             0.27
+## 6  16/17       Watford      0.30         0.43             0.28</code></pre>
+</div>
+<div id="conclusión" class="section level2">
+<h2>Conclusión</h2>
 <p>Una vez obtenida toda esta data, lo que se pretende lograr a
 continuación es el análisis estadístico de tipo descriptivo, predictivo
 e inferencial del VAR para con el fútbol profesional inglés a través de
