@@ -4,7 +4,8 @@ author: "Pedro Alan Velázquez Romero"
 date: "5/3/2021"
 output: html_document
 params:
-  is_work_computer: false
+  is_work_computer: true
+  do_pull: false
 ---
 
 ```{r setup, include=FALSE}
@@ -55,26 +56,16 @@ source("functions_scripts/df_action_zones.R", local = knitr::knit_global())
 
 #Ruta del repo en general de FPL
 ruta_fpl_repo <- get_fpl_repo_directory()
-#Lista con credenciales de Git
-my_git_credentials <- my_git_credentials()
+#Obtenemos el username de Git
+git_username <- my_git_credentials()$username
+#Obtenemos el pw de Git
+git_pw <- my_git_credentials()$pw
 #ruta para el folder con la data raw de FPL
 ruta_fpl <- get_fpl_directory()
 #Nombre de los archivos que se actualizaron y se deben enviar a la carpeta del repo propio
-files_names <- c('cleaned_merged_seasons.csv',
-                 '2016-17/gws/merged_gw.csv','2016-17/cleaned_players.csv','2016-17/players_raw.csv',
-                 '2017-18/gws/merged_gw.csv','2017-18/cleaned_players.csv','2017-18/players_raw.csv',
-                 '2018-19/gws/merged_gw.csv','2018-19/cleaned_players.csv','2018-19/players_raw.csv',
-                 '2019-20/gws/merged_gw.csv','2019-20/cleaned_players.csv','2019-20/players_raw.csv',
-                 '2020-21/gws/merged_gw.csv','2020-21/cleaned_players.csv','2020-21/players_raw.csv',
-                 '2021-22/gws/merged_gw.csv','2021-22/cleaned_players.csv','2021-22/players_raw.csv')
+files_names <- get_pull_files_names()
 #Nombre de los archivos con los que se guardarán en el folder del repo propio
-nombres_finales <- c('cleaned_merged_seasons.csv',
-                     'merged_gw_1617.csv','cleaned_players_1617.csv','players_raw_1617.csv',
-                     'merged_gw_1718.csv','cleaned_players_1718.csv','players_raw_1718.csv',
-                     'merged_gw_1819.csv','cleaned_players_1819.csv','players_raw_1819.csv',
-                     'merged_gw_1920.csv','cleaned_players_1920.csv','players_raw_1920.csv',
-                     'merged_gw_2021.csv','cleaned_players_2021.csv','players_raw_2021.csv',
-                     'merged_gw_2122.csv','cleaned_players_2122.csv','players_raw_2122.csv')
+nombres_finales <- get_pull_destination_files_names()
 #ruta para guardar tablas finales
 ruta_guardado <- get_tables_directory(params$is_work_computer)
 #ruta para leer data raw
@@ -93,13 +84,8 @@ players_teams_catalog <- players_teams_catalog_1617 %>% bind_rows(players_teams_
 ```{r update_fpl_data,include=FALSE}
 #En esta parte actualizamos la data proveniente del repo de GitHub de la FPL
 
-#Actualizamos la data vía Git
-pull(repo = ruta_fpl_repo,
-     credentials = cred_user_pass(username = my_git_credentials$username,
-                                  password = my_git_credentials$pw))
-
-#Una vez que ya tenemos los archivos actualizados vía el Git, los subimos a sus respectivas carpetas del repo propio
-load_raw_csv(ruta_fpl,files_names,ruta_raw,nombres_finales)
+#Hacemos el pull dependiendo de qué compu sea la que trabaje y si es necesario hacer el pull
+pull_fpl_data(ruta_fpl_repo,git_username,git_pw,params$is_work_computer,params$do_pull,files_names,ruta_raw,nombres_finales)
 ```
 
 # Tablas de información acerca de la PL
@@ -153,16 +139,16 @@ premier_league$season <- sapply(premier_league$season,season_format)
 premier_league$team1 <- as.character(premier_league$team1)
 premier_league$team2 <- as.character(premier_league$team2)
 #Aplicamos la función de sustitución de nombres a valores específicos 
-premier_league$team1 <- sub_value_df(premier_league$team1,'Leeds United','Leeds')
 premier_league$team1 <- sub_value_df(premier_league$team1,'Newcastle', 'Newcastle United')
 premier_league$team1 <- sub_value_df(premier_league$team1,'West Bromwich Albion', 'West Brom')
 premier_league$team1 <- sub_value_df(premier_league$team1,'West Ham United', 'West Ham')
 premier_league$team1 <- sub_value_df(premier_league$team1,'Wolverhampton', 'Wolves')
-premier_league$team2 <- sub_value_df(premier_league$team2,'Leeds United','Leeds')
+premier_league$team1 <- sub_value_df(premier_league$team1,'Brighton and Hove Albion', 'Brighton & Hove Albion')
 premier_league$team2 <- sub_value_df(premier_league$team2,'Newcastle', 'Newcastle United')
 premier_league$team2 <- sub_value_df(premier_league$team2,'West Bromwich Albion', 'West Brom')
 premier_league$team2 <- sub_value_df(premier_league$team2,'West Ham United', 'West Ham')
 premier_league$team2 <- sub_value_df(premier_league$team2,'Wolverhampton', 'Wolves')
+premier_league$team2 <- sub_value_df(premier_league$team2,'Brighton and Hove Albion', 'Brighton & Hove Albion')
 
 #Ya que tenemos todas las variables necesarias y los datos transformados, guardamos la tabla en 
 #el directorio local
@@ -214,6 +200,11 @@ ovrt_df <- ovrt_df_19_20 %>% bind_rows(ovrt_df_20_21) %>% bind_rows(ovrt_df_21_2
 
 #Agregamos la variable big_six a la tabla final
 ovrt_df['big_six'] <- sapply(ovrt_df$team,is_big_six)
+
+#Homologamos el nombre de los equipos
+ovrt_df$team <- sub_value_df(ovrt_df$team,'Newcastle', 'Newcastle United')
+ovrt_df$team <- sub_value_df(ovrt_df$team,'Leeds', 'Leeds United')
+ovrt_df$team <- sub_value_df(ovrt_df$team,'Norwich', 'Norwich City')
 
 #Escribimos la tabla final a la carpeta local
 
@@ -268,6 +259,7 @@ ovrt_var$team <- as.character(ovrt_var$team)
 #Hacemos la sustitución de los nombres
 ovrt_var$team <- sub_value_df(ovrt_var$team,'Newcastle', 'Newcastle United')
 ovrt_var$team <- sub_value_df(ovrt_var$team,'Norwich', 'Norwich City')
+ovrt_var$team <- sub_value_df(ovrt_var$team,'Leeds', 'Leeds United')
 #Agregamos la columna big_six
 ovrt_var['big_six'] <- sapply(ovrt_var$team,is_big_six)
 
@@ -330,6 +322,11 @@ var_details$team2 <- sub_value_df(var_details$team2,'Newcastle', 'Newcastle Unit
 var_details$team2 <- sub_value_df(var_details$team2,'Norwich', 'Norwich City')
 var_details$team2 <- sub_value_df(var_details$team2,'Tottenham', 'Tottenham Hotspur')
 var_details$team2 <- sub_value_df(var_details$team2,'WBA', 'West Brom')
+var_details$team1 <- sub_value_df(var_details$team1,'Leeds', 'Leeds United')
+var_details$team1 <- sub_value_df(var_details$team1,'Newcastle', 'Newcastle United')
+var_details$team2 <- sub_value_df(var_details$team2,'Bournemouth', 'AFC Bournemouth')
+var_details$team2 <- sub_value_df(var_details$team2,'Brighton', 'Brighton & Hove Albion')
+var_details$team2 <- sub_value_df(var_details$team2,'Leeds', 'Leeds United')
 #Agregamos las variables correspondientes a los equipos big_six
 var_details['big_six_h'] <- sapply(var_details$team1, is_big_six)
 var_details['big_six_a'] <- sapply(var_details$team2, is_big_six)
@@ -385,6 +382,11 @@ var_details1$team2 <- sub_value_df(var_details1$team2,'Man United', 'Manchester 
 var_details1$team2 <- sub_value_df(var_details1$team2,'Newcastle', 'Newcastle United')
 var_details1$team2 <- sub_value_df(var_details1$team2,'Norwich', 'Norwich City')
 var_details1$team2 <- sub_value_df(var_details1$team2,'Tottenham', 'Tottenham Hotspur')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Leeds', 'Leeds United')
+var_details1$team1 <- sub_value_df(var_details1$team1,'Newcastle', 'Newcastle United')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Bournemouth', 'AFC Bournemouth')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Brighton', 'Brighton & Hove Albion')
+var_details1$team2 <- sub_value_df(var_details1$team2,'Leeds', 'Leeds United')
 #Agregamos las variables relacionadas a los equipos big_six
 var_details1['big_six_h'] <- sapply(var_details1$team1, is_big_six)
 var_details1['big_six_a'] <- sapply(var_details1$team2, is_big_six)
@@ -458,6 +460,20 @@ stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Man City', 'Manchester Ci
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Man United', 'Manchester United')
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Norwich', 'Norwich City')
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Tottenham', 'Tottenham Hotspur')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Cardiff', 'Cardiff City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Cardiff', 'Cardiff City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Huddersfield', 'Huddersfield Town')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Huddersfield', 'Huddersfield Town')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Hull', 'Hull City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Hull', 'Hull City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Leeds', 'Leeds United')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Leeds', 'Leeds United')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Newcastle', 'Newcastle United')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Newcastle', 'Newcastle United')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Stoke', 'Stoke City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Stoke', 'Stoke City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Swansea', 'Swansea City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Swansea', 'Swansea City')
 
 #Agregamos el flag de big_six
 stats_epl['big_six_h'] <- sapply(stats_epl$HomeTeam,is_big_six)
@@ -514,6 +530,14 @@ cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_nam
 cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Norwich','Norwich City')
 cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Sheffield Utd','Sheffield United')
 cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Spurs','Tottenham Hotspur')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Bournemouth','AFC Bournemouth')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Cardiff', 'Cardiff City')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Huddersfield', 'Huddersfield Town')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Hull', 'Hull City')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Leeds', 'Leeds United')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Newcastle', 'Newcastle United')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Stoke', 'Stoke City')
+cleaned_merged_seasons$team_name <- sub_value_df(cleaned_merged_seasons$team_name,'Swansea', 'Swansea City')
 
 cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Bournemouth','AFC Bournemouth')
 cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Brighton','Brighton & Hove Albion')
@@ -523,6 +547,13 @@ cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_
 cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Norwich','Norwich City')
 cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Sheffield Utd','Sheffield United')
 cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Spurs','Tottenham Hotspur')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Cardiff', 'Cardiff City')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Huddersfield', 'Huddersfield Town')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Hull', 'Hull City')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Leeds', 'Leeds United')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Newcastle', 'Newcastle United')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Stoke', 'Stoke City')
+cleaned_merged_seasons$opp_team_name <- sub_value_df(cleaned_merged_seasons$opp_team_name,'Swansea', 'Swansea City')
 
 #Agregamos las columnas de big_six
 
@@ -608,6 +639,25 @@ merged_cleaned_players$name <- sapply(merged_cleaned_players$name,gsub,pattern="
 merged_cleaned_players <- set_player_position(merged_cleaned_players,cleaned_merged_seasons)
 #Completamos la columna del nombre del equipo
 merged_cleaned_players <- set_team_name(merged_cleaned_players,players_teams_catalog)
+#Quitamos los valores NA de la columna team_name
+merged_cleaned_players$team_name[is.na(merged_cleaned_players$team_name)] <- "" 
+
+#Homologamos el nombre de los equipos
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Swansea', 'Swansea City')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Bournemouth','AFC Bournemouth')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Brighton','Brighton & Hove Albion')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Cardiff', 'Cardiff City')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Huddersfield', 'Huddersfield Town')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Hull', 'Hull City')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Leeds', 'Leeds United')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Leicester','Leicester City')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Man City','Manchester City')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Man Utd','Manchester United')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Newcastle', 'Newcastle United')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Norwich','Norwich City')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Sheffield Utd','Sheffield United')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Spurs','Tottenham Hotspur')
+merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_name,'Stoke', 'Stoke City')
 
 #Escribimos la tabla final a la carpeta local
 
@@ -699,6 +749,14 @@ merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Man
 merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Norwich','Norwich City')
 merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Sheffield Utd','Sheffield United')
 merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Spurs','Tottenham Hotspur')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Bournemouth','AFC Bournemouth')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Cardiff', 'Cardiff City')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Huddersfield', 'Huddersfield Town')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Hull', 'Hull City')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Leeds', 'Leeds United')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Newcastle', 'Newcastle United')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Stoke', 'Stoke City')
+merged_gw_formatted$team_name <- sub_value_df(merged_gw_formatted$team_name,'Swansea', 'Swansea City')
 
 merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Bournemouth','AFC Bournemouth')
 merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Brighton','Brighton & Hove Albion')
@@ -708,6 +766,13 @@ merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_t
 merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Norwich','Norwich City')
 merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Sheffield Utd','Sheffield United')
 merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Spurs','Tottenham Hotspur')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Cardiff', 'Cardiff City')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Huddersfield', 'Huddersfield Town')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Hull', 'Hull City')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Leeds', 'Leeds United')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Newcastle', 'Newcastle United')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Stoke', 'Stoke City')
+merged_gw_formatted$opponent_team <- sub_value_df(merged_gw_formatted$opponent_team,'Swansea', 'Swansea City')
 
 #Agregamos el flag de big six
 
@@ -761,15 +826,11 @@ poss_stats <- get_poss_stats(ruta_raw)
 #hacemos cambio de nombre de los equipos para homologar con demas dfs
 poss_stats$team <- sub_value_df(poss_stats$team,'Bournemouth','AFC Bournemouth')
 poss_stats$team <- sub_value_df(poss_stats$team,'Brighton','Brighton & Hove Albion')
-poss_stats$team <- sub_value_df(poss_stats$team,'Cardiff City','Cardiff')
-poss_stats$team <- sub_value_df(poss_stats$team,'Hull City','Hull')
-poss_stats$team <- sub_value_df(poss_stats$team,'Leeds United','Leeds')
 poss_stats$team <- sub_value_df(poss_stats$team,'Manchester Utd','Manchester United')
-poss_stats$team <- sub_value_df(poss_stats$team,'Newcastle Utd','Newcastle')
+poss_stats$team <- sub_value_df(poss_stats$team,'Newcastle Utd','Newcastle United')
 poss_stats$team <- sub_value_df(poss_stats$team,'Sheffield Utd','Sheffield United')
-poss_stats$team <- sub_value_df(poss_stats$team,'Stoke City','Stoke')
-poss_stats$team <- sub_value_df(poss_stats$team,'Swansea City','Swansea')
 poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
+poss_stats$team <- sub_value_df(poss_stats$team,'Huddersfield', 'Huddersfield Town')
 
 #Escribimos la tabla final a la carpeta local
 
@@ -787,23 +848,40 @@ head(poss_stats)
 
 ## Tabla 11: "pl_action_zones". Fuente: WhoScored.com
 
+La tabla número 11 que se presenta aquí contiene información acerca del porcentaje (%) de tiempo de acción que tuvo cada equipo en general durante toda la temporada dentro de cada tercio de la cancha en cada partido de la PL. La data que se presenta aquí es desde la temporada 2016/2017 al día de hoy. 
+
+Algunas de las variables que se presentan en esta tabla son las siguientes:
+
+1. team_name: Nombre del equipo de la PL
+
+2. own_third: Porcentaje (%) de tiempo que ocupó el equipo correspondiente dentro del primer tercio de la cancha (propia cancha) durante toda la temporada correspondiente
+
+3. opposition_third: Porcentaje (%) de tiempo que ocupó el equipo correspondiente dentro del último tercio de la cancha (cancha rival) durante toda la temporada correspondiente
+
+Los datos aquí consultados se obtuvieron de la página [WhoScored.com](https://www.whoscored.com/Regions/252/Tournaments/2/Seasons/6335/Stages/13796/TeamStatistics/England-Premier-League-2016-2017) (página de ejemplo para la temporada 2016-2017).
+
+Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
+
 ```{r action_zones,include=FALSE}
 
 #leemos la data
 action_zones <- get_action_zones(ruta_raw)
 
 #hacemos cambio de nombre de los equipos para homologar con demas dfs
-poss_stats$team <- sub_value_df(poss_stats$team,'Bournemouth','AFC Bournemouth')
-poss_stats$team <- sub_value_df(poss_stats$team,'Brighton','Brighton & Hove Albion')
-poss_stats$team <- sub_value_df(poss_stats$team,'Cardiff City','Cardiff')
-poss_stats$team <- sub_value_df(poss_stats$team,'Hull City','Hull')
-poss_stats$team <- sub_value_df(poss_stats$team,'Leeds United','Leeds')
-poss_stats$team <- sub_value_df(poss_stats$team,'Manchester Utd','Manchester United')
-poss_stats$team <- sub_value_df(poss_stats$team,'Newcastle Utd','Newcastle')
-poss_stats$team <- sub_value_df(poss_stats$team,'Sheffield Utd','Sheffield United')
-poss_stats$team <- sub_value_df(poss_stats$team,'Stoke City','Stoke')
-poss_stats$team <- sub_value_df(poss_stats$team,'Swansea City','Swansea')
-poss_stats$team <- sub_value_df(poss_stats$team,'Tottenham','Tottenham Hotspur')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Bournemouth','AFC Bournemouth')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Brighton','Brighton & Hove Albion')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Cardiff','Cardiff City')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Huddersfield', 'Huddersfield Town')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Hull','Hull City')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Leeds','Leeds United')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Leicester','Leicester City')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Newcastle Utd','Newcastle United')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Norwich','Norwich City')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Stoke','Stoke City')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Swansea','Swansea City')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Tottenham','Tottenham Hotspur')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'West Bromwich','West Brom')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Wolverhampton','Wolves')
 
 #Escribimos la tabla final a la carpeta local
 
@@ -816,7 +894,8 @@ write_csv(action_zones,ruta_final_action_zones)
 Una vista general de algunos registros de esta tabla es la siguiente:
 
 ```{r action_zones_view}
-head(poss_stats)
+head(action_zones)
 ```
+## Conclusión
 
 Una vez obtenida toda esta data, lo que se pretende lograr a continuación es el análisis estadístico de tipo descriptivo, predictivo e inferencial del VAR para con el fútbol profesional inglés a través de las últimas temporadas vs las temporadas anteriores en que el VAR no existía como una realidad dentro del fútbol profesional. 

@@ -50,6 +50,32 @@ get_fpl_directory <- function(){
   return(ruta_fpl)
 }
 
+#Función para obtener el nombre de los archivos para hacer el pull
+get_pull_files_names <- function(){
+  files_names <- c('cleaned_merged_seasons.csv',
+                   '2016-17/gws/merged_gw.csv','2016-17/cleaned_players.csv','2016-17/players_raw.csv',
+                   '2017-18/gws/merged_gw.csv','2017-18/cleaned_players.csv','2017-18/players_raw.csv',
+                   '2018-19/gws/merged_gw.csv','2018-19/cleaned_players.csv','2018-19/players_raw.csv',
+                   '2019-20/gws/merged_gw.csv','2019-20/cleaned_players.csv','2019-20/players_raw.csv',
+                   '2020-21/gws/merged_gw.csv','2020-21/cleaned_players.csv','2020-21/players_raw.csv',
+                   '2021-22/gws/merged_gw.csv','2021-22/cleaned_players.csv','2021-22/players_raw.csv')
+  
+  return(files_names)
+}
+
+#Función para obtener el nombre con el que se guardarán los archivos derivados del pull
+get_pull_destination_files_names <- function(){
+  files_names <- c('cleaned_merged_seasons.csv',
+                   'merged_gw_1617.csv','cleaned_players_1617.csv','players_raw_1617.csv',
+                   'merged_gw_1718.csv','cleaned_players_1718.csv','players_raw_1718.csv',
+                   'merged_gw_1819.csv','cleaned_players_1819.csv','players_raw_1819.csv',
+                   'merged_gw_1920.csv','cleaned_players_1920.csv','players_raw_1920.csv',
+                   'merged_gw_2021.csv','cleaned_players_2021.csv','players_raw_2021.csv',
+                   'merged_gw_2122.csv','cleaned_players_2122.csv','players_raw_2122.csv')
+  
+  return(files_names)
+}
+
 #Función para obtener la ruta en donde guardaremos las tablas finales
 get_tables_directory <- function(is_work_computer=F){
   if(is_work_computer)
@@ -127,4 +153,28 @@ load_raw_csv <- function(ruta_csv,file_names,ruta_guardado,nombres_guardado){
     print(paste('Archivo',nombre_guardado,'guardado'))
   }
   return('Archivos guardados')
+}
+
+#Función para hacer el pull del repo de Fantasy-Premier-League
+pull_fpl_data <- function(ruta_fpl_repo,git_username,git_pw,is_work_computer,do_pull,files_names,ruta_raw,nombres_finales){
+  #Primero nos fijamos si estamos trabajando con la compu del trabajo
+  if(is_work_computer)
+    #Si estamos con la compu del trabajo no hacemos pull
+    resultado <- 'Dont pull'
+  else{
+    #Si estamos con la compu personal ahora nos fijamos si queremos hacer el pull
+    if(do_pull){
+      #Si queremos hacer el pull entonces llamamos la función
+      pull(repo = ruta_fpl_repo,
+           credentials = cred_user_pass(username = git_username,
+                                        password = git_pw))
+      #Hacemos la carga de los archivos a la carpeta seleccionada
+      load_raw_csv(ruta_fpl,files_names,ruta_raw,nombres_finales)
+      #Imprimimos el resultado de que si hicimos el pull
+      resultado <- 'Data pulled'
+    } else
+      resultado <- 'Dont pull'
+  }
+  
+  return(resultado)
 }
