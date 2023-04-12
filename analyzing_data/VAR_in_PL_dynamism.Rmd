@@ -5,6 +5,7 @@ date: "3/15/2023"
 output: html_document
 params:
   is_work_computer: false
+  render_gd: false
 ---
 
 ```{r setup, include=FALSE}
@@ -58,7 +59,7 @@ ruta_mapa_xg <- paste0(ruta_imagenes,'xg_map.png')
 
 ```{r render_etl_file, include = FALSE}
 #Función para actualizar los datos y hacer el ETL, poner T si se requiere hacerlo
-render_etl_file(will_render = F,ruta_render = ruta_final_etl,is_work_computer = is_work_computer)
+render_etl_file(params$render_gd,ruta_render = ruta_final_etl,is_work_computer = is_work_computer)
 ```
 
 ### 1. JUSTIFICACIÓN
@@ -175,12 +176,11 @@ Para poder medir este tipo de acciones defensivas tomaremos en consideración la
 - Número de pases permitidos en contra del equipo a analizar
 - Tiempo de posesión del equipo contrario
 - Número de pases cruzados completados hechos por el equipo contrario
-- Número de pases en un radio de 20 yardas --MODIFICAR
-- Número de tiros hechos por el equipo contrario: Aquí se le dará un peso dependiendo de la distancia a la cual se realizan estos tiros (basado a su vez en su xG) y a su vez de si éstos fueron hechos a portería o no --MODIFICAR
+- Número de pases en un radio de 20 yardas
+- Número de tiros hechos por el equipo contrario: Aquí se le dará un peso dependiendo de la distancia a la cual se realizan estos tiros (basado a su vez en su xG) y a su vez de si éstos fueron hechos a portería o no
 - Número de pases "peligrosos" o claves que se convierten a su vez en oportunidades de gol
-- Número de pases por tiro hecho por el equipo contrario (aquí buscamos solo aquellos valores altos ya que eso define a una "mala defensa") --MODIFICAR
-- PPDA (aquí buscamos valores cercanos a cero) --MODIFICAR
-- Field Tilt (aquí buscamos valores alejados de cero) --MODIFICAR
+- Número de pases por tiro hecho por el equipo contrario (aquí buscamos solo aquellos valores altos ya que eso define a una "mala defensa") 
+- Field Tilt (aquí buscamos valores alejados de cero)
 - Número de goles concedidos
 - Número de faltas cometidas
 - Número de goles hechos en propia puerta
@@ -199,6 +199,8 @@ df_shots <- get_df(5,is_work_computer) %>% select(c('season','Date','HomeTeam','
 df_poss <- get_df(9,is_work_computer) %>% select(c('season','team','poss'))
 #Leemos el df de donde obtendremos el detalle de las interveciones del VAR
 df_var <- get_df(2,is_work_computer)
+#Leemos el df con el % de accion en las zonas de la cancha por temporada y equipo
+df_action_zones <- get_df(10,is_work_computer)
 ```
 
 ```{r merge_data,include=FALSE}
@@ -222,39 +224,13 @@ df_gw <- df_gw %>% group_by(season,team_name) %>% summarise(matches_played = max
                                                             cross_passes_conceded = sum(cross_passes,na.rm = T))
 #Hacemos el promedio de xG por temporada y equipo
 df_xg <- df_xg %>% group_by(season,team1) %>% summarise(avg_xg = round(mean(xg2,na.rm = T),2), total_xg = round(sum(xg2,na.rm = T),2))
-#Homologamos los nombres de los equipos para el df de gw
-df_gw$team_name <- sub_value_df(df_gw$team_name,'Bournemouth','AFC Bournemouth')
-df_gw$team_name <- sub_value_df(df_gw$team_name,'Brighton & Hove Albion','Brighton and Hove Albion')
-df_gw$team_name <- sub_value_df(df_gw$team_name,'Cardiff','Cardiff City')
-df_gw$team_name <- sub_value_df(df_gw$team_name,'Huddersfield','Huddersfield Town')
-df_gw$team_name <- sub_value_df(df_gw$team_name,'Hull','Hull City')
-df_gw$team_name <- sub_value_df(df_gw$team_name,'Newcastle','Newcastle United')
-df_gw$team_name <- sub_value_df(df_gw$team_name,'Stoke','Stoke City')
-df_gw$team_name <- sub_value_df(df_gw$team_name,'Swansea','Swansea City')
 #Hacemos el total de tiros hechos por el equipo contrario por temporada y equipo
 df_shots <- df_shots %>% group_by(season,HomeTeam) %>% summarise(shots_conceded = sum(AS), 
                                                                  shots_target_conceded = sum(AST))
-#Homologamos el nombre de los equipos para el df de tiros
-df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Brighton & Hove Albion','Brighton and Hove Albion')
-df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Cardiff','Cardiff City')
-df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Huddersfield','Huddersfield Town')
-df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Hull','Hull City')
-df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Newcastle','Newcastle United')
-df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Stoke','Stoke City')
-df_shots$HomeTeam <- sub_value_df(df_shots$HomeTeam,'Swansea','Swansea City')
-#Homologamos los nombres de los equipos en el df de poss
-df_poss$team <- sub_value_df(df_poss$team,'Brighton & Hove Albion','Brighton and Hove Albion')
-df_poss$team <- sub_value_df(df_poss$team,'Cardiff','Cardiff City')
-df_poss$team <- sub_value_df(df_poss$team,'Huddersfield','Huddersfield Town')
-df_poss$team <- sub_value_df(df_poss$team,'Hull','Hull City')
-df_poss$team <- sub_value_df(df_poss$team,'Newcastle','Newcastle United')
-df_poss$team <- sub_value_df(df_poss$team,'Stoke','Stoke City')
-df_poss$team <- sub_value_df(df_poss$team,'Swansea','Swansea City')
-#Homologamos los nombres de los equipos dentro del df del var
-df_var$team <- sub_value_df(df_var$team,'Brighton & Hove Albion','Brighton and Hove Albion')
 #Cruzamos todos los dfs
 df_def <- df_gw %>% inner_join(df_xg,by = c('season','team_name' = 'team1')) %>% 
   inner_join(df_shots,by = c('season','team_name'='HomeTeam')) %>% inner_join(df_poss,by = c('season','team_name' = 'team')) %>% 
+  inner_join(df_action_zones,by = c('season','team_name')) %>% 
   left_join(df_var,by = c('season','team_name' = 'team')) %>% 
   mutate(across(ns:rcns,~replace(.,which(is.na(.)),2019))) %>% #Todos los valores NA los reemplazamos por "2019" en el último cruce
   rename(avg_xg_conceded = avg_xg, 
@@ -262,9 +238,18 @@ df_def <- df_gw %>% inner_join(df_xg,by = c('season','team_name' = 'team1')) %>%
          possession_conceded = poss
          ) #Renombramos unas columnas
 #Nos deshacemos de todos los dfs excepto del último
-rm(df_gw,df_poss,df_shots,df_var,df_xg)
+rm(df_gw,df_poss,df_shots,df_var,df_xg,df_action_zones)
+
 #Ahora creamos las nuevas variables que se derivan de las ya creadas anteriormente
-df_def <- df_def %>% mutate(ppda = )
+df_def <- group_by(df_def,season) %>% mutate(field_tilt = passes_conceded*own_third/sum(passes_conceded))
+df_def <- df_def %>% mutate(passes_per_shot = passes_conceded/shots_conceded,
+                            passes_conceded_20y = passes_conceded*own_third)
+
+#VARIABLES SIN INFORMACIÓN:
+#       1. penalties_conceded (19/20,20/21,21/22)
+#       2. fouls (19/20,20/21,21/22)
+#       3. passes_conceded (19/20,20/21,21/22)
+#       4. cross_passes_conceded (19/20,20/21,21/22)
 ```
 
 ```{r show_df_def}
@@ -272,3 +257,13 @@ head(df_def)
 ```
 
 ![Imagen tomada de [The Athletic](https://theathletic.com/3145563/2022/02/24/how-shot-locations-have-changed-in-the-premier-league/)](`r ruta_mapa_xg`){Width=500}
+
+
+```{r plt_1,include=FALSE}
+plt1 <- ggplot(df_def,aes(x = avg_xg_conceded, y = field_tilt)) + geom_point()
+```
+
+
+```{r plt_1_show}
+plt1
+```

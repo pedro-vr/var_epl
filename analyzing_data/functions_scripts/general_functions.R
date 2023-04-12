@@ -53,7 +53,8 @@ get_df <- function(df_number,is_work_computer=F){
                      '6' = 'fpl_merged_seasons.csv',
                      '7' = 'fpl_merged_players.csv',
                      '8' = 'fpl_merged_gw.csv',
-                     '9' = 'epl_poss_stats.csv'
+                     '9' = 'epl_poss_stats.csv',
+                     '10' = 'pl_action_zones.csv'
   )
   
   if(is_work_computer)
