@@ -79,6 +79,8 @@ players_teams_catalog_2021 <- get_players_catalog(ruta_raw,'20/21')
 players_teams_catalog_2122 <- get_players_catalog(ruta_raw,'21/22')
 #Unimos los catálogos de cada temporada en uno solo
 players_teams_catalog <- players_teams_catalog_1617 %>% bind_rows(players_teams_catalog_1718) %>% bind_rows(players_teams_catalog_1819) %>% bind_rows(players_teams_catalog_1920) %>% bind_rows(players_teams_catalog_2021) %>% bind_rows(players_teams_catalog_2122)
+#Eliminamos los dfs auxiliares para quedarnos solo con el último
+rm(players_teams_catalog_1617,players_teams_catalog_1718,players_teams_catalog_1819,players_teams_catalog_1920,players_teams_catalog_2021,players_teams_catalog_2122)
 ```
 
 ```{r update_fpl_data,include=FALSE}
@@ -212,6 +214,8 @@ ovrt_df$team <- sub_value_df(ovrt_df$team,'Norwich', 'Norwich City')
 ruta_final_pl_ovrt <- paste(ruta_guardado,'pl_overturns.csv',sep = "")
 #lo escribimos
 write_csv(ovrt_df,ruta_final_pl_ovrt)
+#Eliminamos los dfs auxiliares para quedarnos solo con el último
+rm(ovrt_df_19_20,ovrt_df_20_21,ovrt_df_21_22)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
@@ -269,6 +273,8 @@ ovrt_var['big_six'] <- sapply(ovrt_var$team,is_big_six)
 ruta_final_pl_ovrt_desc <- paste(ruta_guardado,'pl_overturns_var.csv',sep = "")
 #lo escribimos
 write_csv(ovrt_var,ruta_final_pl_ovrt_desc)
+#Eliminamos los dfs auxiliares para quedarnos solo con el último
+rm(des_df,des_df_19_20,des_df_20_21,des_df_21_22)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
@@ -338,6 +344,8 @@ var_details['big_six'] <- if_else(var_details$big_six_h == 1 | var_details$big_s
 ruta_final_pl_var_details <- paste(ruta_guardado,'var_details.csv',sep = "")
 #lo escribimos
 write_csv(var_details,ruta_final_pl_var_details)
+#Eliminamos los dfs auxiliares para quedarnos solo con el último
+rm(var_details_19_20,var_details_20_21,var_details_21_22)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
@@ -398,6 +406,8 @@ var_details1['big_six'] <- if_else(var_details1$big_six_h == 1 | var_details1$bi
 ruta_final_pl_var_details1 <- paste(ruta_guardado,'var_details1.csv',sep = "")
 #lo escribimos
 write_csv(var_details1,ruta_final_pl_var_details1)
+#Eliminamos los dfs auxiliares para quedarnos solo con el último
+rm(var_details1_19_20,var_details1_20_21,var_details1_21_22)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
@@ -453,6 +463,14 @@ stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Man City', 'Manchester Ci
 stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Man United', 'Manchester United')
 stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Norwich', 'Norwich City')
 stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Tottenham', 'Tottenham Hotspur')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Cardiff', 'Cardiff City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Huddersfield', 'Huddersfield Town')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Hull', 'Hull City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Leeds', 'Leeds United')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Newcastle', 'Newcastle United')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Stoke', 'Stoke City')
+stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Swansea', 'Swansea City')
+
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Bournemouth', 'AFC Bournemouth')
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Brighton', 'Brighton & Hove Albion')
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Leicester', 'Leicester City')
@@ -460,20 +478,13 @@ stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Man City', 'Manchester Ci
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Man United', 'Manchester United')
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Norwich', 'Norwich City')
 stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Tottenham', 'Tottenham Hotspur')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Cardiff', 'Cardiff City')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Cardiff', 'Cardiff City')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Huddersfield', 'Huddersfield Town')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Huddersfield', 'Huddersfield Town')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Hull', 'Hull City')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Hull', 'Hull City')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Leeds', 'Leeds United')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Leeds', 'Leeds United')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Newcastle', 'Newcastle United')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Newcastle', 'Newcastle United')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Stoke', 'Stoke City')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Stoke', 'Stoke City')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$HomeTeam,'Swansea', 'Swansea City')
-stats_epl$HomeTeam <- sub_value_df(stats_epl$AwayTeam,'Swansea', 'Swansea City')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Cardiff', 'Cardiff City')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Huddersfield', 'Huddersfield Town')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Hull', 'Hull City')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Leeds', 'Leeds United')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Newcastle', 'Newcastle United')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Stoke', 'Stoke City')
+stats_epl$AwayTeam <- sub_value_df(stats_epl$AwayTeam,'Swansea', 'Swansea City')
 
 #Agregamos el flag de big_six
 stats_epl['big_six_h'] <- sapply(stats_epl$HomeTeam,is_big_six)
@@ -486,6 +497,8 @@ stats_epl['big_six'] <- if_else(stats_epl$big_six_a == 1 | stats_epl$big_six_h =
 ruta_final_pl_stats <- paste(ruta_guardado,'stats_epl.csv',sep = "")
 #lo escribimos
 write_csv(stats_epl,ruta_final_pl_stats)
+#Eliminamos los dfs auxiliares para quedarnos solo con el último
+rm(stats_1617,stats_1718,stats_1819,stats_1920,stats_2021,stats_2122)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
@@ -665,6 +678,8 @@ merged_cleaned_players$team_name <- sub_value_df(merged_cleaned_players$team_nam
 ruta_final_pl_merged_players <- paste(ruta_guardado,'fpl_merged_players.csv',sep = "")
 #Lo escribimos
 write_csv(merged_cleaned_players,ruta_final_pl_merged_players)
+#Eliminamos los dfs auxiliares para quedarnos solo con el último
+rm(cleaned_players_1617,cleaned_players_1718,cleaned_players_1819,cleaned_players_1920,cleaned_players_2021,cleaned_players_2122)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
@@ -794,6 +809,8 @@ merged_gw_formatted <- merged_gw_formatted %>% select(.,-c('bs_t','bs_ot'))
 ruta_final_pl_merged_gw <- paste(ruta_guardado,'fpl_merged_gw.csv',sep = "")
 #Lo escribimos
 write_csv(merged_gw_formatted,ruta_final_pl_merged_gw)
+#Eliminamos los dfs auxiliares para quedarnos solo con el último
+rm(merged_gw,merged_gw_1617,merged_gw_1718,merged_gw_1819,merged_gw_1920,merged_gw_2021,merged_gw_2122)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
@@ -875,7 +892,7 @@ action_zones$team_name <- sub_value_df(action_zones$team_name,'Huddersfield', 'H
 action_zones$team_name <- sub_value_df(action_zones$team_name,'Hull','Hull City')
 action_zones$team_name <- sub_value_df(action_zones$team_name,'Leeds','Leeds United')
 action_zones$team_name <- sub_value_df(action_zones$team_name,'Leicester','Leicester City')
-action_zones$team_name <- sub_value_df(action_zones$team_name,'Newcastle Utd','Newcastle United')
+action_zones$team_name <- sub_value_df(action_zones$team_name,'Newcastle','Newcastle United')
 action_zones$team_name <- sub_value_df(action_zones$team_name,'Norwich','Norwich City')
 action_zones$team_name <- sub_value_df(action_zones$team_name,'Stoke','Stoke City')
 action_zones$team_name <- sub_value_df(action_zones$team_name,'Swansea','Swansea City')
