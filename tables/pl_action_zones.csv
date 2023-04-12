@@ -27,7 +27,7 @@ season,team_name,own_third,middle_third,opposition_third
 17/18,Stoke City,0.3,0.45,0.26
 17/18,Leicester City,0.29,0.45,0.27
 17/18,West Ham,0.29,0.45,0.25
-17/18,Newcastle,0.29,0.45,0.25
+17/18,Newcastle United,0.29,0.45,0.25
 17/18,Burnley,0.29,0.43,0.28
 17/18,Crystal Palace,0.29,0.43,0.28
 17/18,Huddersfield Town,0.28,0.45,0.27
@@ -40,7 +40,7 @@ season,team_name,own_third,middle_third,opposition_third
 17/18,Liverpool,0.23,0.47,0.3
 17/18,Manchester City,0.21,0.44,0.34
 18/19,AFC Bournemouth,0.31,0.44,0.26
-18/19,Newcastle,0.3,0.47,0.24
+18/19,Newcastle United,0.3,0.47,0.24
 18/19,Brighton & Hove Albion,0.3,0.45,0.23
 18/19,Crystal Palace,0.3,0.45,0.25
 18/19,Arsenal,0.29,0.45,0.27
@@ -62,7 +62,7 @@ season,team_name,own_third,middle_third,opposition_third
 19/20,Norwich City,0.35,0.42,0.23
 19/20,Arsenal,0.32,0.42,0.27
 19/20,Aston Villa,0.32,0.41,0.27
-19/20,Newcastle,0.31,0.46,0.22
+19/20,Newcastle United,0.31,0.46,0.22
 19/20,Crystal Palace,0.31,0.43,0.26
 19/20,AFC Bournemouth,0.3,0.43,0.27
 19/20,Tottenham Hotspur,0.29,0.46,0.26
@@ -80,7 +80,7 @@ season,team_name,own_third,middle_third,opposition_third
 19/20,Liverpool,0.23,0.44,0.33
 19/20,Manchester City,0.21,0.43,0.36
 20/21,Leeds United,0.32,0.41,0.27
-20/21,Newcastle,0.32,0.44,0.25
+20/21,Newcastle United,0.32,0.44,0.25
 20/21,Everton,0.31,0.44,0.25
 20/21,West Brom,0.31,0.43,0.27
 20/21,Crystal Palace,0.3,0.46,0.24
@@ -106,7 +106,7 @@ season,team_name,own_third,middle_third,opposition_third
 21/22,Leeds United,0.31,0.41,0.27
 21/22,Watford,0.31,0.43,0.27
 21/22,Crystal Palace,0.31,0.43,0.27
-21/22,Newcastle,0.3,0.44,0.26
+21/22,Newcastle United,0.3,0.44,0.26
 21/22,Burnley,0.29,0.41,0.3
 21/22,West Ham,0.29,0.43,0.29
 21/22,Tottenham Hotspur,0.29,0.44,0.26
