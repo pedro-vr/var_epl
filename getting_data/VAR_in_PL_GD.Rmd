@@ -4,7 +4,7 @@ author: "Pedro Alan Velázquez Romero"
 date: "5/3/2021"
 output: html_document
 params:
-  is_work_computer: true
+  is_work_computer: false
   do_pull: false
 ---
 
@@ -49,6 +49,8 @@ source("functions_scripts/df_merged_gw.R", local = knitr::knit_global())
 source("functions_scripts/df_poss_stats.R", local = knitr::knit_global())
 #script en donde incluimos las funciones referentes a la tabla action_zones
 source("functions_scripts/df_action_zones.R", local = knitr::knit_global())
+#script en donde incluimos las funciones referentes a la tabla players_standard_stats
+source("functions_scripts/df_players_standard_stats.R", local = knitr::knit_global())
 ```
 
 ```{r local_vars,include=FALSE}
@@ -913,6 +915,50 @@ Una vista general de algunos registros de esta tabla es la siguiente:
 ```{r action_zones_view}
 head(action_zones)
 ```
+
+## Tabla 12: "pl_players_standard_stats". Fuente: FBREF
+
+La tabla número 11 que se presenta aquí contiene información acerca del porcentaje (%) de tiempo de acción que tuvo cada equipo en general durante toda la temporada dentro de cada tercio de la cancha en cada partido de la PL. La data que se presenta aquí es desde la temporada 2016/2017 al día de hoy. 
+
+Algunas de las variables que se presentan en esta tabla son las siguientes:
+
+1. team_name: Nombre del equipo de la PL
+
+2. own_third: Porcentaje (%) de tiempo que ocupó el equipo correspondiente dentro del primer tercio de la cancha (propia cancha) durante toda la temporada correspondiente
+
+3. opposition_third: Porcentaje (%) de tiempo que ocupó el equipo correspondiente dentro del último tercio de la cancha (cancha rival) durante toda la temporada correspondiente
+
+Los datos aquí consultados se obtuvieron de la página [WhoScored.com](https://www.whoscored.com/Regions/252/Tournaments/2/Seasons/6335/Stages/13796/TeamStatistics/England-Premier-League-2016-2017) (página de ejemplo para la temporada 2016-2017).
+
+Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
+
+```{r players_standard_stats,include=FALSE}
+#leemos la data
+df_ply_std_stats <- get_players_standard_stats(ruta_raw)
+
+#hacemos cambio de nombre de los equipos para homologar con demas dfs
+df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Bournemouth','AFC Bournemouth')
+df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Brighton','Brighton & Hove Albion')
+df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Huddersfield','Huddersfield Town')
+df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Manchester Utd','Manchester United')
+df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Newcastle Utd','Newcastle United')
+df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Sheffield Utd','Sheffield United')
+df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Tottenham','Tottenham Hotspur')
+
+#Escribimos la tabla final a la carpeta local
+
+#declaramos la ruta final de la tabla
+ruta_final_ply_std_stats <- paste0(ruta_guardado,'pl_players_standard_stats.csv')
+#Lo escribimos
+write_csv(df_ply_std_stats,ruta_final_ply_std_stats)
+```
+
+Una vista general de algunos registros de esta tabla es la siguiente:
+
+```{r players_standard_stats_view}
+head(df_ply_std_stats)
+```
+
 ## Conclusión
 
 Una vez obtenida toda esta data, lo que se pretende lograr a continuación es el análisis estadístico de tipo descriptivo, predictivo e inferencial del VAR para con el fútbol profesional inglés a través de las últimas temporadas vs las temporadas anteriores en que el VAR no existía como una realidad dentro del fútbol profesional. 
