@@ -1,0 +1,94 @@
+Diccionario tabla: players_standard_stats
+
+Tabla que contiene estadísticas generales acerca de las acciones que realizan los jugadores en cada temporada de la PL
+
+1. player: Nombre del jugador
+
+2. nation: Nacionalidad del jugador
+
+3. pos: Posición que el jugador juega comúnmente en los partidos de la PL para una temporada determinada. Las posiciones están abreviadas por su nombre en inglés y contiene los sig. valores:
+	
+	GK - Goalkeepers
+	DF - Defenders
+	MF - Midfielders
+	FW - Forwards
+	FB - Fullbacks
+	LB - Left Backs
+	RB - Right Backs
+	CB - Center Backs
+	DM - Defensive Midfielders
+	CM - Central Midfielders
+	LM - Left Midfielders
+	RM - Right Midfielders
+	WM - Wide Midfielders
+	LW - Left Wingers
+	RW - Right Wingers
+	AM - Attacking Midfielders
+
+4. team_name: Nombre del equipo al que pertenece el jugador para la temporada correspondiente, puede que existan registros duplicados de jugadores debido a que durante una temporada perteneció a dos equipos (transferencias de invierno)
+
+5. age: Edad que tenía el jugador al empezar la temporada correspondiente
+
+6. born: Año de nacimiento del jugador
+
+7. match_ply: Número de partidos que disputo el jugador en cuestión (no necesariamente partidos completos)
+
+8. starts: Número de partidos que el jugador inició como titular dentro de una temporada específica de la PL
+
+9. min: Número total de minutos que disputó el jugador en toda la temporada
+
+10. mp_90: Número de partidos completos que disputó el jugador durante una temporada en específico (partidos de 90 minutos)
+
+11. goals_scored: Número total de goles anotados por el jugador durante una temporada en epecífico
+
+12. assists: Número total de asistencias hechas por el jugador durante una temporada en epecífico
+
+13. goals_assists: Suma del número de goles (gls) y número de asistencias (ast) hechas por el jugador durante una temporada en específico
+
+14. goals_pen_kicks: Número total de goles anotados por el jugador sin contar los hechos pòr vía penal durante una temporada en específico
+
+15. pen_kicks: Número total de tiros penal que efectuó y anotó el jugador en cuestión
+
+16. pen_kicks_att: Número total de tiros penal que efectuó y que no necesariamente anotó el jugador en cuestión
+
+17. yellow_cards: Número total de tarjetas amarillas que obtuvo el jugador en cuestión
+
+18. red_cards: Número total de tarjetas rojas que obtuvo el jugador en cuestión
+
+19. xg: Número total de goles esperados efectuados por el jugador en cuestión
+
+20. npxg: Número total de goles esperados sin contar los hechos por vía penal efectuados por el jugador en cuestión
+
+21. xag: Número total de goles asistidos esperados efectuados por el jugador en cuestión (cuántos goles se espera que el jugador pueda asistir)
+
+22. npxg_xag: Suma del número de goles esperados sin vía penal y el número de goles asistidos esperados
+
+23. prog_carries: Número total de acarreos de balón progresivos hechos por el jugador en cuestión. Se cuentan como carreos progresivos a todos aquellos que, o bien terminen dentro del área penal o, por otro lado, aquellos que terminen en al menos 10 yardas a partir de la línea de gol (~9 metros) y a partir de la mitad de cancha (inicio de terreno contrario). 
+
+24. prog_passes: Número total de pases progresivos efectuados por el jugador en cuestión. Se toman en cuenta aquellos pases que o bien hayan terminado dentro del área penal o, por otro lado, hayan terminado dentro de una distancia de 10 yardas a partir de la línea de gol del oponente y a partir del último décimo de cancha propia de cada equipo.
+
+25. prog_rec: Número total de pases progresivos recibidos por el jugador en cuestión. Se toman en cuenta aquellos pases que o bien hayan terminado dentro del área penal o, por otro lado, hayan terminado dentro de una distancia de 10 yardas a partir de la línea de gol del oponente y a partir del último décimo de cancha propia de cada equipo.
+
+26. goals_90: Número total de goles anotados por cada 90 minutos de juego respecto al jugador en cuestión.
+
+27. assists_90: Número total de asistencias hechas por cada 90 minutos de juego respecto al jugador en cuestión.
+
+28. goals_assists_90: Suma del número de goles anotados por cada 90 minutos y el número de asistencias hechas por cada 90 minutos
+
+29. goals_pen_kicks_90: Número total de goles anotados menos el número de penales hechos por cada 90 minutos respecto al jugador en cuestión
+
+30. goals_assists_pen_kicks_90: Número total de goles anotados más el número total de asistencias hechas menos el número de penales hechos por cada 90 minutos respecto al jugador en cuestión
+
+31. xg_90: Número total de goles esperados por cada 90 minutos hechos por el jugador en cuestión
+
+32. xag_90: Número total de goles asistidos esperados por cada 90 minutos hechos por el jugador en cuestión
+
+33. xg_xag_90: Suma del número total de goles esperados y el número total de goles asistidos esperados por cada 90 minutos hechos por el jugador en cuestion
+
+34. npxg_90: Número total de goles esperados sin contar los hechos por vía penal por cada 90 minutos efectuados por el jugador en cuestión
+
+35. npxg_xag_90: Suma del número total de goles esperados sin penales y el número total de goles asistidos esperados por cada 90 minutos efectuados por el jugador en cuestión.
+
+36. season: Número de temporada correspondiente de la PL
+
+Obtenido de https://fbref.com/en/comps/9/2021-2022/2021-2022-Premier-League-Stats
