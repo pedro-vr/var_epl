@@ -91,4 +91,28 @@ Tabla que contiene estadísticas generales acerca de las acciones que realizan l
 
 36. season: Número de temporada correspondiente de la PL
 
+37. gk_goals_against: Número total de goles que recibió el portero en cuestión
+
+38. gk_goals_against_90: Número total de goles recibidos por cada 90 mins por el portero en cuestión
+
+39. gk_shots_target_against: Número total de tiros a puerta en contra recibidos por el portero en cuestión
+
+40. gk_saves: Número total de balones atajados por el portero en cuestión (gk_shots_target_against - gk_goals_against). Aquí tomar en cuenta de que no todos los tiros son salvados por porteros, a veces son salvados por defensores, no se incluyen penalties atajados
+
+41. gk_saves_perc: Porcentaje de balones atajados por el portero en cuestión ((gk_shots_target_against - gk_goals_against) / gk_shots_target_against). Aquí tomar en cuenta de que no todos los tiros son salvados por porteros, a veces son salvados por defensores, no se incluyen penalties atajados
+
+42. gk_clean_sheets: Número total de partidos completos en que el portero en cuestión no permitió ni un solo gol en su portería
+
+43. gk_clean_sheets_perc: Porcentaje de partidos completos en que el portero en cuestión no permitió ni un solo gol en su portería
+
+44. gk_pen_kicks_att: Número total de penales intentados en contra del portero en cuestión
+
+45. gk_pen_kicks_allowed: Número total de penales permitidos en contra del portero en cuestión
+
+46. gk_pen_kicks_saved: Número total de penales atajados por del portero en cuestión
+
+47. gk_pen_kicks_missed: Número total de penales fallados en contra del portero en cuestión
+
+48. gk_pen_kicks_saved_perc: Porcentaje de penales atajados por el portero en cuestión. Aquí no se toman en cuenta los penales fallados por los jugadores
+
 Obtenido de https://fbref.com/en/comps/9/2021-2022/2021-2022-Premier-League-Stats
