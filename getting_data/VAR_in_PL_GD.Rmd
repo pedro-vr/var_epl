@@ -918,17 +918,17 @@ head(action_zones)
 
 ## Tabla 12: "pl_players_standard_stats". Fuente: FBREF
 
-La tabla número 11 que se presenta aquí contiene información acerca del porcentaje (%) de tiempo de acción que tuvo cada equipo en general durante toda la temporada dentro de cada tercio de la cancha en cada partido de la PL. La data que se presenta aquí es desde la temporada 2016/2017 al día de hoy. 
+La tabla número 12 que se presenta aquí contiene información acerca de algunas de las estadísticas más importantes que se necesitan para medir el performance de los jugadores dentro de la PL.
 
 Algunas de las variables que se presentan en esta tabla son las siguientes:
 
 1. team_name: Nombre del equipo de la PL
 
-2. own_third: Porcentaje (%) de tiempo que ocupó el equipo correspondiente dentro del primer tercio de la cancha (propia cancha) durante toda la temporada correspondiente
+2. goals_scored: Número total de goles anotados por un jugador para un equipo en específico dentro de determinada temporada de la PL
 
-3. opposition_third: Porcentaje (%) de tiempo que ocupó el equipo correspondiente dentro del último tercio de la cancha (cancha rival) durante toda la temporada correspondiente
+3. xg: Número total de goles esperados efectuados por el jugador en cuestión dentro de una temporada en específico de la PL
 
-Los datos aquí consultados se obtuvieron de la página [WhoScored.com](https://www.whoscored.com/Regions/252/Tournaments/2/Seasons/6335/Stages/13796/TeamStatistics/England-Premier-League-2016-2017) (página de ejemplo para la temporada 2016-2017).
+Los datos aquí consultados se obtuvieron de la página [FBREF](https://fbref.com/en/comps/9/2021-2022/stats/2021-2022-Premier-League-Stats) (página de ejemplo para la temporada 2021-2022).
 
 Para información más detallada de las variables que se presentan en esta tabla se puede consultar el repositorio de [GitHub](https://github.com/pedro-vr/var_epl/tree/main/tables/dictionaries).
 
@@ -936,7 +936,10 @@ Para información más detallada de las variables que se presentan en esta tabla
 #leemos la data
 df_ply_std_stats <- get_players_standard_stats(ruta_raw)
 
-#hacemos cambio de nombre de los equipos para homologar con demas dfs
+#Leemos la data correspondiente a GK
+df_ply_gk <- get_players_gk_stats(ruta_raw)
+
+#hacemos cambio de nombre de los equipos en df de standard stats para homologar con demas dfs
 df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Bournemouth','AFC Bournemouth')
 df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Brighton','Brighton & Hove Albion')
 df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Huddersfield','Huddersfield Town')
@@ -945,18 +948,40 @@ df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Newcastle
 df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Sheffield Utd','Sheffield United')
 df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Tottenham','Tottenham Hotspur')
 
+#hacemos cambio de nombre de los equipos en df de GK para homologar con demas dfs
+df_ply_gk$team_name <- sub_value_df(df_ply_gk$team_name,'Bournemouth','AFC Bournemouth')
+df_ply_gk$team_name <- sub_value_df(df_ply_gk$team_name,'Brighton','Brighton & Hove Albion')
+df_ply_gk$team_name <- sub_value_df(df_ply_gk$team_name,'Huddersfield','Huddersfield Town')
+df_ply_gk$team_name <- sub_value_df(df_ply_gk$team_name,'Manchester Utd','Manchester United')
+df_ply_gk$team_name <- sub_value_df(df_ply_gk$team_name,'Newcastle Utd','Newcastle United')
+df_ply_gk$team_name <- sub_value_df(df_ply_gk$team_name,'Sheffield Utd','Sheffield United')
+df_ply_gk$team_name <- sub_value_df(df_ply_gk$team_name,'Tottenham','Tottenham Hotspur')
+
+#Modificamos la columna nation para que quede con el formato deseado en el df de standard stats
+df_ply_std_stats$nation <- sapply(df_ply_std_stats$nation,nationality_formatted)
+#Modificamos la columna pos para que quede con el formato deseado
+df_ply_std_stats$pos <- sapply(df_ply_std_stats$pos,position_formatted)
+#Modificamos la columna nation para que quede con el formato deseado en el df de goalkeeping
+df_ply_gk$nation <- sapply(df_ply_gk$nation,nationality_formatted)
+
+#De la tabla para GK nos quedamos solo con las columnas que nos interesan
+df_ply_gk <- df_ply_gk %>% select(-c('nation','pos','age','born','match_ply','starts','min','mp_90','gk_wins','gk_deuces','gk_losses'))
+
+#Unimos las dos tablas para tener la información completa
+df_ply_stats <- df_ply_std_stats %>% left_join(df_ply_gk,by = c('player','team_name','season'))
+
 #Escribimos la tabla final a la carpeta local
 
 #declaramos la ruta final de la tabla
-ruta_final_ply_std_stats <- paste0(ruta_guardado,'pl_players_standard_stats.csv')
+ruta_final_ply_std_stats <- paste0(ruta_guardado,'pl_players_general_stats.csv')
 #Lo escribimos
-write_csv(df_ply_std_stats,ruta_final_ply_std_stats)
+write_csv(df_ply_stats,ruta_final_ply_std_stats)
 ```
 
 Una vista general de algunos registros de esta tabla es la siguiente:
 
 ```{r players_standard_stats_view}
-head(df_ply_std_stats)
+head(df_ply_stats)
 ```
 
 ## Conclusión

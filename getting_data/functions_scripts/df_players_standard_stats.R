@@ -47,33 +47,72 @@ get_players_standard_stats <- function(ruta_file){
   return(df_ply_std_stats)
 }
 
-#Función para modificar la columna nation ya que contiene más de una clave
-nation_column_formatted <- function(df_players){
+#Función para modificar los registros de nación, para que queden con el formato deseado
+nationality_formatted <- function(nation_char){
+
+  #Del char nacion, ubicamos la posición del espacio
+  pos_esp <- unlist(gregexpr(' ',nation_char))
+  #Obtenemos solo la parte de la nacionalidad que nos sirve
+  nacionalidad_formatted <- substr(nation_char,pos_esp+1,nchar(nation_char))
   
-  #Obtenemos la longitud de la columna nation
-  num_registros <- dim(df_players)[1]
-  #Auxiliar para contar el num de registros
-  reg_mod <- 0
-  #Vector para guardar las nacionalidades ya con el formato deseado
-  nacionalidades_array <- NULL
+  #Regresamos el registro de nación ya modificado
+  return(nacionalidad_formatted)
+}
+
+#Función para modificar los registros de posición, cuando aplique
+position_formatted <- function(position_char){
   
-  #Generamos el primer loop en donde ubicamos el espacio " "
-  for (registro in 1:num_registros) {
-    #Obtenemos cada nacionalidad
-    nacionalidad <- df_players$nation[registro]
-    #Ubicamos la posición del espacio
-    pos_esp <- unlist(gregexpr(' ',nacionalidad))
-    #Obtenemos solo la parte de la nacionalidad que nos sirve
-    nacionalidad_formatted <- substr(nacionalidad,pos_esp+1,nchar(nacionalidad))
-    #Asignamos el nuevo valor al renglón correspondiente
-    nacionalidades_array <- c(nacionalidades_array,nacionalidad_formatted) 
-    #Aumentamos la cuenta de registros
-    reg_mod <- reg_mod + 1
-  }
+  #Del char posición, obtenemos el número de chars que lo componen
+  n_chars <- nchar(position_char)
+  #Ahora, si el num de chars > 2 entonces modificamos el registro
+  if(n_chars > 2)
+    #Si tiene mas de dos characters, nos quedamos solo con los primeros dos
+    posicion_formatted <- substr(position_char,1,2)
+  else 
+    #Si solo tiene dos chars entonces lo dejamos igual
+    posicion_formatted <- position_char
   
-  #Asignamos el vector de nacionalidades con formato a la columna deseada
-  df_players$nation = nacionalidades_array
+  #Regresamos el valor de la posición ya formateada
+  return(posicion_formatted)
+}
+
+#Función para leer la información acerca de porteros en la PL
+get_players_gk_stats <- function(ruta_file){
+  #Declaramos la ruta final del archivo
+  ruta_ply_gk_stats <- paste0(ruta_file,'players_goalkeeping.csv')
   
-  #Regresamos el num de registros modificados
-  print(paste('Se modificaron',as.character(reg_mod),'registros'))
+  #Leemos el archivo
+  df_ply_gk_stats <- read.csv(ruta_ply_gk_stats)
+  
+  #Obtenemos el array con los nombres de las columnas del df
+  columnas <- df_ply_gk_stats %>% names()
+  #Pasamos a minúscula todos los nombres
+  columnas <- lapply(columnas,tolower)
+  #Los convertimos de nuevo a una lista sencilla para poder asignarlo al df
+  columnas <- unlist(columnas)
+  
+  #Asignamos estos nuevos nombres como columnas del df
+  colnames(df_ply_gk_stats) <- columnas
+  
+  #Cambiamos el nombre de la columna
+  df_ply_gk_stats <- df_ply_gk_stats %>% rename(mp_90 = x90s,
+                                                match_ply = mp,
+                                                team_name = squad,
+                                                gk_goals_against = ga,
+                                                gk_goals_against_90 = ga90,
+                                                gk_shots_target_against = sota,
+                                                gk_saves_perc = save.,
+                                                gk_saves = saves,
+                                                gk_wins = w,
+                                                gk_deuces = d,
+                                                gk_losses = l,
+                                                gk_clean_sheets = cs,
+                                                gk_clean_sheets_perc = cs.,
+                                                gk_pen_kicks_att = pkatt,
+                                                gk_pen_kicks_allowed = pka,
+                                                gk_pen_kicks_saved = pksv,
+                                                gk_pen_kicks_missed = pkm,
+                                                gk_pen_kicks_saved_perc = save._pk)
+  
+  return(df_ply_gk_stats)
 }
