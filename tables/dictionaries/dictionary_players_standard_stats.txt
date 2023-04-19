@@ -115,4 +115,68 @@ Tabla que contiene estadísticas generales acerca de las acciones que realizan l
 
 48. gk_pen_kicks_saved_perc: Porcentaje de penales atajados por el portero en cuestión. Aquí no se toman en cuenta los penales fallados por los jugadores
 
+49. sh_shots: Número total de tiros efectuados por el jugador durante una temporada en específico. No se incluyen los tiros penalty
+
+50. sh_shots_target: Número total de tiros a puerta efectuados por el jugador durante una temporada en específico. No se incluyen los tiros penalty
+
+51. sh_shots_target_perc: Porcentaje del total de tiros que van a puerta
+
+52. sh_shots_90: Número total de tiros hechos por el jugador por cada 90 mins de juego
+
+53. sh_shots_target_90: Número total de tiros a puerta hechos por el jugador por cada 90 mins de juego
+
+54. sh_goals_per_shot: Número total de goles por tiro registrado por el jugador durante una temporada en específico. No se incluyen los tiros penalty
+
+55. sh_goals_per_shot_target: Número total de goles por tiro a puerta registrado por el jugador durante una temporada en específico. No se incluyen los tiros penalty
+
+56. sh_avg_shot_distance: Distancia promedio de tiro medido en yardas registrado por el jugador durante una temporada en específico. No se incluyen los tiros penalty
+
+57. sh_shots_free_kicks: Número total de tiros hechos desde tiros libres por el jugador durante una temporada en específico
+
+58. npxg_sh: Número total de goles esperados (sin contar penalties) por tiro registrado por el jugador durante una temporada en específico. No se incluyen los tiros penalty
+
+59. g_xg: Número total de goles menos el número total de goles esperados registrado por el jugador durante una temporada en específico. No se incluyen los tiros penalty
+
+60. np_g_xg: Número total de goles (sin contar los hechos por vía penal) menos el número total de goles esperados (sin contar los hechos por vía penal) registrado por el jugador durante una temporada en específico. No se incluyen los tiros penalty
+
+61. passes_completed: Número total de pases completados por el jugador en cuestión
+
+62. passes_attempted: Número total de pases intentados por el jugador en cuestión
+
+63. pass_comp_perc: Porcentaje de pases completados por el jugador en cuestión
+
+64. total_pass_dist: Distancia total en yardas que los pases completados viajaron en cualquier dirección
+
+65. prog_pass_dist: Distancia total en yardas que los pases completados viajaron específicamente a la dirección de gol del oponente
+
+66. short_passes_completed: Número total de pases entre 5 y 15 yardas completados por el jugador en cuestión
+
+67. short_passes_attempted: Número total de pases entre 5 y 15 yardas intentados por el jugador en cuestión
+
+68. short_pass_comp_perc: Porcentaje de pases entre 5 y 15 yardas completados por el jugador en cuestión
+
+69. medium_passes_completed: Número total de pases entre 15 y 30 yardas completados por el jugador en cuestión
+
+70. medium_passes_attempted: Número total de pases entre 15 y 30 yardas intentados por el jugador en cuestión
+
+71. medium_pass_comp_perc: Porcentaje de pases entre 15 y 30 yardas completados por el jugador en cuestión
+
+72. long_passes_completed: Número total de pases mayores a 30 yardas completados por el jugador en cuestión
+
+73. long_passes_attempted: Número total de pases mayores a 30 yardas intentados por el jugador en cuestión
+
+74. long_pass_comp_perc: Porcentaje de pases mayores a 30 yardas completados por el jugador en cuestión
+
+75. xa: Número total de asistencias esperadas
+
+76. assists_xag: Número total de asistencias menos el número total de goles asistidos esperados
+
+77. key_passes: Número total de pases que llevaron directamente a un tiro
+
+78. passes_final_third: Número total de pases completados hechos en el último tercio de la cancha (cancha del rival)
+
+79. passes_pen_area: Número total de pases completados que entraron al área penal
+
+80. crosses_pen_area: Número total de pases cruzados que entraron al área penal
+
 Obtenido de https://fbref.com/en/comps/9/2021-2022/2021-2022-Premier-League-Stats
