@@ -116,3 +116,116 @@ get_players_gk_stats <- function(ruta_file){
   
   return(df_ply_gk_stats)
 }
+
+#Función para leer la información acerca de tiros en la PL
+get_players_shooting_stats <- function(ruta_file){
+  #Declaramos la ruta final del archivo
+  ruta_ply_shooting_stats <- paste0(ruta_file,'players_shooting.csv')
+  
+  #Leemos el archivo
+  df_ply_shooting_stats <- read.csv(ruta_ply_shooting_stats)
+  
+  #Obtenemos el array con los nombres de las columnas del df
+  columnas <- df_ply_shooting_stats %>% names()
+  #Pasamos a minúscula todos los nombres
+  columnas <- lapply(columnas,tolower)
+  #Los convertimos de nuevo a una lista sencilla para poder asignarlo al df
+  columnas <- unlist(columnas)
+  
+  #Asignamos estos nuevos nombres como columnas del df
+  colnames(df_ply_shooting_stats) <- columnas
+  
+  #Cambiamos el nombre de la columna
+  df_ply_shooting_stats <- df_ply_shooting_stats %>% rename(mp_90 = x90s,
+                                                            team_name = squad,
+                                                            sh_goals_scored = gls,
+                                                            sh_shots = sh,
+                                                            sh_shots_target = sot,
+                                                            sh_shots_target_perc = sot.,
+                                                            sh_shots_90 = sh.90,
+                                                            sh_shots_target_90 = sot.90,
+                                                            sh_goals_per_shot = g.sh,
+                                                            sh_goals_per_shot_target = g.sot,
+                                                            sh_avg_shot_distance = dist,
+                                                            sh_shots_free_kicks = fk,
+                                                            sh_pen_kicks = pk,
+                                                            sh_pen_kicks_att = pkatt)
+  
+  return(df_ply_shooting_stats)
+}
+
+#Función para leer la información acerca de pases en la PL
+get_players_passing_stats <- function(ruta_file){
+  #Declaramos la ruta final del archivo
+  ruta_ply_passing_stats <- paste0(ruta_file,'players_passing.csv')
+  
+  #Leemos el archivo
+  df_ply_passing_stats <- read.csv(ruta_ply_passing_stats)
+  
+  #Obtenemos el array con los nombres de las columnas del df
+  columnas <- df_ply_passing_stats %>% names()
+  #Pasamos a minúscula todos los nombres
+  columnas <- lapply(columnas,tolower)
+  #Los convertimos de nuevo a una lista sencilla para poder asignarlo al df
+  columnas <- unlist(columnas)
+  
+  #Asignamos estos nuevos nombres como columnas del df
+  colnames(df_ply_passing_stats) <- columnas
+  
+  #Cambiamos el nombre de la columna
+  df_ply_passing_stats <- df_ply_passing_stats %>% rename(mp_90 = x90s,
+                                                          team_name = squad,
+                                                          passes_completed = cmp,
+                                                          passes_attempted = att,
+                                                          pass_comp_perc = cmp.,
+                                                          total_pass_dist = totdist,
+                                                          prog_pass_dist = prgdist,
+                                                          short_passes_completed = cmp.1,
+                                                          short_passes_attempted = att.1,
+                                                          short_pass_comp_perc = cmp..1,
+                                                          medium_passes_completed = cmp.2,
+                                                          medium_passes_attempted = att.2,
+                                                          medium_pass_comp_perc = cmp..2,
+                                                          long_passes_completed = cmp.3,
+                                                          long_passes_attempted = att.3,
+                                                          long_pass_comp_perc = cmp..3,
+                                                          assists = ast,
+                                                          assists_xag = a.xag,
+                                                          key_passes = kp,
+                                                          passes_final_third = x01.mar,
+                                                          passes_pen_area = ppa,
+                                                          crosses_pen_area = crspa,
+                                                          prog_passes = prgp)
+  
+  return(df_ply_passing_stats)
+}
+
+#Función para leer la información acerca del tipo de pases en la PL
+get_players_passing_types_stats <- function(ruta_file){
+  #Declaramos la ruta final del archivo
+  ruta_ply_passing_types_stats <- paste0(ruta_file,'players_passing_types.csv')
+  
+  #Leemos el archivo
+  df_ply_passing_types_stats <- read.csv(ruta_ply_passing_types_stats)
+  
+  #Obtenemos el array con los nombres de las columnas del df
+  columnas <- df_ply_passing_types_stats %>% names()
+  #Pasamos a minúscula todos los nombres
+  columnas <- lapply(columnas,tolower)
+  #Los convertimos de nuevo a una lista sencilla para poder asignarlo al df
+  columnas <- unlist(columnas)
+  
+  #Asignamos estos nuevos nombres como columnas del df
+  colnames(df_ply_passing_types_stats) <- columnas
+  
+  #Cambiamos el nombre de la columna
+  df_ply_passing_types_stats <- df_ply_passing_types_stats %>% rename(mp_90 = x90s,
+                                                                      team_name = squad,
+                                                                      = att,
+                                                                      = live,
+                                                                      = dead,
+                                                                      = fk,
+                                                                      = tb)
+  
+  return(df_ply_passing_types_stats)
+}
