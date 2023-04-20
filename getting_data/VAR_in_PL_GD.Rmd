@@ -945,6 +945,15 @@ df_ply_shoots <- get_players_shooting_stats(ruta_raw)
 #Leemos la data correspondiente a las estadísticas de pases del jugador
 df_ply_passes <- get_players_passing_stats(ruta_raw)
 
+#Leemos la data correspondiente a las estadísticas del tipo de pases del jugador
+df_ply_passes_types <- get_players_passing_types_stats(ruta_raw)
+
+#Leemos la data correspondiente a las estadísticas de creaciones de tiros y goles del jugador
+df_ply_goal_shot_creation <- get_players_goals_shoots_creation_stats(ruta_raw)
+
+#Leemos la data correspondiente a las estadísticas de acciones defensivas del jugador
+df_ply_defensive_actions <- get_players_defensive_actions_stats(ruta_raw)
+
 #hacemos cambio de nombre de los equipos en df de standard stats para homologar con demas dfs
 df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Bournemouth','AFC Bournemouth')
 df_ply_std_stats$team_name <- sub_value_df(df_ply_std_stats$team_name,'Brighton','Brighton & Hove Albion')
@@ -981,6 +990,33 @@ df_ply_passes$team_name <- sub_value_df(df_ply_passes$team_name,'Newcastle Utd',
 df_ply_passes$team_name <- sub_value_df(df_ply_passes$team_name,'Sheffield Utd','Sheffield United')
 df_ply_passes$team_name <- sub_value_df(df_ply_passes$team_name,'Tottenham','Tottenham Hotspur')
 
+#hacemos cambio de nombre de los equipos en df de passes_types para homologar con demas dfs
+df_ply_passes_types$team_name <- sub_value_df(df_ply_passes_types$team_name,'Bournemouth','AFC Bournemouth')
+df_ply_passes_types$team_name <- sub_value_df(df_ply_passes_types$team_name,'Brighton','Brighton & Hove Albion')
+df_ply_passes_types$team_name <- sub_value_df(df_ply_passes_types$team_name,'Huddersfield','Huddersfield Town')
+df_ply_passes_types$team_name <- sub_value_df(df_ply_passes_types$team_name,'Manchester Utd','Manchester United')
+df_ply_passes_types$team_name <- sub_value_df(df_ply_passes_types$team_name,'Newcastle Utd','Newcastle United')
+df_ply_passes_types$team_name <- sub_value_df(df_ply_passes_types$team_name,'Sheffield Utd','Sheffield United')
+df_ply_passes_types$team_name <- sub_value_df(df_ply_passes_types$team_name,'Tottenham','Tottenham Hotspur')
+
+#hacemos cambio de nombre de los equipos en df de goal_shot_creation para homologar con demas dfs
+df_ply_goal_shot_creation$team_name <- sub_value_df(df_ply_goal_shot_creation$team_name,'Bournemouth','AFC Bournemouth')
+df_ply_goal_shot_creation$team_name <- sub_value_df(df_ply_goal_shot_creation$team_name,'Brighton','Brighton & Hove Albion')
+df_ply_goal_shot_creation$team_name <- sub_value_df(df_ply_goal_shot_creation$team_name,'Huddersfield','Huddersfield Town')
+df_ply_goal_shot_creation$team_name <- sub_value_df(df_ply_goal_shot_creation$team_name,'Manchester Utd','Manchester United')
+df_ply_goal_shot_creation$team_name <- sub_value_df(df_ply_goal_shot_creation$team_name,'Newcastle Utd','Newcastle United')
+df_ply_goal_shot_creation$team_name <- sub_value_df(df_ply_goal_shot_creation$team_name,'Sheffield Utd','Sheffield United')
+df_ply_goal_shot_creation$team_name <- sub_value_df(df_ply_goal_shot_creation$team_name,'Tottenham','Tottenham Hotspur')
+
+#hacemos cambio de nombre de los equipos en df de defensive_actions para homologar con demas dfs
+df_ply_defensive_actions$team_name <- sub_value_df(df_ply_defensive_actions$team_name,'Bournemouth','AFC Bournemouth')
+df_ply_defensive_actions$team_name <- sub_value_df(df_ply_defensive_actions$team_name,'Brighton','Brighton & Hove Albion')
+df_ply_defensive_actions$team_name <- sub_value_df(df_ply_defensive_actions$team_name,'Huddersfield','Huddersfield Town')
+df_ply_defensive_actions$team_name <- sub_value_df(df_ply_defensive_actions$team_name,'Manchester Utd','Manchester United')
+df_ply_defensive_actions$team_name <- sub_value_df(df_ply_defensive_actions$team_name,'Newcastle Utd','Newcastle United')
+df_ply_defensive_actions$team_name <- sub_value_df(df_ply_defensive_actions$team_name,'Sheffield Utd','Sheffield United')
+df_ply_defensive_actions$team_name <- sub_value_df(df_ply_defensive_actions$team_name,'Tottenham','Tottenham Hotspur')
+
 #Modificamos la columna nation para que quede con el formato deseado en el df de standard stats
 df_ply_std_stats$nation <- sapply(df_ply_std_stats$nation,nationality_formatted)
 #Modificamos la columna pos para que quede con el formato deseado en el df de standard stats
@@ -995,6 +1031,18 @@ df_ply_shoots$pos <- sapply(df_ply_shoots$pos,position_formatted)
 df_ply_passes$nation <- sapply(df_ply_passes$nation,nationality_formatted)
 #Modificamos la columna pos para que quede con el formato deseado en el df de passes
 df_ply_passes$pos <- sapply(df_ply_passes$pos,position_formatted)
+#Modificamos la columna nation para que quede con el formato deseado en el df de passes_types
+df_ply_passes_types$nation <- sapply(df_ply_passes_types$nation,nationality_formatted)
+#Modificamos la columna pos para que quede con el formato deseado en el df de passes_types
+df_ply_passes_types$pos <- sapply(df_ply_passes_types$pos,position_formatted)
+#Modificamos la columna nation para que quede con el formato deseado en el df de goal_shot_creation
+df_ply_goal_shot_creation$nation <- sapply(df_ply_goal_shot_creation$nation,nationality_formatted)
+#Modificamos la columna pos para que quede con el formato deseado en el df de goal_shot_creation
+df_ply_goal_shot_creation$pos <- sapply(df_ply_goal_shot_creation$pos,position_formatted)
+#Modificamos la columna nation para que quede con el formato deseado en el df de defensive_actions
+df_ply_defensive_actions$nation <- sapply(df_ply_defensive_actions$nation,nationality_formatted)
+#Modificamos la columna pos para que quede con el formato deseado en el df de defensive_actions
+df_ply_defensive_actions$pos <- sapply(df_ply_defensive_actions$pos,position_formatted)
 
 #De la tabla para GK nos quedamos solo con las columnas que nos interesan
 df_ply_gk <- df_ply_gk %>% select(-c('nation','pos','age','born','match_ply','starts','min','mp_90','gk_wins','gk_deuces','gk_losses'))
@@ -1002,12 +1050,18 @@ df_ply_gk <- df_ply_gk %>% select(-c('nation','pos','age','born','match_ply','st
 df_ply_shoots <- df_ply_shoots %>% select(-c('nation','pos','age','born','mp_90','npxg','sh_pen_kicks','sh_pen_kicks_att','xg','sh_goals_scored'))
 #De la tabla para pases nos quedamos solo con las columnas que nos interesan
 df_ply_passes <- df_ply_passes %>% select(-c('nation','pos','age','born','mp_90','assists','prog_passes','xag'))
+#De la tabla para pases_types nos quedamos solo con las columnas que nos interesan
+df_ply_passes_types <- df_ply_passes_types %>% select(-c('nation','pos','age','born','mp_90','live_ball_passes','dead_ball_passes','free_kicks_passes','throw_ins','inswinging_corner_kicks','outswinging_corner_kicks','straight_corner_kicks','passes_completed','passes_attempted'))
+#De la tabla para goal_shot_creation nos quedamos solo con las columnas que nos interesan
+df_ply_goal_shot_creation<- df_ply_goal_shot_creation %>% select(-c('nation','pos','age','born','mp_90','sca_live_passes','sca_dead_passes','sca_fouls_drawn','gca_live_passes','gca_dead_passes','gca_fouls_drawn'))
+#De la tabla para defensive_actions nos quedamos solo con las columnas que nos interesan
+df_ply_defensive_actions <- df_ply_defensive_actions %>% select(-c('nation','pos','age','born','mp_90','dribbles_challenged'))
 
 #Unimos las dos tablas para tener la información completa
-df_ply_stats <- df_ply_std_stats %>% left_join(df_ply_gk,by = c('player','team_name','season')) %>% left_join(df_ply_shoots,by = c('player','team_name','season')) %>% left_join(df_ply_passes,by = c('player','team_name','season'))
+df_ply_stats <- df_ply_std_stats %>% left_join(df_ply_gk,by = c('player','team_name','season')) %>% left_join(df_ply_shoots,by = c('player','team_name','season')) %>% left_join(df_ply_passes,by = c('player','team_name','season')) %>% left_join(df_ply_passes_types,by = c('player','team_name','season')) %>% left_join(df_ply_goal_shot_creation,by = c('player','team_name','season')) %>% left_join(df_ply_defensive_actions,by = c('player','team_name','season'))
 
 #Eliminamos los dfs individuales y solo nos quedamos con el general
-rm(df_ply_gk,df_ply_std_stats,df_ply_shoots,df_ply_passes)
+rm(df_ply_gk,df_ply_std_stats,df_ply_shoots,df_ply_passes,df_ply_passes_types,df_ply_goal_shot_creation,df_ply_defensive_actions)
 
 #Escribimos la tabla final a la carpeta local
 
