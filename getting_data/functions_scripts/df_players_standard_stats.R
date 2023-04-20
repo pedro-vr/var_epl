@@ -221,11 +221,102 @@ get_players_passing_types_stats <- function(ruta_file){
   #Cambiamos el nombre de la columna
   df_ply_passing_types_stats <- df_ply_passing_types_stats %>% rename(mp_90 = x90s,
                                                                       team_name = squad,
-                                                                      = att,
-                                                                      = live,
-                                                                      = dead,
-                                                                      = fk,
-                                                                      = tb)
+                                                                      passes_attempted = att,
+                                                                      live_ball_passes = live,
+                                                                      dead_ball_passes = dead,
+                                                                      free_kicks_passes = fk,
+                                                                      through_ball_passes = tb,
+                                                                      switches = sw,
+                                                                      crosses = crs,
+                                                                      throw_ins = ti,
+                                                                      corner_kicks = ck,
+                                                                      inswinging_corner_kicks = `in`,
+                                                                      outswinging_corner_kicks = out,
+                                                                      straight_corner_kicks = str,
+                                                                      passes_completed = cmp,
+                                                                      passes_offside = off,
+                                                                      blocked_passes = blocks)
   
   return(df_ply_passing_types_stats)
+}
+
+#Función para leer la información acerca de creación de tiros y goles en la PL
+get_players_goals_shoots_creation_stats <- function(ruta_file){
+  #Declaramos la ruta final del archivo
+  ruta_ply_goals_shoots_creation_stats <- paste0(ruta_file,'players_goal_shot_creation.csv')
+  
+  #Leemos el archivo
+  df_ply_goals_shoots_creation_stats <- read.csv(ruta_ply_goals_shoots_creation_stats)
+  
+  #Obtenemos el array con los nombres de las columnas del df
+  columnas <- df_ply_goals_shoots_creation_stats %>% names()
+  #Pasamos a minúscula todos los nombres
+  columnas <- lapply(columnas,tolower)
+  #Los convertimos de nuevo a una lista sencilla para poder asignarlo al df
+  columnas <- unlist(columnas)
+  
+  #Asignamos estos nuevos nombres como columnas del df
+  colnames(df_ply_goals_shoots_creation_stats) <- columnas
+  
+  #Cambiamos el nombre de la columna
+  df_ply_goals_shoots_creation_stats <- df_ply_goals_shoots_creation_stats %>% rename(mp_90 = x90s,
+                                                                                      team_name = squad,
+                                                                                      shot_creating_actions = sca,
+                                                                                      shot_creating_actions_90 = sca90,
+                                                                                      sca_live_passes = passlive,
+                                                                                      sca_dead_passes = passdead,
+                                                                                      sca_take_ons = to,
+                                                                                      sca_shots = sh,
+                                                                                      sca_fouls_drawn = fld,
+                                                                                      sca_def = def,
+                                                                                      goal_creating_actions = gca,
+                                                                                      goal_creating_actions_90 = gca90,
+                                                                                      gca_live_passes = passlive.1,
+                                                                                      gca_dead_passes = passdead.1,
+                                                                                      gca_take_ons = to.1,
+                                                                                      gca_shots = sh.1,
+                                                                                      gca_fouls_drawn = fld.1,
+                                                                                      gca_def = def.1)
+  
+  return(df_ply_goals_shoots_creation_stats)
+}
+
+#Función para leer la información acerca de acciones defensivas en la PL
+get_players_defensive_actions_stats <- function(ruta_file){
+  #Declaramos la ruta final del archivo
+  ruta_ply_defensive_actions_stats <- paste0(ruta_file,'players_defensive_actions.csv')
+  
+  #Leemos el archivo
+  df_ply_defensive_actions_stats <- read.csv(ruta_ply_defensive_actions_stats)
+  
+  #Obtenemos el array con los nombres de las columnas del df
+  columnas <- df_ply_defensive_actions_stats %>% names()
+  #Pasamos a minúscula todos los nombres
+  columnas <- lapply(columnas,tolower)
+  #Los convertimos de nuevo a una lista sencilla para poder asignarlo al df
+  columnas <- unlist(columnas)
+  
+  #Asignamos estos nuevos nombres como columnas del df
+  colnames(df_ply_defensive_actions_stats) <- columnas
+  
+  #Cambiamos el nombre de la columna
+  df_ply_defensive_actions_stats <- df_ply_defensive_actions_stats %>% rename(mp_90 = x90s,
+                                                                              team_name = squad,
+                                                                              tackles = tkl,
+                                                                              tackles_won = tklw,
+                                                                              tackles_def_third = def.3rd,
+                                                                              tackles_mid_third = mid.3rd,
+                                                                              tackles_att_third = att.3rd,
+                                                                              dribblers_tackled = tkl.1,
+                                                                              dribbles_challenged = att,
+                                                                              dribblers_tackled_perc = tkl.,
+                                                                              challenges_lost = lost,
+                                                                              shots_blocked = sh,
+                                                                              passes_blocked = pass,
+                                                                              interceptions = int,
+                                                                              tackles_interceptions = tkl.int,
+                                                                              clearances = clr,
+                                                                              errors = err)
+  
+  return(df_ply_defensive_actions_stats)
 }

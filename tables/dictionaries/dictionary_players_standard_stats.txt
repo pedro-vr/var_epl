@@ -179,4 +179,61 @@ Tabla que contiene estadísticas generales acerca de las acciones que realizan l
 
 80. crosses_pen_area: Número total de pases cruzados que entraron al área penal
 
+81. through_ball_passes: Número total de pases completados enviados entre los defensores centrales a espacio abierto
+
+82. switches: Número total de pases que viajaron más de 40 yardas a lo ancho de la cancha
+
+83: crosses: Número total de pases cruzados hechos por el jugador en cuestión
+
+84. corner_kicks: Número total de tiros de esquina realizados por el jugador en cuestión
+
+85. passes_offside: Número total de pases que resultaron en fuera de juego hechos por el jugador en cuestión
+
+86. blocked_passes: Número total de pases que le fueron bloqueados al jugador en cuestión por un defensor rival
+
+87. shot_creating_actions: Número total de acciones ofensivas que desembocaron en un tiro realizadas por el jugador en cuestión
+
+88. shot_creating_actions_90: Número total de acciones ofensivas que desembocaron en un tiro por cada 90 minutos realizadas por el jugador en cuestión
+
+89. sca_take_ons: Número total de dribles efectivos que llevaron a un intento de tiro 
+
+90. sca_shots: Número total de tiros que llevaron a otro intento de tiro
+
+91. sca_def: Número total de acciones defensivas que llevaron a un intento de tiro
+
+92. goal_creating_actions: Número total de acciones ofensivas que llevaron a un gol realizadas por el jugador en cuestión
+
+93. goal_creating_actions_90: Número total de acciones ofensivas que llevaron a un gol por cada 90 minutos realizadas por el jugador en cuestión
+
+94. gca_take_ons: Número total de dribles efectivos que llevaron a un gol
+
+95. gca_shots: Número total de tiros que llevaron a un gol
+
+96. gca_def: Número total de acciones defensivas que llevaron a un gol
+
+97. tackles: Número total de tacleos que realiza el jugador en cuestión                  
+
+98. tackles_won: Número total de tacleos en donde el jugador que la realiza obtiene la posesión del balón
+
+99. tackles_def_third: Número total de tacleos en el primer tercio de la cancha que realiza el jugador en cuestión                  
+
+100. tackles_mid_third: Número total de tacleos en el segundo tercio de la cancha que realiza el jugador en cuestión101. tackles_att_third: Número total de tacleos en el último tercio de la cancha que realiza el jugador en cuestión
+
+102. dribblers_tackled: Número total de tacleos que se realizaron a jugadores que hacen dribles con el balón
+
+103. dribblers_tackled_perc: Porcentaje de tacleos que se realizaron a jugadores que hacen dribles con el balón
+
+104. challenges_lost: Número total de intentos fallidos que realiza en querer frenar a un jugador que dribla el jugador en cuestión 
+105. blocks: Número total de bloqueos de balón que realiza el jugador en cuestión              
+
+106. shots_blocked: Número total de tiros bloqueados que realiza el jugador en cuestión
+
+107. passes_blocked: Número total de pases bloqueados que realiza el jugador en cuestión
+
+108. interceptions: Número total de intercepciones que realiza el jugador en cuestión   109. tackles_interceptions: Número total de jugadores tecleados más el número total de intercepciones que realiza el jugador
+
+110. clearances: Número total de despejes que realiza el jugador en cuestión
+
+111. errors: Número total de errores defensivos que comete el jugador en cuestión
+
 Obtenido de https://fbref.com/en/comps/9/2021-2022/2021-2022-Premier-League-Stats
