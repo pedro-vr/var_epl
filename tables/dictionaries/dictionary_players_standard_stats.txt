@@ -236,4 +236,42 @@ Tabla que contiene estadísticas generales acerca de las acciones que realizan l
 
 111. errors: Número total de errores defensivos que comete el jugador en cuestión
 
+112. touches: Número total de veces que el jugador en cuestión tocó el balón durante una temporada en específico
+
+113. touches_def_pen: Número total de toques de balón que realizó el jugador en el área penal defensiva
+
+114. touches_def_third: Número total de toques de balón que realizó el jugador en el primer tercio del campo defensivo
+
+115. touches_mid_third: Número total de toques de balón que realizó el jugador en el tercio del campo correspondiente a la mitad del campo
+
+116. touches_att_third: Número total de toques de balón que realizó el jugador en el último tercio del campo atacante
+
+117. touches_att_pen: Número total de toques de balón que realizó el jugador en el área penal atacante
+
+118. take_ons_att: Número total de intentos que realizó el jugador en cuestión para superar al jugador defensivo mientras tenía la posesión del balón
+
+119. take_ons_succ: Número total de intentos logrados que realizó el jugador en cuestión para superar al jugador defensivo mientras tenía la posesión del balón
+
+120. take_ons_succ_perc: Porcentaje de intentos que realizó el jugador en cuestión para superar al jugador defensivo mientras tenía la posesión del balón
+
+121. tackled: Número total de veces que el jugador en cuestión fue derribado por un jugador defensivo mientras intentó superarlo en posesión de balón
+
+122. tackled_perc: Porcentaje de veces que el jugador en cuestión fue derribado por un jugador defensivo mientras intentó superarlo en posesión de balón
+
+123. carries: Número total de veces que el jugador realizó acarreos de balón, es decir, que el jugador tuvo el control del balón con los pies
+
+124. carrying_dist: Distancia total, medida en yardas, de los acarreos de balón que realizó el jugador en cuestión hacia cualquier dirección del campo
+
+125. prog_carrying_dist: Distancia total, medida en yardas, de los acarreos de balón que realizó el jugador en cuestión en dirección a la zona de gol del oponente
+
+126. carries_final_third: Número total de acarreos de balón que realizó el jugador dentro del último tercio del campo contrincante
+
+127. carries_pen: Número total de acarreos de balón que realizó el jugador dentro del área penal contrincante
+
+128. miscontrols: Número total de veces que el jugador en cuestión falló al intentar ganar el control del balón
+
+129. dispossessed: Número total de veces que el jugador en cuestión pierde el control del balón después de ser derribado por un jugador rival
+
+130. passes_received: Número de veces que un jugador recibió un balón satisfactoriamente
+
 Obtenido de https://fbref.com/en/comps/9/2021-2022/2021-2022-Premier-League-Stats
