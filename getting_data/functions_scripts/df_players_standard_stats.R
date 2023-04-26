@@ -320,3 +320,48 @@ get_players_defensive_actions_stats <- function(ruta_file){
   
   return(df_ply_defensive_actions_stats)
 }
+
+#Función para leer la información acerca de la posesión de balón en la PL
+get_players_possession_stats <- function(ruta_file){
+  #Declaramos la ruta final del archivo
+  ruta_ply_possession_stats <- paste0(ruta_file,'players_possession_stats.csv')
+  
+  #Leemos el archivo
+  df_ply_possession_stats <- read.csv(ruta_ply_possession_stats)
+  
+  #Obtenemos el array con los nombres de las columnas del df
+  columnas <- df_ply_possession_stats %>% names()
+  #Pasamos a minúscula todos los nombres
+  columnas <- lapply(columnas,tolower)
+  #Los convertimos de nuevo a una lista sencilla para poder asignarlo al df
+  columnas <- unlist(columnas)
+  
+  #Asignamos estos nuevos nombres como columnas del df
+  colnames(df_ply_possession_stats) <- columnas
+  
+  #Cambiamos el nombre de la columna
+  df_ply_possession_stats <- df_ply_possession_stats %>% rename(mp_90 = x90s,
+                                                                team_name = squad,
+                                                                touches_def_pen = def.pen,
+                                                                touches_def_third = def.3rd,
+                                                                touches_mid_third = mid.3rd,
+                                                                touches_att_third = att.3rd,
+                                                                touches_att_pen = att.pen,
+                                                                live_touches = live,
+                                                                take_ons_att = att,
+                                                                take_ons_succ = succ,
+                                                                take_ons_succ_perc = succ.,
+                                                                tackled = tkld,
+                                                                tackled_perc = tkld.,
+                                                                carrying_dist = totdist,
+                                                                prog_carrying_dist = prgdist,
+                                                                prog_carries = prgc,
+                                                                carries_final_third = x01.mar,
+                                                                carries_pen = cpa,
+                                                                miscontrols = mis,
+                                                                dispossessed = dis,
+                                                                passes_received = rec,
+                                                                prog_passes_received = prgr)
+  
+  return(df_ply_possession_stats)
+}
