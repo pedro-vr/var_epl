@@ -4,7 +4,7 @@ author: "Pedro Alan Velázquez Romero"
 date: "3/15/2023"
 output: html_document
 params:
-  is_work_computer: true
+  is_work_computer: false
   render_gd: false
 ---
 
